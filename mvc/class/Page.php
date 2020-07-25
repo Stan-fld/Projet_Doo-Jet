@@ -43,12 +43,6 @@ class Page
         return $this->controller;
     }
 
-    /**
-     *  Récupère l'adresse de la page courante
-     * @return array
-     **/
-
-
     //- pour recuperer l'adresse de la page courante
     function getUrl()
     {

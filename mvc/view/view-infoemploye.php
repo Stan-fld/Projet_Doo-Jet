@@ -2,12 +2,13 @@
 if ($_GET['id'] == null or $_GET['id'] == 0) {
     echo '<script type="text/javascript">window.location.assign("/employe");</script>';
 } else {
+    //session_destroy();
     $idemploye = $_GET["id"];
     $employe = $model->getEmploye($idemploye);
-    ?>
-    <!-- Title Page-->
-    <title>Fiche client : <?php echo $employe['Prenom']." ".$employe['Nom'];?></title>
-    <div class="main-content">
+?>
+<!-- Title Page-->
+<title>Fiche client : <?php echo $employe['Prenom']." ".$employe['Nom'];?></title>
+<div class="main-content">
     <div class="section__content section__content--p30">
         <div class="container-fluid">
             <div class="row">
@@ -19,6 +20,7 @@ if ($_GET['id'] == null or $_GET['id'] == 0) {
                         <div class="card-body card-block">
                             <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                                 <input type="hidden" name="controller" value="updateEmploye">
+                                <input type="hidden" name="id_employe" value="<?php echo $employe['ID_Personne'];?>">
                                 <div class="row form-group">
                                     <label class="col col-md-3" for="nom">Nom : </label>
                                     <div class="col col-md-3">
@@ -137,17 +139,19 @@ if ($_GET['id'] == null or $_GET['id'] == 0) {
                                         <input name="date_fin_ina" id="date_fin_ina" class="text-center form-control" type="text" disabled value="<?php echo $employe['max_date_fin'];?>">
                                     </div>
                                 </div>
+                                <div class="card-footer text-right">
+                                    <button id="hidebtn1" style="margin-left: 2vh; display:none" onclick="reload()" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-ban"></i> Annuler
+                                    </button>
+                                    <button id="hidebtn2" style="margin-left: 2vh; display:none" type="submit" class="btn btn-success btn-sm ajax">
+                                        <in class="fa fa-check"></in> Valider
+                                    </button>
+                                </div>
                             </form>
                         </div>
                         <div class="card-footer text-right">
-                            <button id="hidebtn1" style="margin-left: 2vh; display:none" onclick="reload()" class="btn btn-danger btn-sm">
-                                <i class="fa fa-ban"></i> Annuler
-                            </button>
                             <button style="margin-left: 2vh" onclick="enable()" class="btn btn-warning btn-sm">
                                 <i class="fa fa-cog"></i> Modifier
-                            </button>
-                            <button id="hidebtn2" style="margin-left: 2vh; display:none" class="btn btn-success btn-sm">
-                                <i class="fa fa-check"></i> Valider
                             </button>
                         </div>
                     </div>
@@ -165,4 +169,11 @@ if ($_GET['id'] == null or $_GET['id'] == 0) {
             location.reload();
         }
     </script>
-<?php }?>
+    <?php }?>
+
+    <?php
+
+    $nom         = $model->getInput('nom');
+    $_SESSION['update']['employe']['nom']                  =  $nom;
+    var_dump($_SESSION);
+    ?>

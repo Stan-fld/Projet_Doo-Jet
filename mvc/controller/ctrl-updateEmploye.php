@@ -4,8 +4,9 @@ $feedback = "";
 $model    = new Model;
 
 // Récupération des informations saisies dans le formulaire
-$nom         = $model->getInput('Nom');
-$prenom      = $model->getInput('Prenom');
+//$id_employe  = $model->getInput('ID_Personne');
+$nom         = $model->getInput('nom');
+/*$prenom      = $model->getInput('Prenom');
 $anniv       = $model->getInput('anniv');
 $telephone   = $model->getInput('Telephone');
 $permis      = $model->getEmail('N_Permis');
@@ -21,11 +22,12 @@ $code_post   = $model->getInput('Code_Postal');
 $pays        = $model->getInput('Nom_Pays');
 $motif       = $model->getInput('Motif');
 $date_debut  = $model->getInput('max_date_debut');
-$date_fin    = $model->getInput('max_date_fin');
+$date_fin    = $model->getInput('max_date_fin');*/
 
 // Mise en session des informations
-$_SESSION['update']['employe']['Nom']                  = htmlentities($nom);
-$_SESSION['update']['employe']['Prenom']               = htmlentities($prenom);
+//$_SESSION['update']['employe']['ID_Personne']                  = htmlentities($id_employe);
+$_SESSION['update']['employe']['nom']                  =  $nom;
+/*$_SESSION['update']['employe']['Prenom']               = htmlentities($prenom);
 $_SESSION['update']['employe']['anniv']                = htmlentities($anniv);
 $_SESSION['update']['employe']['Telephone']            = htmlentities($telephone);
 $_SESSION['update']['employe']['N_Permis']             = htmlentities($permis);
@@ -41,7 +43,7 @@ $_SESSION['update']['employe']['Code_Postal']          = htmlentities($code_post
 $_SESSION['update']['employe']['Nom_Pays']             = htmlentities($pays);
 $_SESSION['update']['employe']['Motif']                = htmlentities($motif);
 $_SESSION['update']['employe']['max_date_debut']       = htmlentities($date_debut);
-$_SESSION['update']['employe']['max_date_fin']         = htmlentities($date_fin);
+$_SESSION['update']['employe']['max_date_fin']         = htmlentities($date_fin);*/
 /*
 
 
