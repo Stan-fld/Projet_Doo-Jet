@@ -117,10 +117,28 @@ class Model{
     function getEmploye($idemploye)
     {
         $query  = "CALL select_employe(:idemploye)";
-        $bind = [":idemploye" => $idemploye,];
+        $bind   = [":idemploye" => $idemploye,];
         $stmt   = $this->executeSQL($query, $bind);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function updateEmploye($idemploye, $nomE, $prenomE, $annivE, $telE, $permisE, $secu, $bees, $contrat, $embauche, $medical)
+    {
+        $query  = "CALL update_employe_personne(:idemploye, :nomE, :prenomE, :annivE, :telE, :permisE, :secu, :bees, :contrat, :embauche, :medical)";
+        $bind = [":idemploye" => $idemploye,
+                ":nomE" => $nomE,
+                ":prenomE" => $prenomE,
+                ":annivE" => $annivE,
+                ":telE" => $telE,
+                ":permisE" => $permisE,
+                ":secu" => $secu,
+                ":bees" => $bees,
+                ":contrat" => $contrat,
+                ":embauche" => $embauche,
+                ":medical" => $medical,];
+        $stmt   = $this->executeSQL($query, $bind);
     }
 }

@@ -173,7 +173,33 @@ if ($_GET['id'] == null or $_GET['id'] == 0) {
 
     <?php
 
+    $id_employe  = $model->getInput('id_employe');
     $nom         = $model->getInput('nom');
-    $_SESSION['update']['employe']['nom']                  =  $nom;
+    $prenom      = $model->getInput('prenom');
+    $anniv       = $model->getInput('date_naissance');
+    $telephone   = $model->getInput('telephone');
+    $permis      = $model->getInput('num_permis');
+    $secu        = $model->getInput('num_secu');
+    $bees        = $model->getInput('num_bees');
+    $contrat     = $model->getInput('contrat');
+    $embauche    = $model->getInput('date_embauche');
+    $visit_med   = $model->getInput('date_visite_med');
+
+    $newanniv = substr($anniv, 6, 4) . '-' . substr($anniv, 3, 2) . '-' . substr($anniv, 0, 2);
+    $newembauche = substr($embauche, 6, 4) . '-' . substr($embauche, 3, 2) . '-' . substr($embauche, 0, 2);
+    $newmedical = substr($visit_med, 6, 4) . '-' . substr($visit_med, 3, 2) . '-' . substr($visit_med, 0, 2);
+
+    $_SESSION['update']['employe']['id_employe']           = $id_employe;
+    $_SESSION['update']['employe']['nom']                  = $nom;
+    $_SESSION['update']['employe']['Prenom']               = $prenom;
+    $_SESSION['update']['employe']['date_naissance']       = $newanniv;
+    $_SESSION['update']['employe']['telephone']            = $telephone;
+    $_SESSION['update']['employe']['num_permis']           = $permis;
+    $_SESSION['update']['employe']['num_secu']             = $secu;
+    $_SESSION['update']['employe']['num_bees']             = $bees;
+    $_SESSION['update']['employe']['contrat']              = $contrat;
+    $_SESSION['update']['employe']['date_embauche']        = $newembauche;
+    $_SESSION['update']['employe']['date_visite_med']      = $newmedical;
+    $employe = $model->updateEmploye($id_employe, $nom, $prenom, $newanniv, $telephone, $permis, $secu, $bees, $contrat, $newembauche, $newmedical);
     var_dump($_SESSION);
     ?>

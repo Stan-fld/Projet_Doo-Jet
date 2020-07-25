@@ -3,18 +3,20 @@
 $feedback = "";
 $model    = new Model;
 
+
+$employe = $model->updateEmploye($id_employe, $nom, $prenom, $newanniv, $telephone, $permis, $secu, $bees, $contrat, $newembauche, $newmedical);
 // Récupération des informations saisies dans le formulaire
-//$id_employe  = $model->getInput('ID_Personne');
+/*$id_employe  = $model->getInput('id_employe');
 $nom         = $model->getInput('nom');
-/*$prenom      = $model->getInput('Prenom');
-$anniv       = $model->getInput('anniv');
-$telephone   = $model->getInput('Telephone');
-$permis      = $model->getEmail('N_Permis');
-$secu        = $model->getInput('N_Securite_Sociale');
-$bees        = $model->getInput('N_BEES');
-$contrat     = $model->getInput('Contrat');
-$embauche    = $model->getInput('dateembau');
-$visit_med   = $model->getInput('datevisit');
+$prenom      = $model->getInput('prenom');
+$anniv       = $model->getInput('date_naissance');
+$telephone   = $model->getInput('telephone');
+$permis      = $model->getEmail('num_permis');
+$secu        = $model->getInput('num_secu');
+$bees        = $model->getInput('num_bees');
+$contrat     = $model->getInput('contrat');
+$embauche    = $model->getInput('date_embauche');
+$visit_med   = $model->getInput('date_visite_med');
 $num_rue     = $model->getInput('Numero_Rue');
 $rue         = $model->getInput('Rue');
 $ville       = $model->getInput('Nom_Ville');
@@ -25,17 +27,17 @@ $date_debut  = $model->getInput('max_date_debut');
 $date_fin    = $model->getInput('max_date_fin');*/
 
 // Mise en session des informations
-//$_SESSION['update']['employe']['ID_Personne']                  = htmlentities($id_employe);
+/*$_SESSION['update']['employe']['id_employe']                  = $id_employe;
 $_SESSION['update']['employe']['nom']                  =  $nom;
-/*$_SESSION['update']['employe']['Prenom']               = htmlentities($prenom);
-$_SESSION['update']['employe']['anniv']                = htmlentities($anniv);
-$_SESSION['update']['employe']['Telephone']            = htmlentities($telephone);
-$_SESSION['update']['employe']['N_Permis']             = htmlentities($permis);
-$_SESSION['update']['employe']['N_Securite_Sociale']   = htmlentities($secu);
-$_SESSION['update']['employe']['N_BEES']               = htmlentities($bees);
-$_SESSION['update']['employe']['Contrat']              = htmlentities($contrat);
-$_SESSION['update']['employe']['dateembau']            = htmlentities($embauche);
-$_SESSION['update']['employe']['datevisit']            = htmlentities($visit_med);
+$_SESSION['update']['employe']['Prenom']               =  $prenom;
+$_SESSION['update']['employe']['date_naissance']                =  $anniv;
+$_SESSION['update']['employe']['telephone']            = $telephone;
+$_SESSION['update']['employe']['num_permis']             = $permis;
+$_SESSION['update']['employe']['num_secu']   = $secu;
+$_SESSION['update']['employe']['num_bees']               = $bees;
+$_SESSION['update']['employe']['contrat']              = $contrat;
+$_SESSION['update']['employe']['date_embauche']            = $embauche;
+$_SESSION['update']['employe']['date_visite_med']            = $visit_med;
 $_SESSION['update']['employe']['Numero_Rue']           = htmlentities($num_rue);
 $_SESSION['update']['employe']['Rue']                  = htmlentities($rue);
 $_SESSION['update']['employe']['Nom_Ville']            = htmlentities($ville);
