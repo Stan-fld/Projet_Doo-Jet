@@ -2,6 +2,8 @@
 //session_destroy();
 $idemploye = $_GET["id"];
 $employe = $model->getEmploye($idemploye);
+$pays = $model->getPays();
+$ville = $model->getVille();
 ?>
 <!-- Title Page-->
 <title>Fiche client : <?php echo $employe['Prenom']." ".$employe['Nom'];?></title>
@@ -99,7 +101,16 @@ $employe = $model->getEmploye($idemploye);
                                 <div class="row form-group">
                                     <label class="col col-md-3 form-control-label" for="ville">Ville : </label>
                                     <div class="col col-md-3">
-                                        <input name="ville" id="ville" class="text-center form-control"  type="text" disabled value="<?php echo $employe['Nom_Ville'];?>">
+                                        
+                                        <select name="ville" id="ville"  class="text-center form-control ville" disabled>
+                                            <?php foreach($ville as $Ville){ ?>
+                                                <?php if($Ville['Nom_Ville'] == $employe['Nom_Ville']) {?>
+                                                    <option selected value="<?php echo $Ville['Nom_Ville'];?>"><?php echo $Ville['Nom_Ville'];?></option>
+                                                <?php }else{ ?>
+                                                    <option value="<?php echo $Ville['Nom_Ville'];?>"><?php echo $Ville['Nom_Ville'];?></option>
+                                                <?php } ?>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                 </div>
                                 <hr>
@@ -113,7 +124,15 @@ $employe = $model->getEmploye($idemploye);
                                 <div class="row form-group">
                                     <label class="col col-md-3 form-control-label" for="pays">Pays : </label>
                                     <div class="col col-md-3">
-                                        <input name="pays" id="pays" class="text-center form-control"  type="text" disabled value="<?php echo $employe['Nom_Pays'];?>">
+                                        <select name="pays" id="pays" class="text-center form-control pays" disabled>
+                                            <?php foreach($pays as $Pays){ ?>
+                                                <?php if($Pays['Nom_Pays'] == $employe['Nom_Pays']) {?>
+                                                    <option selected value="<?php echo $Pays['Nom_Pays'];?>"><?php echo $Pays['Nom_Pays'];?></option>
+                                                <?php }else{ ?>
+                                                    <option value="<?php echo $Pays['Nom_Pays'];?>"><?php echo $Pays['Nom_Pays'];?></option>
+                                                <?php } ?>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                 </div>
                                 <hr>
@@ -161,11 +180,15 @@ $employe = $model->getEmploye($idemploye);
     <script>
         function enable() {
             $("input").prop('disabled', false);
+            $("select").prop('disabled', false);
             $("#hidebtn1").css("display", "");
             $("#hidebtn2").css("display", "");
+            $('.pays').select2();
+            $('.ville').select2();
         }
 
         function reload() {
             window.location.reload();
         }
+
     </script>

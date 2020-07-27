@@ -141,4 +141,17 @@ class Model{
                 ":medical" => $medical,];
         $stmt   = $this->executeSQL($query, $bind);
     }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getPays()
+    {
+        $query  = "SELECT Nom_Pays FROM pays";
+        $stmt   = $this->executeSQL($query);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+
 }

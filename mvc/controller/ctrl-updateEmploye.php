@@ -24,14 +24,27 @@ switch ($etape) {
         $embauche = $model->getInput('date_embauche');
         $visit_med = $model->getInput('date_visite_med');
 
+        // Conversion des dates au format US
         $newanniv = substr($anniv, 6, 4) . '-' . substr($anniv, 3, 2) . '-' . substr($anniv, 0, 2);
         $newembauche = substr($embauche, 6, 4) . '-' . substr($embauche, 3, 2) . '-' . substr($embauche, 0, 2);
         $newmedical = substr($visit_med, 6, 4) . '-' . substr($visit_med, 3, 2) . '-' . substr($visit_med, 0, 2);
 
-        $employe = $model->updateEmploye($id_employe, $nom, $prenom, $newanniv, $telephone, $permis, $secu, $bees, $contrat, $newembauche, $newmedical);
+        // Date du jour format US
+        $now = date('Y');
+        $datenow = ($now - 15).date('-m-d');
+        //$dateAnniv = substr($newanniv, 0, 4) . substr($newanniv, 5, 2) . substr($newanniv, 8, 2);
 
-        $feedback .= '<script type="text/javascript">alert("Modifications effectuées");window.location.assign("infoemploye?id=' . $id_employe . '");</script>';
+        if(substr($newanniv, 0, 4) >=  substr($datenow, 0, 4))
+        {
+            $feedback .= '<script type="text/javascript">alert("Trop jeune")';
+        }
+        else
+        {
+            $employe = $model->updateEmploye($id_employe, $nom, $prenom, $newanniv, $telephone, $permis, $secu, $bees, $contrat, $newembauche, $newmedical);
 
+            $feedback .= '<script type="text/javascript">alert("Modifications effectuées");window.location.assign("infoemploye?id=' . $id_employe . '");</script>';
+
+        }
         break;
 
     default:
