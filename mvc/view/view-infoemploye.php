@@ -1,10 +1,7 @@
 <?php
-if ($_GET['id'] == null or $_GET['id'] == 0) {
-    echo '<script type="text/javascript">window.location.assign("/employe");</script>';
-} else {
-    //session_destroy();
-    $idemploye = $_GET["id"];
-    $employe = $model->getEmploye($idemploye);
+//session_destroy();
+$idemploye = $_GET["id"];
+$employe = $model->getEmploye($idemploye);
 ?>
 <!-- Title Page-->
 <title>Fiche client : <?php echo $employe['Prenom']." ".$employe['Nom'];?></title>
@@ -18,8 +15,9 @@ if ($_GET['id'] == null or $_GET['id'] == 0) {
                             <strong>Fiche client : </strong><?php echo $employe['Prenom']." ".$employe['Nom'];?>
                         </div>
                         <div class="card-body card-block">
-                            <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                            <form action="" method="post" class="form-horizontal ajax">
                                 <input type="hidden" name="controller" value="updateEmploye">
+                                <input type="hidden" name="etape" value="update_employe">
                                 <input type="hidden" name="id_employe" value="<?php echo $employe['ID_Personne'];?>">
                                 <div class="row form-group">
                                     <label class="col col-md-3" for="nom">Nom : </label>
@@ -85,56 +83,56 @@ if ($_GET['id'] == null or $_GET['id'] == 0) {
                                 </div>
                                 <hr>
                                 <div class="row form-group">
-                                    <label class="col col-md-3 form-control-label" for="date_visite_med">Date dernière visite médicale</label>
+                                    <label class="col col-md-3 form-control-label" for="date_visite_med">Date dernière visite médicale : </label>
                                     <div class="col col-md-3">
                                         <input name="date_visite_med" id="date_visite_med" class="text-center form-control"  type="text" disabled value="<?php echo $employe['datevisit'];?>">
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row form-group">
-                                    <label class="col col-md-3 form-control-label" for="adresse">Adresse</label>
+                                    <label class="col col-md-3 form-control-label" for="adresse">Adresse : </label>
                                     <div class="col col-md-3">
                                         <input name="adresse" id="adresse" class="text-center form-control"  type="text" disabled value="<?php echo $employe['Numero_Rue']." ".$employe['Rue'];?>">
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row form-group">
-                                    <label class="col col-md-3 form-control-label" for="ville">Ville</label>
+                                    <label class="col col-md-3 form-control-label" for="ville">Ville : </label>
                                     <div class="col col-md-3">
                                         <input name="ville" id="ville" class="text-center form-control"  type="text" disabled value="<?php echo $employe['Nom_Ville'];?>">
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row form-group">
-                                    <label class="col col-md-3 form-control-label" for="code_postal">Code postal</label>
+                                    <label class="col col-md-3 form-control-label" for="code_postal">Code postal : </label>
                                     <div class="col col-md-3">
                                         <input name="code_postal" id="code_postal" class="text-center form-control"  type="text" disabled value="<?php echo $employe['Code_Postal'];?>">
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row form-group">
-                                    <label class="col col-md-3 form-control-label" for="pays">Pays</label>
+                                    <label class="col col-md-3 form-control-label" for="pays">Pays : </label>
                                     <div class="col col-md-3">
                                         <input name="pays" id="pays" class="text-center form-control"  type="text" disabled value="<?php echo $employe['Nom_Pays'];?>">
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row form-group">
-                                    <label class="col col-md-3 form-control-label" for="motifs">Motifs</label>
+                                    <label class="col col-md-3 form-control-label" for="motifs">Motifs : </label>
                                     <div class="col col-md-3">
                                         <input name="motifs" id="motifs" class="text-center form-control"  type="text" disabled value="<?php echo $employe['Motif'];?>">
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row form-group">
-                                    <label class="col col-md-3 form-control-label" id="date_debut_ina">Date début d'inactivité</label>
+                                    <label class="col col-md-3 form-control-label" id="date_debut_ina">Date début d'inactivité : </label>
                                     <div class="col col-md-3">
                                         <input name="date_debut_ina" id="date_debut_ina" class="text-center form-control"  type="text" disabled value="<?php echo $employe['max_date_debut'];?>">
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row form-group">
-                                    <label class="col col-md-3 form-control-label" for="date_fin_ina">Date fin d'inactivité</label>
+                                    <label class="col col-md-3 form-control-label" for="date_fin_ina">Date fin d'inactivité : </label>
                                     <div class="col col-md-3">
                                         <input name="date_fin_ina" id="date_fin_ina" class="text-center form-control" type="text" disabled value="<?php echo $employe['max_date_fin'];?>">
                                     </div>
@@ -143,8 +141,8 @@ if ($_GET['id'] == null or $_GET['id'] == 0) {
                                     <button id="hidebtn1" style="margin-left: 2vh; display:none" onclick="reload()" class="btn btn-danger btn-sm">
                                         <i class="fa fa-ban"></i> Annuler
                                     </button>
-                                    <button id="hidebtn2" style="margin-left: 2vh; display:none" type="submit" class="btn btn-success btn-sm ajax">
-                                        <in class="fa fa-check"></in> Valider
+                                    <button id="hidebtn2" style="margin-left: 2vh; display:none" class="btn btn-success btn-sm">
+                                        <i class="fa fa-check"></i> Valider
                                     </button>
                                 </div>
                             </form>
@@ -159,47 +157,15 @@ if ($_GET['id'] == null or $_GET['id'] == 0) {
             </div>
         </div>
     </div>
+
     <script>
         function enable() {
             $("input").prop('disabled', false);
             $("#hidebtn1").css("display", "");
             $("#hidebtn2").css("display", "");
         }
+
         function reload() {
-            location.reload();
+            window.location.reload();
         }
     </script>
-    <?php }?>
-
-    <?php
-
-    $id_employe  = $model->getInput('id_employe');
-    $nom         = $model->getInput('nom');
-    $prenom      = $model->getInput('prenom');
-    $anniv       = $model->getInput('date_naissance');
-    $telephone   = $model->getInput('telephone');
-    $permis      = $model->getInput('num_permis');
-    $secu        = $model->getInput('num_secu');
-    $bees        = $model->getInput('num_bees');
-    $contrat     = $model->getInput('contrat');
-    $embauche    = $model->getInput('date_embauche');
-    $visit_med   = $model->getInput('date_visite_med');
-
-    $newanniv = substr($anniv, 6, 4) . '-' . substr($anniv, 3, 2) . '-' . substr($anniv, 0, 2);
-    $newembauche = substr($embauche, 6, 4) . '-' . substr($embauche, 3, 2) . '-' . substr($embauche, 0, 2);
-    $newmedical = substr($visit_med, 6, 4) . '-' . substr($visit_med, 3, 2) . '-' . substr($visit_med, 0, 2);
-
-    $_SESSION['update']['employe']['id_employe']           = $id_employe;
-    $_SESSION['update']['employe']['nom']                  = $nom;
-    $_SESSION['update']['employe']['Prenom']               = $prenom;
-    $_SESSION['update']['employe']['date_naissance']       = $newanniv;
-    $_SESSION['update']['employe']['telephone']            = $telephone;
-    $_SESSION['update']['employe']['num_permis']           = $permis;
-    $_SESSION['update']['employe']['num_secu']             = $secu;
-    $_SESSION['update']['employe']['num_bees']             = $bees;
-    $_SESSION['update']['employe']['contrat']              = $contrat;
-    $_SESSION['update']['employe']['date_embauche']        = $newembauche;
-    $_SESSION['update']['employe']['date_visite_med']      = $newmedical;
-    $employe = $model->updateEmploye($id_employe, $nom, $prenom, $newanniv, $telephone, $permis, $secu, $bees, $contrat, $newembauche, $newmedical);
-    var_dump($_SESSION);
-    ?>

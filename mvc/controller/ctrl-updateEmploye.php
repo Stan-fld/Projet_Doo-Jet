@@ -1,10 +1,46 @@
 <?php
 
-$feedback = "";
 $model    = new Model;
 
+$etape  = $model->getInput('etape');
 
-$employe = $model->updateEmploye($id_employe, $nom, $prenom, $newanniv, $telephone, $permis, $secu, $bees, $contrat, $newembauche, $newmedical);
+switch ($etape) {
+
+    //|||||||||||||||||||||\\
+    //| CHOIX DE LA MODIF |\\
+    //|||||||||||||||||||||\\
+
+    case 'update_employe':
+
+        $id_employe = $model->getInput('id_employe');
+        $nom = $model->getInput('nom');
+        $prenom = $model->getInput('prenom');
+        $anniv = $model->getInput('date_naissance');
+        $telephone = $model->getInput('telephone');
+        $permis = $model->getInput('num_permis');
+        $secu = $model->getInput('num_secu');
+        $bees = $model->getInput('num_bees');
+        $contrat = $model->getInput('contrat');
+        $embauche = $model->getInput('date_embauche');
+        $visit_med = $model->getInput('date_visite_med');
+
+        $newanniv = substr($anniv, 6, 4) . '-' . substr($anniv, 3, 2) . '-' . substr($anniv, 0, 2);
+        $newembauche = substr($embauche, 6, 4) . '-' . substr($embauche, 3, 2) . '-' . substr($embauche, 0, 2);
+        $newmedical = substr($visit_med, 6, 4) . '-' . substr($visit_med, 3, 2) . '-' . substr($visit_med, 0, 2);
+
+        $employe = $model->updateEmploye($id_employe, $nom, $prenom, $newanniv, $telephone, $permis, $secu, $bees, $contrat, $newembauche, $newmedical);
+
+        $feedback .= '<script type="text/javascript">alert("Modifications effectuées");window.location.assign("infoemploye?id=' . $id_employe . '");</script>';
+
+        break;
+
+    default:
+        $feedback .= '<script type="text/javascript">window.location.assign("/");</script>';
+        break;
+}
+
+
+//$employe = $model->updateEmploye($id_employe, $nom, $prenom, $newanniv, $telephone, $permis, $secu, $bees, $contrat, $newembauche, $newmedical);
 // Récupération des informations saisies dans le formulaire
 /*$id_employe  = $model->getInput('id_employe');
 $nom         = $model->getInput('nom');

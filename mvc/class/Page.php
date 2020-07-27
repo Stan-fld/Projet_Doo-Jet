@@ -69,13 +69,30 @@ class Page
             $nomPage[0] = "index";
         }
 
+        $cheminSolo = 'mvc/view/' . $nomPage[0] . '.php';
         $cheminPage = 'mvc/view/view-' . $nomPage[0] . '.php';
 
+        if (is_file($cheminSolo)) {
+            include($cheminSolo);
+        }else if (is_file($cheminPage)) {
 
-        include("mvc/view/header.php");
-        include($cheminPage);
-        include("mvc/view/footer.php");
+            if($nomPage[0] =="infoemploye" && $model->getEmploye($_GET["id"]) == null)
+            {
+                header("location: /employe");
+                exit;
+            }
 
+            include("mvc/view/header.php");
+            include($cheminPage);
+            include("mvc/view/footer.php");
+
+        }
+        else{
+            header("HTTP/1.1 404 Not Found");
+            //include("mvc/view/header.php");
+            include ("mvc/view/404.php");
+            //include("mvc/view/footer.php");
+        }
     }
 
     // FIN DU CODE DE LA CLASSE Page

@@ -21,3 +21,6 @@
 
 <!-- Main JS-->
 <script src="js/main.js"></script>
+
+<!-- Feedback -->
+<div class="feedback"></div>
