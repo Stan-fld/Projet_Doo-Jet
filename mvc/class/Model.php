@@ -127,19 +127,20 @@ class Model{
     //----------------------------------------------------------------------------------------------------------------------------------
     function updateEmploye($idemploye, $nomE, $prenomE, $annivE, $telE, $permisE, $secu, $bees, $contrat, $embauche, $medical)
     {
-        $query  = "CALL update_employe_personne(:idemploye, :nomE, :prenomE, :annivE, :telE, :permisE, :secu, :bees, :contrat, :embauche, :medical)";
+        $query  = "CALL update_tb_personne_employe(:idemploye, :nomE, :prenomE, :annivE, :telE, :permisE, :secu, :bees, :contrat, :embauche, :medical)";
         $bind = [":idemploye" => $idemploye,
-                ":nomE" => $nomE,
-                ":prenomE" => $prenomE,
-                ":annivE" => $annivE,
-                ":telE" => $telE,
-                ":permisE" => $permisE,
-                ":secu" => $secu,
-                ":bees" => $bees,
-                ":contrat" => $contrat,
-                ":embauche" => $embauche,
-                ":medical" => $medical,];
-        $stmt   = $this->executeSQL($query, $bind);
+            ":nomE" => $nomE,
+            ":prenomE" => $prenomE,
+            ":annivE" => $annivE,
+            ":telE" => $telE,
+            ":permisE" => $permisE,
+            ":secu" => $secu,
+            ":bees" => $bees,
+            ":contrat" => $contrat,
+            ":embauche" => $embauche,
+            ":medical" => $medical,];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
@@ -153,5 +154,46 @@ class Model{
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
+    function updateVille($idad, $nom_ville, $code_postal, $pays)
+    {
+        $query  = "CALL update_ville(:idadresse, :ville, :code_postal, :pays)";
+        $bind = [":idadresse" => $idad,
+            ":ville" => $nom_ville,
+            ":code_postal" => $code_postal,
+            ":pays" => $pays];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
 
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function updateAdresse($idad, $num, $rue, $voie)
+    {
+        $query  = "CALL update_adresse(:idadresse, :numero, :rue, :voie)";
+        $bind = [":idadresse" => $idad,
+            ":numero" => $num,
+            ":rue" => $rue,
+            ":voie" => $voie];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function updateInactivite($idpers, $motif, $debut, $fin)
+    {
+        $query  = "
+                    UPDATE periode_inactivite
+                    SET periode_inactivite.Motif = :motif,
+                        periode_inactivite.Date_Debut_Inactivite = :date_debut,
+                        periode_inactivite.Date_Fin_Inactivite = :date_fin
+                    WHERE 
+                    (ID_Inactivite = (SELECT MAX(ID_Inactivite)as maxid FROM employe_malade WHERE employe_malade.ID_Personne = :idpersonne))
+                    
+                    ";
+        $bind = [":idpersonne" => $idpers,
+            ":motif" => $motif,
+            ":date_debut" => $debut,
+            ":date_fin" => $fin];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
 }

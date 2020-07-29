@@ -13,6 +13,9 @@ switch ($etape) {
     case 'update_employe':
 
         $id_employe = $model->getInput('id_employe');
+        $id_adresse       = $model->getInput('id_adresse');
+
+        // Récupere les infos du formulaire pour les personnes
         $nom = $model->getInput('nom');
         $prenom = $model->getInput('prenom');
         $anniv = $model->getInput('date_naissance');
@@ -24,26 +27,59 @@ switch ($etape) {
         $embauche = $model->getInput('date_embauche');
         $visit_med = $model->getInput('date_visite_med');
 
+        // Récupere les infos du formulaire pour la ville
+        $ville            = $model->getInput('ville');
+        $code_post        = $model->getInput('code_postal');
+        $pays             = $model->getInput('nom_pays');
+
+        // Récupere les infos du formulaire pour l'adresse
+        $num_rue     = $model->getInput('num_voie');
+        $rue         = $model->getInput('nom_voie');
+        $voie         = $model->getInput('type_voie');
+
+        // Récupere les infos du formulaire pour l'inactivité
+        $motif       = $model->getInput('motifs');
+        $date_debut  = $model->getInput('date_debut_ina');
+        $date_fin    = $model->getInput('date_fin_ina');
+
         // Conversion des dates au format US
         $newanniv = substr($anniv, 6, 4) . '-' . substr($anniv, 3, 2) . '-' . substr($anniv, 0, 2);
         $newembauche = substr($embauche, 6, 4) . '-' . substr($embauche, 3, 2) . '-' . substr($embauche, 0, 2);
         $newmedical = substr($visit_med, 6, 4) . '-' . substr($visit_med, 3, 2) . '-' . substr($visit_med, 0, 2);
+        $newdebut = substr($date_debut, 6, 4) . '-' . substr($date_debut, 3, 2) . '-' . substr($date_debut, 0, 2);
+        $newfin = substr($date_fin, 6, 4) . '-' . substr($date_fin, 3, 2) . '-' . substr($date_fin, 0, 2);
 
         // Date du jour format US
         $now = date('Y');
         $datenow = ($now - 15).date('-m-d');
-        //$dateAnniv = substr($newanniv, 0, 4) . substr($newanniv, 5, 2) . substr($newanniv, 8, 2);
 
+        //On convertit les dates en nombre pour les comparer
+        $date_debutcompare = substr($newdebut, 0, 4) . substr($newdebut, 5, 2) . substr($newdebut, 8, 2);
+        $date_fincompare = substr($newfin, 0, 4) . substr($newfin, 5, 2) . substr($newfin, 8, 2);
+
+        // Si la date est null on dit que la conversion est null
+        if($date_fin == null)
+        {
+            $newfin = NULL;
+        }
+
+        //Si l'année de naissance est supérieur ou égal à l'année actuel on retourne une erreur
         if(substr($newanniv, 0, 4) >=  substr($datenow, 0, 4))
         {
             $feedback .= '<script type="text/javascript">alert("Trop jeune")';
         }
+        else if($date_fincompare <= $date_debutcompare && $newfin!==null)
+        {
+            $feedback .= '<script type="text/javascript">alert("La date de fin d\'inactivité ne peut pas être inférieure ou égale à celle de début")';
+        }
         else
         {
-            $employe = $model->updateEmploye($id_employe, $nom, $prenom, $newanniv, $telephone, $permis, $secu, $bees, $contrat, $newembauche, $newmedical);
+            $update_employe = $model->updateEmploye($id_employe, $nom, $prenom, $newanniv, $telephone, $permis, $secu, $bees, $contrat, $newembauche, $newmedical);
+            $update_ville = $model->updateVille($id_adresse, $ville, $code_post, $pays);
+            $udpate_adresse = $model->updateAdresse($id_adresse, $num_rue, $rue, $voie);
+            $update_inactivite = $model->updateInactivite($id_employe, $motif, $newdebut, $newfin);
 
             $feedback .= '<script type="text/javascript">alert("Modifications effectuées");window.location.assign("infoemploye?id=' . $id_employe . '");</script>';
-
         }
         break;
 
@@ -55,25 +91,6 @@ switch ($etape) {
 
 //$employe = $model->updateEmploye($id_employe, $nom, $prenom, $newanniv, $telephone, $permis, $secu, $bees, $contrat, $newembauche, $newmedical);
 // Récupération des informations saisies dans le formulaire
-/*$id_employe  = $model->getInput('id_employe');
-$nom         = $model->getInput('nom');
-$prenom      = $model->getInput('prenom');
-$anniv       = $model->getInput('date_naissance');
-$telephone   = $model->getInput('telephone');
-$permis      = $model->getEmail('num_permis');
-$secu        = $model->getInput('num_secu');
-$bees        = $model->getInput('num_bees');
-$contrat     = $model->getInput('contrat');
-$embauche    = $model->getInput('date_embauche');
-$visit_med   = $model->getInput('date_visite_med');
-$num_rue     = $model->getInput('Numero_Rue');
-$rue         = $model->getInput('Rue');
-$ville       = $model->getInput('Nom_Ville');
-$code_post   = $model->getInput('Code_Postal');
-$pays        = $model->getInput('Nom_Pays');
-$motif       = $model->getInput('Motif');
-$date_debut  = $model->getInput('max_date_debut');
-$date_fin    = $model->getInput('max_date_fin');*/
 
 // Mise en session des informations
 /*$_SESSION['update']['employe']['id_employe']                  = $id_employe;

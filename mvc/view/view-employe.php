@@ -14,7 +14,7 @@ $employes = $model->getEmployeAll();
                 <div style="margin-bottom: 2vh!important; text-align: center!important;">
                     <h2 class="title-1">Liste des employés</h2>
                 </div>
-                <input class ="au-input" id="myInput" style="padding: 0px 16px;  border-radius: 10px; margin-bottom: 1vh; margin-left: 1vh" type="text" placeholder="Search..">
+                <input class ="au-input" id="myInput" style="padding: 0px 16px;  border-radius: 10px; margin-bottom: 1vh; margin-left: 1vh" type="text" placeholder="Rechercher..">
                 <!-- DATA TABLE-->
                 <div class="table-responsive m-b-40">
                     <table class="table table-borderless table-data3">
@@ -42,7 +42,7 @@ $employes = $model->getEmployeAll();
                                 <td><?php echo $employe['Telephone'];?></td>
                                 <td><?php echo $employe['N_Permis'];?></td>
                                 <td><?php echo $employe['N_BEES'];?></td>
-                                <td><?php echo $employe['Numero_Rue']." ".$employe['Rue'];?></td>
+                                <td><?php echo $employe['Numero_Rue']." ".$employe['Type_Voie']." ".$employe['Rue'];?></td>
                                 <td><?php echo $employe['Nom_Ville'];?></td>
                                 <td><?php echo $employe['Code_Postal'];?></td>
                                 <td><?php echo $employe['Nom_Pays'];?></td>
