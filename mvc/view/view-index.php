@@ -40,7 +40,7 @@ $clients = $model->getClientAll();
                                 <td><?php echo $clts['anniv'];?></td>
                                 <td><?php echo $clts['Telephone'];?></td>
                                 <td><?php echo $clts['N_Permis'];?></td>
-                                <td><?php echo $clts['Numero_Rue']." ".$clts['Rue'];?></td>
+                                <td><?php echo $clts['Numero_Rue']." ".$clts['Type_Voie']." ".$clts['Rue'];?></td>
                                 <td><?php echo $clts['Nom_Ville'];?></td>
                                 <td><?php echo $clts['Code_Postal'];?></td>
                                 <td><?php echo $clts['Nom_Pays'];?></td>

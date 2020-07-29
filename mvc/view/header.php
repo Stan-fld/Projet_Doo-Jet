@@ -61,8 +61,8 @@
                         <i class="fas fa-user"></i>Employé</a>
                 </li>
                 <li>
-                    <a href="table.html">
-                        <i class="fas fa-table"></i>Tables</a>
+                    <a href="/createclient">
+                        <i class="fa fa-pencil"></i>Ajouter client</a>
                 </li>
                 <li>
                     <a href="form.html">
@@ -154,9 +154,9 @@
                     <a href="/employe">
                         <i class="fas fa-user"></i>Employé</a>
                 </li>
-                <li>
-                    <a href="table.html">
-                        <i class="fas fa-table"></i>Tables</a>
+                <li <?= $nomPage[0] == 'createclient' ? ' class="active"' : '' ?>>
+                    <a href="createclient">
+                        <i class="fas fa-pencil"></i>Ajouter client</a>
                 </li>
                 <li>
                     <a href="form.html">

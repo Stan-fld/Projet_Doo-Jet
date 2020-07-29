@@ -76,9 +76,15 @@ class Page
             include($cheminSolo);
         }else if (is_file($cheminPage)) {
 
-            if($nomPage[0] =="infoemploye" && $model->getEmploye($_GET["id"]) == null)
+            if($nomPage[0] == "infoemploye" && $model->getEmploye($_GET["id"]) == null)
             {
                 header("location: /employe");
+                exit;
+            }
+
+            if($nomPage[0] == "infoclient" && $model->getClient($_GET["id"]) == null)
+            {
+                header("location: /index");
                 exit;
             }
 

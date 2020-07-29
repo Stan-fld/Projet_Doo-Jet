@@ -1,11 +1,14 @@
 <?php
 //session_destroy();
+
+//On récupère les infos de l'employé à partir de son id
 $idemploye = $_GET["id"];
 $employe = $model->getEmploye($idemploye);
+//On récupère tous les pays
 $pays = $model->getPays();
 ?>
 <!-- Title Page-->
-<title>Fiche client : <?php echo $employe['Prenom']." ".$employe['Nom'];?></title>
+<title>Fiche employé : <?php echo $employe['Prenom']." ".$employe['Nom'];?></title>
 <div class="main-content">
     <div class="section__content section__content--p30">
         <div class="container-fluid">
@@ -13,12 +16,12 @@ $pays = $model->getPays();
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>Fiche client : </strong><?php echo $employe['Prenom']." ".$employe['Nom'];?>
+                            <strong>Fiche employé : </strong><?php echo $employe['Prenom']." ".$employe['Nom'];?>
                         </div>
                         <div class="card-body card-block">
                             <form action="" method="post" class="form-horizontal ajax">
-                                <input type="hidden" name="controller" value="updateEmploye">
-                                <input type="hidden" name="etape" value="update_employe">
+                                <input type="hidden" name="controller" value="updatePersonne">
+                                <input type="hidden" id="etape" name="etape" value="">
                                 <input type="hidden" name="id_employe" value="<?php echo $employe['ID_Personne'];?>">
                                 <input type="hidden" name="id_adresse" value="<?php echo $employe['ID_Adresse'];?>">
                                 <div class="row form-group">
@@ -129,9 +132,9 @@ $pays = $model->getPays();
                                 <hr>
                                 <div class="row form-group">
                                     <label class="col col-md-3 form-control-label" for="ville">Ville : </label>
-                                        <div class="col col-md-3">
-                                            <input name="ville" id="ville" class="text-center form-control"  type="text" required disabled value="<?php echo $employe['Nom_Ville'];?>">
-                                        </div>
+                                    <div class="col col-md-3">
+                                        <input name="ville" id="ville" class="text-center form-control"  type="text" required disabled value="<?php echo $employe['Nom_Ville'];?>">
+                                    </div>
                                 </div>
                                 <hr>
                                 <div class="row form-group">
@@ -142,16 +145,25 @@ $pays = $model->getPays();
                                 </div>
                                 <hr>
                                 <div class="row form-group">
-                                    <label class="col col-md-3 form-control-label" for="motifs">Motifs : </label>
-                                    <div class="col col-md-3">
-                                        <input name="motifs" id="motifs" class="text-center form-control"  type="text" required disabled value="<?php echo $employe['Motif'];?>">
+                                    <label class="col col-md-3 form-control-label"></label>
+                                    <div class="col col-md-3 text-center">
+                                        <strong style="font-size: large">Période d'inactivité</strong>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row form-group">
-                                    <label class="col col-md-3 form-control-label" id="date_debut_ina">Date début d'inactivité : </label>
+                                    <label class="col col-md-3 form-control-label" for="motifs">Motifs : </label>
                                     <div class="col col-md-3">
-                                        <input name="date_debut_ina" id="date_debut_ina" class="text-center form-control"  type="text" required disabled value="<?php echo $employe['max_date_debut'];?>">
+                                        <input name="motifs" id="motifs" class="text-center form-control"  type="text" disabled value="<?php echo $employe['Motif'];?>">
+                                        <input name="newmotifs" id="newmotifs" class="text-center form-control hiddeninact" type="text" hidden value="">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row form-group">
+                                    <label class="col col-md-3 form-control-label" for="date_debut_ina">Date début d'inactivité : </label>
+                                    <div class="col col-md-3">
+                                        <input name="date_debut_ina" id="date_debut_ina" class="text-center form-control"  type="text" disabled value="<?php echo $employe['max_date_debut'];?>">
+                                        <input name="newdate_debut" id="newdate_debut" class="text-center form-control hiddeninact"  type="text" hidden value="">
                                     </div>
                                 </div>
                                 <hr>
@@ -159,21 +171,25 @@ $pays = $model->getPays();
                                     <label class="col col-md-3 form-control-label" for="date_fin_ina">Date fin d'inactivité : </label>
                                     <div class="col col-md-3">
                                         <input name="date_fin_ina" id="date_fin_ina" class="text-center form-control" type="text" disabled value="<?php echo $employe['max_date_fin'];?>">
+                                        <input name="newdate_fin" id="newdate_fin" class="text-center form-control hiddeninact" type="text" hidden value="">
                                     </div>
                                 </div>
                                 <div class="card-footer text-right">
-                                    <button id="hidebtn1" style="margin-left: 2vh; display:none" onclick="reload()" class="btn btn-danger btn-sm">
+                                    <button id="hidebtnAnnuler" style="margin-left: 2vh; display:none" onclick="reload()" class="btn btn-danger btn-sm">
                                         <i class="fa fa-ban"></i> Annuler
                                     </button>
-                                    <button id="hidebtn2" style="margin-left: 2vh; display:none" class="btn btn-success btn-sm">
+                                    <button id="hidebtnValider" style="margin-left: 2vh; display:none" class="btn btn-success btn-sm">
                                         <i class="fa fa-check"></i> Valider
                                     </button>
                                 </div>
                             </form>
                         </div>
                         <div class="card-footer text-right">
-                            <button style="margin-left: 2vh" onclick="enable()" class="btn btn-warning btn-sm">
+                            <button id="modif" style="margin-left: 2vh" onclick="modif()" class="btn btn-warning btn-sm">
                                 <i class="fa fa-cog"></i> Modifier
+                            </button>
+                            <button id="inact" style="margin-left: 2vh"  onclick="inact()" class="btn btn-danger btn-sm">
+                                <i class="fa fa-ambulance"></i> Ajouter inactivité
                             </button>
                         </div>
                     </div>
@@ -183,12 +199,24 @@ $pays = $model->getPays();
     </div>
 
     <script>
-        function enable() {
+        function modif() {
             $("input").prop('disabled', false);
             $("select").prop('disabled', false);
-            $("#hidebtn1").css("display", "");
-            $("#hidebtn2").css("display", "");
+            $("#hidebtnAnnuler").css("display", "");
+            $("#hidebtnValider").css("display", "");
+            $("#inact").css("display", "none");
+            $('#etape').val('update_employe');
             $('.pays').select2();
+        }
+        function inact() {
+            $("#hidebtnAnnuler").css("display", "");
+            $("#hidebtnValider").css("display", "");
+            $("#modif").css("display", "none");
+            $("#motifs").css("display", "none");
+            $("#date_debut_ina").css("display", "none");
+            $("#date_fin_ina").css("display", "none");
+            $('#etape').val('new_inact');
+            $(".hiddeninact").prop('hidden', false);
         }
 
         function reload() {

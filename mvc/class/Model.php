@@ -142,6 +142,19 @@ class Model{
         $result   = $this->executeSQL($query, $bind);
         return $result;
     }
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function updateClient($idclient, $nomC, $prenomC, $annivC, $telC, $permisC)
+    {
+        $query  = "CALL  	update_tb_personne_client(:idclient, :nomC, :prenomC, :annivC, :telC, :permisC)";
+        $bind = [":idclient" => $idclient,
+            ":nomC" => $nomC,
+            ":prenomC" => $prenomC,
+            ":annivC" => $annivC,
+            ":telC" => $telC,
+            ":permisC" => $permisC];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
 
     //----------------------------------------------------------------------------------------------------------------------------------
     function getPays()
@@ -190,6 +203,24 @@ class Model{
                     
                     ";
         $bind = [":idpersonne" => $idpers,
+            ":motif" => $motif,
+            ":date_debut" => $debut,
+            ":date_fin" => $fin];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function addPeriodeinact($idemploye, $motif, $debut, $fin)
+    {
+        $query  = "
+                    INSERT INTO periode_inactivite (Motif, Date_Debut_Inactivite, Date_Fin_Inactivite)
+      	            VALUES (:motif, :date_debut,  :date_fin);
+                    INSERT INTO employe_malade (ID_Personne, ID_Inactivite) 
+      	            VALUES (:idemploye, LAST_INSERT_ID())
+      	            
+                    ";
+        $bind = [":idemploye" => $idemploye,
             ":motif" => $motif,
             ":date_debut" => $debut,
             ":date_fin" => $fin];
