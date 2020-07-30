@@ -9,14 +9,9 @@ switch ($etape) {
     //|||||||||||||||||||||\\
     //| CHOIX DE LA MODIF |\\
     //|||||||||||||||||||||\\
+/*
+    case 'create_employe':
 
-    case 'update_employe':
-
-        $inact="";
-
-        // Récupere les ID du formulaire pour modifier un employé
-        $id_employe     = $model->getInput('id_employe');
-        $id_adresse     = $model->getInput('id_adresse');
 
         // Récupere les infos du formulaire pour les personnes
         $nom       = $model->getInput('nom');
@@ -172,14 +167,10 @@ switch ($etape) {
             }
         }
 
-        break;
+        break;*/
 
 
-    case 'update_client':
-
-        // Récupere les ID du formulaire pour modifier un client
-        $id_client = $model->getInput('id_client');
-        $id_adresse = $model->getInput('id_adresse');
+    case 'create_client':
 
         // Récupere les infos du formulaire pour les personnes
         $nom       = $model->getInput('nom');
@@ -214,15 +205,12 @@ switch ($etape) {
         //Enfin on execute les requêtes préparées
         else
         {
-            $update_employe = $model->updateClient($id_client, $nom, $prenom, $newanniv, $telephone, $permis);
-            $update_ville = $model->updateVille($id_adresse, $ville, $code_post, $pays);
-            $udpate_adresse = $model->updateAdresse($id_adresse, $num_rue, $rue, $voie);
-
-            $feedback .= '<script type="text/javascript">alert("Modifications effectuées");window.location.assign("infoclient?id=' . $id_client . '");</script>';
+            $add_cient = $model->addClient($nom, $prenom, $newanniv, $telephone, $permis, $ville, $code_post, $pays, $num_rue, $rue, $voie);
+            $feedback .= '<script type="text/javascript">alert("Client ajouté");window.location.assign("/")</script>';
         }
         break;
 
     default:
-        $feedback .= '<script type="text/javascript">alert("Erreur");window.location.assign("/");</script>';
+        $feedback .= '<script type="text/javascript">alert("Erreur");window.location.assign("/")</script>';
         break;
 }

@@ -15,8 +15,8 @@ $pays = $model->getPays();
                         </div>
                         <div class="card-body card-block">
                             <form action="" method="post" class="form-horizontal ajax">
-                                <input type="hidden" name="controller" value="updatePersonne">
-                                <input type="hidden" id="etape" name="etape" value="">
+                                <input type="hidden" name="controller" value="createPersonne">
+                                <input type="hidden" id="etape" name="etape" value="create_client">
                                 <div class="row form-group">
                                     <label class="col col-md-3" for="nom">Nom : </label>
                                     <div class="col col-md-3">
@@ -48,7 +48,7 @@ $pays = $model->getPays();
                                 <div class="row form-group">
                                     <label class="col col-md-3 form-control-label" for="num_permis">Numéro de permis : </label>
                                     <div class="col col-md-3">
-                                        <input name="num_permis" id="num_permis" class="text-center form-control"  type="text" required  value="">
+                                        <input name="num_permis" id="num_permis" class="text-center form-control"  type="text"  value="">
                                     </div>
                                 </div>
                                 <hr>
@@ -57,7 +57,11 @@ $pays = $model->getPays();
                                     <div class="col col-md-3">
                                         <select name="nom_pays" id="nom_pays" class="text-center form-control pays" required >
                                             <?php foreach($pays as $Pays){ ?>
-                                                <option value="<?php echo $Pays['Nom_Pays'];?>"><?php echo $Pays['Nom_Pays'];?></option>
+                                                <?php if($Pays['Nom_Pays'] == 'France'){?>
+                                                    <option selected value="<?php echo $Pays['Nom_Pays'];?>"><?php echo $Pays['Nom_Pays'];?></option>
+                                                <?php }else{?>
+                                                    <option value="<?php echo $Pays['Nom_Pays'];?>"><?php echo $Pays['Nom_Pays'];?></option>
+                                                <?php } ?>
                                             <?php } ?>
                                         </select>
                                     </div>
