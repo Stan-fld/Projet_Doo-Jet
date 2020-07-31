@@ -62,7 +62,7 @@
                 </li>
                 <li>
                     <a href="/createclient">
-                        <i class="fa fa-pencil"></i>Ajouter client</a>
+                        <i class="far fa-check-square"></i>Ajouter client</a>
                 </li>
                 <li>
                     <a href="form.html">
@@ -156,7 +156,7 @@
                 </li>
                 <li <?= $nomPage[0] == 'createclient' ? ' class="active"' : '' ?>>
                     <a href="createclient">
-                        <i class="fas fa-pencil"></i>Ajouter client</a>
+                        <i class="far fa-check-square"></i>Ajouter client</a>
                 </li>
                 <li>
                     <a href="form.html">

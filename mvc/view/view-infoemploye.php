@@ -175,7 +175,7 @@ $pays = $model->getPays();
                                     </div>
                                 </div>
                                 <div class="card-footer text-right">
-                                    <button id="hidebtnAnnuler" style="margin-left: 2vh; display:none" onclick="reload()" class="btn btn-danger btn-sm">
+                                    <button id="hidebtnAnnuler" type="button" style="margin-left: 2vh; display:none" onclick="reload()" class="btn btn-danger btn-sm">
                                         <i class="fa fa-ban"></i> Annuler
                                     </button>
                                     <button id="hidebtnValider" style="margin-left: 2vh; display:none" class="btn btn-success btn-sm">

@@ -258,5 +258,39 @@ class Model{
 
         return $result;
     }
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function addEmploye($nomC, $prenomC, $annivC, $telC, $permisC, $villeC, $code_postC, $paysC, $num_rueC, $rueC, $voieC, $secu, $bees, $contrat, $embauche, $vmedicale)
+    {
+        $query  = "CALL create_personne(:nomC, :prenomC, :annivC, :telC, :permisC, :villeC, :code_postC, :paysC, :num_rueC, :rueC, :voieC, :secu, :bees, :contrat, :embauche, :vmedicale, NULL)";
+        $bind = [
+            ":nomC" => $nomC,
+            ":prenomC" => $prenomC,
+            ":annivC" => $annivC,
+            ":telC" => $telC,
+            ":permisC" => $permisC,
+            ":villeC" => $villeC,
+            ":code_postC" => $code_postC,
+            ":paysC" => $paysC,
+            ":num_rueC" => $num_rueC,
+            ":rueC" => $rueC,
+            ":voieC" => $voieC,
+            ":secu" => $secu,
+            ":bees" => $bees,
+            ":contrat" => $contrat,
+            ":embauche" => $embauche,
+            ":vmedicale" => $vmedicale,
+            //":password" => $password,
+            ];
+        $result   = $this->executeSQL($query, $bind);
+
+        //Si la procédure retourne erreur 45000 alors l'utilisateur existe déjà
+        if($result->errorCode() == '45000')
+        {
+            echo '<script type="text/javascript">alert("Utilisateur déjà existant")</script>';
+            exit;
+        }
+
+        return $result;
+    }
 
 }

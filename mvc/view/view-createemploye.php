@@ -3,7 +3,7 @@
 $pays = $model->getPays();
 ?>
 <!-- Title Page-->
-<title>Création fiche client : </title>
+<title>Création fiche employé : </title>
 <div class="main-content">
     <div class="section__content section__content--p30">
         <div class="container-fluid">
@@ -11,12 +11,12 @@ $pays = $model->getPays();
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <strong>Création fiche client : </strong>
+                            <strong>Création fiche employé : </strong>
                         </div>
                         <div class="card-body card-block">
                             <form action="" method="post" class="form-horizontal ajax">
                                 <input type="hidden" name="controller" value="createPersonne">
-                                <input type="hidden" id="etape" name="etape" value="create_client">
+                                <input type="hidden" id="etape" name="etape" value="create_employe">
                                 <div class="row form-group">
                                     <label class="col col-md-3" for="nom">Nom : </label>
                                     <div class="col col-md-3">
@@ -48,7 +48,42 @@ $pays = $model->getPays();
                                 <div class="row form-group">
                                     <label class="col col-md-3 form-control-label" for="num_permis">Numéro de permis : </label>
                                     <div class="col col-md-3">
-                                        <input name="num_permis" id="num_permis" class="text-center form-control"  type="text"  value="">
+                                        <input name="num_permis" id="num_permis" class="text-center form-control"  type="text" required value="">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row form-group">
+                                    <label class="col col-md-3 form-control-label" for="num_secu">Numéro de sécurité sociale : </label>
+                                    <div class="col col-md-3">
+                                        <input name="num_secu" id="num_secu" class="text-center form-control"  type="text" required value="">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row form-group">
+                                    <label class="col col-md-3 form-control-label" for="num_bees">Numéro BEES : </label>
+                                    <div class="col col-md-3">
+                                        <input name="num_bees" id="num_bees" class="text-center form-control"  type="text" required value="">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row form-group">
+                                    <label class="col col-md-3 form-control-label" for="contrat">Contrat : </label>
+                                    <div class="col col-md-3">
+                                        <input name="contrat" id="contrat" class="text-center form-control"  type="text" required value="">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row form-group">
+                                    <label class="col col-md-3 form-control-label" for="date_embauche">Date d'embauche : </label>
+                                    <div class="col col-md-3">
+                                        <input name="date_embauche" id="date_embauche" class="text-center form-control"  type="text" required value="">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row form-group">
+                                    <label class="col col-md-3 form-control-label" for="date_visite_med">Date dernière visite médicale : </label>
+                                    <div class="col col-md-3">
+                                        <input name="date_visite_med" id="date_visite_med" class="text-center form-control"  type="text" required value="">
                                     </div>
                                 </div>
                                 <hr>
