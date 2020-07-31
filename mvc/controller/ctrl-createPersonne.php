@@ -38,6 +38,8 @@ switch ($etape) {
 
         // Conversion des dates au format US
         $newanniv    = substr($anniv, 6, 4) . '-' . substr($anniv, 3, 2) . '-' . substr($anniv, 0, 2);
+        $newembauche = substr($embauche, 6, 4) . '-' . substr($embauche, 3, 2) . '-' . substr($embauche, 0, 2);
+        $newmedical  = substr($visit_med, 6, 4) . '-' . substr($visit_med, 3, 2) . '-' . substr($visit_med, 0, 2);
 
 
         // Date du jour -15 ans format US
@@ -52,7 +54,8 @@ switch ($etape) {
         }
         else
             {
-                $add_cient = $model->addEmploye($nom, $prenom, $newanniv, $telephone, $permis, $ville, $code_post, $pays, $num_rue, $rue, $voie, $secu, $bees, $contrat, $embauche, $visit_med);
+                $add_employe= $model->addEmploye($nom, $prenom, $newanniv, $telephone, $permis, $ville, $code_post, $pays, $num_rue, $rue, $voie, $secu, $bees, $contrat, $newembauche, $newmedical);
+                $feedback .= '<script type="text/javascript">alert("Employé ajouté");window.location.assign("/")</script>';
             }
 
         break;
