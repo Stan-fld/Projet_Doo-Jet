@@ -183,17 +183,20 @@ $pays = $model->getPays();
                                     </button>
                                 </div>
                             </form>
-                        </div>
-                        <div class="card-footer text-right">
-                            <button id="modif" style="margin-left: 2vh" onclick="modif()" class="btn btn-warning btn-sm">
-                                <i class="fa fa-cog"></i> Modifier
-                            </button>
-                            <button id="inact" style="margin-left: 2vh"  onclick="inact()" class="btn btn-secondary btn-sm">
-                                <i class="fa fa-ambulance"></i> Ajouter inactivité
-                            </button>
-                            <button id="supp" style="margin-left: 2vh" onclick="supp()" class="btn btn-danger btn-sm">
-                                <i class="fa fa-cog"></i> Supprimer
-                            </button>
+                            <div style="margin-top: 2vh"  class="text-right">
+                                <button id="aff_inact" style="margin-left: 2vh;" onclick="aff_inact()" class="btn btn-info btn-sm">
+                                    <i class="fa fa-eye"></i> Afficher périodes inactivité
+                                </button>
+                                <button id="inact" style="margin-left: 2vh"  onclick="inact()" class="btn btn-secondary btn-sm">
+                                    <i class="fa fa-ambulance"></i> Ajouter période inactivité
+                                </button>
+                                <button id="modif" style="margin-left: 2vh" onclick="modif()" class="btn btn-warning btn-sm">
+                                    <i class="fa fa-cog"></i> Modifier
+                                </button>
+                                <button id="supp" style="margin-left: 2vh" onclick="supp()" class="btn btn-danger btn-sm">
+                                    <i class="fa fa-cog"></i> Supprimer
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -208,6 +211,7 @@ $pays = $model->getPays();
             $("#hidebtnAnnuler").css("display", "");
             $("#hidebtnValider").css("display", "");
             $("#inact").css("display", "none");
+            $("#supp").css("display", "none");
             $('#etape').val('update_employe');
             $('.pays').select2();
         }
@@ -215,6 +219,7 @@ $pays = $model->getPays();
             $("#hidebtnAnnuler").css("display", "");
             $("#hidebtnValider").css("display", "");
             $("#modif").css("display", "none");
+            $("#supp").css("display", "none");
             $("#motifs").css("display", "none");
             $("#date_debut_ina").css("display", "none");
             $("#date_fin_ina").css("display", "none");
@@ -227,6 +232,12 @@ $pays = $model->getPays();
             $("#hidebtnValider").css("display", "");
             $('#etape').val('delete_employe');
             $("#modif").css("display", "none");
+            $("#inact").css("display", "none");
+        }
+
+        function aff_inact() {
+            var id = "<?php echo $idemploye ?>";
+            window.location.assign("infoinact?id="+id);
         }
 
         function reload() {

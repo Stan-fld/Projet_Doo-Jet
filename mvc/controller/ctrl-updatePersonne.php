@@ -239,7 +239,7 @@ switch ($etape) {
         // Récupere les ID du formulaire pour supprimer un client
         $id_employe     = $model->getInput('id_employe');
 
-        $id_inact = $model->getPeriodeinact($id_employe);
+        $id_inact = $model->getEmployemalade($id_employe);
 
         $delete_employemalade = $model->deleteEmployemalade($id_employe);
 

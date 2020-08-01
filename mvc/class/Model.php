@@ -125,6 +125,37 @@ class Model{
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
+    function getPays()
+    {
+        $query  = "SELECT Nom_Pays FROM pays";
+        $stmt   = $this->executeSQL($query);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getEmployemalade($id_personne)
+    {
+        $query  = "SELECT ID_Inactivite FROM employe_malade WHERE ID_Personne = :id_personne";
+        $bind = [":id_personne" => $id_personne];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getPeriodeinact($id_inact)
+    {
+            $query  = "SELECT * FROM periode_inactivite WHERE ID_Inactivite = :id_inact";
+        $bind = [":id_inact" => $id_inact];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
     function updateEmploye($idemploye, $nomE, $prenomE, $annivE, $telE, $permisE, $secu, $bees, $contrat, $embauche, $medical)
     {
         $query  = "CALL update_tb_personne_employe(:idemploye, :nomE, :prenomE, :annivE, :telE, :permisE, :secu, :bees, :contrat, :embauche, :medical)";
@@ -154,27 +185,6 @@ class Model{
             ":telC" => $telC,
             ":permisC" => $permisC];
         $result   = $this->executeSQL($query, $bind);
-        return $result;
-    }
-
-    //----------------------------------------------------------------------------------------------------------------------------------
-    function getPays()
-    {
-        $query  = "SELECT Nom_Pays FROM pays";
-        $stmt   = $this->executeSQL($query);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        return $result;
-    }
-
-    //----------------------------------------------------------------------------------------------------------------------------------
-    function getPeriodeinact($id_personne)
-    {
-        $query  = "SELECT ID_Inactivite FROM employe_malade WHERE ID_Personne = :id_personne";
-        $bind = [":id_personne" => $id_personne];
-        $stmt   = $this->executeSQL($query, $bind);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         return $result;
     }
 
