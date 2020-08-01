@@ -211,6 +211,7 @@ $pays = $model->getPays();
             $("#hidebtnAnnuler").css("display", "");
             $("#hidebtnValider").css("display", "");
             $("#inact").css("display", "none");
+            $("#aff_inact").css("display", "none");
             $("#supp").css("display", "none");
             $('#etape').val('update_employe');
             $('.pays').select2();
@@ -220,6 +221,7 @@ $pays = $model->getPays();
             $("#hidebtnValider").css("display", "");
             $("#modif").css("display", "none");
             $("#supp").css("display", "none");
+            $("#aff_inact").css("display", "none");
             $("#motifs").css("display", "none");
             $("#date_debut_ina").css("display", "none");
             $("#date_fin_ina").css("display", "none");
@@ -233,6 +235,7 @@ $pays = $model->getPays();
             $('#etape').val('delete_employe');
             $("#modif").css("display", "none");
             $("#inact").css("display", "none");
+            $("#aff_inact").css("display", "none");
         }
 
         function aff_inact() {
