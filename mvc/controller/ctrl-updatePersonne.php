@@ -110,7 +110,7 @@ switch ($etape) {
                 $update_employe = $model->updateEmploye($id_employe, $nom, $prenom, $newanniv, $telephone, $permis, $secu, $bees, $contrat, $newembauche, $newmedical);
                 $update_ville = $model->updateVille($id_adresse, $ville, $code_post, $pays);
                 $udpate_adresse = $model->updateAdresse($id_adresse, $num_rue, $rue, $voie);
-                $update_inactivite = $model->updateInactivite($id_employe, $motif, $newdebut, $newfin);
+                $update_inactivite = $model->updatePeriodeinact($id_employe, $motif, $newdebut, $newfin);
 
                 $feedback .= '<script type="text/javascript">alert("Modifications effectuées");window.location.assign("infoemploye?id=' . $id_employe . '");</script>';
             }
@@ -224,5 +224,32 @@ switch ($etape) {
 
     default:
         $feedback .= '<script type="text/javascript">alert("Erreur");window.location.assign("/");</script>';
+        break;
+
+    case 'delete_client':
+        // Récupere les ID du formulaire pour supprimer un client
+        $id_client = $model->getInput('id_client');
+
+        $delete_client = $model->deletePersonne($id_client, 'Client');
+        $feedback .= '<script type="text/javascript">alert("Client supprimé");window.location.assign("client");</script>';
+
+        break;
+
+    case 'delete_employe':
+        // Récupere les ID du formulaire pour supprimer un client
+        $id_employe     = $model->getInput('id_employe');
+
+        $id_inact = $model->getPeriodeinact($id_employe);
+
+        $delete_employemalade = $model->deleteEmployemalade($id_employe);
+
+        foreach ($id_inact as $inactivite)
+        {
+            $delete_inact = $model->deletePeriodeInact($inactivite['ID_Inactivite']);
+        }
+
+        $delete_client = $model->deletePersonne($id_employe, "Employé");
+        $feedback .= '<script type="text/javascript">alert("Employé supprimé");window.location.assign("employe");</script>';
+
         break;
 }

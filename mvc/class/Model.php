@@ -168,6 +168,17 @@ class Model{
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
+    function getPeriodeinact($id_personne)
+    {
+        $query  = "SELECT ID_Inactivite FROM employe_malade WHERE ID_Personne = :id_personne";
+        $bind = [":id_personne" => $id_personne];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
     function updateVille($idad, $nom_ville, $code_postal, $pays)
     {
         $query  = "CALL update_ville(:idadresse, :ville, :code_postal, :pays)";
@@ -192,7 +203,7 @@ class Model{
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
-    function updateInactivite($idpers, $motif, $debut, $fin)
+    function updatePeriodeinact($idpers, $motif, $debut, $fin)
     {
         $query  = "
                     UPDATE periode_inactivite
@@ -232,7 +243,7 @@ class Model{
     //----------------------------------------------------------------------------------------------------------------------------------
     function addClient($nomC, $prenomC, $annivC, $telC, $permisC, $villeC, $code_postC, $paysC, $num_rueC, $rueC, $voieC)
     {
-        $query  = "CALL create_personne(:nomC, :prenomC, :annivC, :telC, :permisC, :villeC, :code_postC, :paysC, :num_rueC, :rueC, :voieC, NULL, NULL, NULL, NULL, NULL, NULL)";
+        $query  = "CALL create_personne('Client', :nomC, :prenomC, :annivC, :telC, :permisC, :villeC, :code_postC, :paysC, :num_rueC, :rueC, :voieC, NULL, NULL, NULL, NULL, NULL, NULL)";
         $bind = [
             ":nomC" => $nomC,
             ":prenomC" => $prenomC,
@@ -261,7 +272,7 @@ class Model{
     //----------------------------------------------------------------------------------------------------------------------------------
     function addEmploye($nomC, $prenomC, $annivC, $telC, $permisC, $villeC, $code_postC, $paysC, $num_rueC, $rueC, $voieC, $secu, $bees, $contrat, $embauche, $vmedicale)
     {
-        $query  = "CALL create_personne(:nomC, :prenomC, :annivC, :telC, :permisC, :villeC, :code_postC, :paysC, :num_rueC, :rueC, :voieC, :secu, :bees, :contrat, :embauche, :vmedicale, NULL)";
+        $query  = "CALL create_personne('Employé', :nomC, :prenomC, :annivC, :telC, :permisC, :villeC, :code_postC, :paysC, :num_rueC, :rueC, :voieC, :secu, :bees, :contrat, :embauche, :vmedicale, NULL)";
         $bind = [
             ":nomC" => $nomC,
             ":prenomC" => $prenomC,
@@ -293,4 +304,34 @@ class Model{
         return $result;
     }
 
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function deletePersonne($idpersonne, $statut)
+    {
+        $query  = "CALL delete_personne (:idpersonne, :statut)";
+        $bind = [":idpersonne" => $idpersonne,
+                ":statut" => $statut];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function deleteEmployemalade($idemploye)
+    {
+        $query  = "
+                    DELETE FROM employe_malade WHERE (ID_Personne = :id_personne);
+                    ";
+        $bind = [":id_personne" => $idemploye];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function deletePeriodeInact($idinact)
+    {
+        $query  = "
+                    DELETE FROM periode_inactivite WHERE (ID_Inactivite = :id_inact); 
+                    ";
+        $bind = [":id_inact" => $idinact];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
 }

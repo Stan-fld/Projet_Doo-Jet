@@ -56,15 +56,27 @@
                     <a href="/">
                         <i class="fas fa-tachometer-alt"></i>Accueil</a>
                 </li>
+                <li <?= $nomPage[0] == 'client' || $nomPage[0] == 'createclient'? ' class="active"' : '' ?>>
+                    <a class="js-arrow" href="#" >
+                        <i class="fas fa-user"></i>Clients</a>
+                    <ul class="list-unstyled navbar__sub-list js-sub-list">
+                        <li <?= $nomPage[0] == 'client' ? ' class="active"' : '' ?>>
+                            <a class="fas fa-group (alias)" href="/client">Afficher les clients</a>
+                        </li>
+                        <li <?= $nomPage[0] == 'createclient' ? ' class="active"' : '' ?>>
+                            <a class="fas fa-edit (alias)"href="/createclient">Ajouter un client</a>
+                        </li>
+                    </ul>
+                </li>
                 <li <?= $nomPage[0] == 'employe' || $nomPage[0] == 'createemploye'? ' class="active"' : '' ?>>
                     <a class="js-arrow" href="#" >
-                        <i class="fas fa-user"></i>Employé</a>
+                        <i class="fas fa-user"></i>Employés</a>
                     <ul class="list-unstyled navbar__sub-list js-sub-list">
                         <li <?= $nomPage[0] == 'employe' ? ' class="active"' : '' ?>>
-                            <a href="/employe">Employé</a>
+                            <a class="fas fa-group (alias)" href="/employe">Afficher les employés</a>
                         </li>
                         <li <?= $nomPage[0] == 'createemploye' ? ' class="active"' : '' ?>>
-                            <a href="/createemploye">Ajouter employé</a>
+                            <a class="fas fa-edit href="/createemploye">Ajouter un employé</a>
                         </li>
                     </ul>
                 </li>
@@ -119,21 +131,29 @@
                     <a href="/">
                         <i class="fas fa-tachometer-alt"></i>Accueil</a>
                 </li>
-                <li <?= $nomPage[0] == 'employe' || $nomPage[0] == 'createemploye'? ' class="active"' : '' ?>>
+                <li <?= $nomPage[0] == 'client' || $nomPage[0] == 'createclient'? ' class="active"' : '' ?>>
                     <a class="js-arrow" href="#" >
-                        <i class="fas fa-user"></i>Employé</a>
+                        <i class="fas fa-user"></i>Clients</a>
                     <ul class="list-unstyled navbar__sub-list js-sub-list">
-                        <li <?= $nomPage[0] == 'employe' ? ' class="active"' : '' ?>>
-                            <a href="/employe">Employé</a>
+                        <li <?= $nomPage[0] == 'client' ? ' class="active"' : '' ?>>
+                            <a class="fas fa-group (alias)" href="/client">Afficher les clients</a>
                         </li>
-                        <li <?= $nomPage[0] == 'createemploye' ? ' class="active"' : '' ?>>
-                            <a href="/createemploye">Ajouter employé</a>
+                        <li <?= $nomPage[0] == 'createclient' ? ' class="active"' : '' ?>>
+                            <a class="fas fa-edit (alias)"href="/createclient">Ajouter un client</a>
                         </li>
                     </ul>
                 </li>
-                <li <?= $nomPage[0] == 'createclient' ? ' class="active"' : '' ?>>
-                    <a href="createclient">
-                        <i class="far fa-check-square"></i>Ajouter client</a>
+                <li <?= $nomPage[0] == 'employe' || $nomPage[0] == 'createemploye'? ' class="active"' : '' ?>>
+                    <a class="js-arrow" href="#" >
+                        <i class="fas fa-user"></i>Employés</a>
+                    <ul class="list-unstyled navbar__sub-list js-sub-list">
+                        <li <?= $nomPage[0] == 'employe' ? ' class="active"' : '' ?>>
+                            <a class="fas fa-group (alias)" href="/employe">Afficher les employés</a>
+                        </li>
+                        <li <?= $nomPage[0] == 'createemploye' ? ' class="active"' : '' ?>>
+                            <a class="fas fa-edit" href="/createemploye">Ajouter un employé</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="form.html">

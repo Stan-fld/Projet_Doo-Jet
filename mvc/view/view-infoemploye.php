@@ -188,8 +188,11 @@ $pays = $model->getPays();
                             <button id="modif" style="margin-left: 2vh" onclick="modif()" class="btn btn-warning btn-sm">
                                 <i class="fa fa-cog"></i> Modifier
                             </button>
-                            <button id="inact" style="margin-left: 2vh"  onclick="inact()" class="btn btn-danger btn-sm">
+                            <button id="inact" style="margin-left: 2vh"  onclick="inact()" class="btn btn-secondary btn-sm">
                                 <i class="fa fa-ambulance"></i> Ajouter inactivité
+                            </button>
+                            <button id="supp" style="margin-left: 2vh" onclick="supp()" class="btn btn-danger btn-sm">
+                                <i class="fa fa-cog"></i> Supprimer
                             </button>
                         </div>
                     </div>
@@ -217,6 +220,13 @@ $pays = $model->getPays();
             $("#date_fin_ina").css("display", "none");
             $('#etape').val('new_inact');
             $(".hiddeninact").prop('hidden', false);
+        }
+
+        function supp() {
+            $("#hidebtnAnnuler").css("display", "");
+            $("#hidebtnValider").css("display", "");
+            $('#etape').val('delete_employe');
+            $("#modif").css("display", "none");
         }
 
         function reload() {

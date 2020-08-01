@@ -18,7 +18,7 @@ $pays = $model->getPays();
                         <div class="card-body card-block">
                             <form action="" method="post" class="form-horizontal ajax">
                                 <input type="hidden" name="controller" value="updatePersonne">
-                                <input type="hidden" name="etape" value="update_client">
+                                <input type="hidden" id="etape" name="etape" value="">
                                 <input type="hidden" name="id_client" value="<?php echo $client['ID_Personne'];?>">
                                 <input type="hidden" name="id_adresse" value="<?php echo $client['ID_Adresse'];?>">
                                 <div class="row form-group">
@@ -114,11 +114,15 @@ $pays = $model->getPays();
                                     </button>
                                 </div>
                             </form>
-                        </div>
-                        <div class="card-footer text-right">
-                            <button style="margin-left: 2vh" onclick="enable()" class="btn btn-warning btn-sm">
-                                <i class="fa fa-cog"></i> Modifier
-                            </button>
+
+                            <div style="margin-top: 2vh" class="text-right">
+                                <button id="modif" style="margin-left: 2vh" onclick="modif()" class="btn btn-warning btn-sm">
+                                    <i class="fa fa-cog"></i> Modifier
+                                </button>
+                                <button id="supp" style="margin-left: 2vh" onclick="supp()" class="btn btn-danger btn-sm">
+                                    <i class="fa fa-cog"></i> Supprimer
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -127,12 +131,21 @@ $pays = $model->getPays();
     </div>
 
     <script>
-        function enable() {
+        function modif() {
             $("input").prop('disabled', false);
             $("select").prop('disabled', false);
             $("#hidebtnAnnuler").css("display", "");
             $("#hidebtnValider").css("display", "");
+            $("#supp").css("display", "none");
+            $('#etape').val('update_client');
             $('.pays').select2();
+        }
+
+        function supp() {
+            $("#hidebtnAnnuler").css("display", "");
+            $("#hidebtnValider").css("display", "");
+            $('#etape').val('delete_client');
+            $("#modif").css("display", "none");
         }
 
         function reload() {
