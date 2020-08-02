@@ -1,5 +1,7 @@
 <?php
 $clients = $model->getClientAll();
+$equipements = $model->getEquipementAll();
+$service = 1;
 ?>
 
 <!-- Title Page-->
@@ -9,6 +11,54 @@ $clients = $model->getClientAll();
 <div class="page-wrapper">
     <!-- MAIN CONTENT-->
     <div class="main-content">
+        <div class="section__content section__content--p30">
+            <div class="col-md-12">
+                <div class="overview-wrap">
+                    <h2 class="title-1">Vue d'ensemble</h2>
+                </div>
+            </div>
+            <div class="row m-t-25">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="overview-item overview-item--c1">
+                        <div class="overview-box clearfix">
+                            <div class="icon">
+                                <i class="zmdi zmdi-account-o"></i>
+                            </div>
+                            <div class="text">
+                                <h2><?php echo(count($clients)); ?></h2>
+                                <span>Nombre total de clients</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="overview-item overview-item--c2">
+                        <div class="overview-box clearfix">
+                            <div class="icon">
+                                <i class="zmdi  zmdi-boat"></i>
+                            </div>
+                            <div class="text">
+                                <h2><?php echo array_count_values(array_column($equipements, 'Service'))[$service]; ?></h2>
+                                <span>Équipements en service</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="overview-item overview-item--c3">
+                        <div class="overview-box clearfix">
+                            <div class="icon">
+                                <i class="zmdi  zmdi-calendar-check"></i>
+                            </div>
+                            <div class="text">
+                                <h2><?php echo 0; ?></h2>
+                                <span>Réservations courant <?php echo date("Y"); ?></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row m-t-30">
             <div class="col-md-12">
                 <div style="margin-bottom: 2vh!important; text-align: center!important;">

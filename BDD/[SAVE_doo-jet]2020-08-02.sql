@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : Dim 02 août 2020 à 12:33
+-- Généré le : Dim 02 août 2020 à 16:11
 -- Version du serveur :  5.7.24
 -- Version de PHP : 7.2.19
 
@@ -25,6 +25,10 @@ DELIMITER $$
 --
 -- Procédures
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `create_equipement` (IN `vnom` CHAR(50), IN `vcommentaire` CHAR(100), IN `vpuissance` INT, IN `vservice` TINYINT(1))  BEGIN
+   INSERT INTO equipement (Nom_Equipement, Commentaire, Puissance , Service) VALUES(vnom, vcommentaire, vpuissance, vservice);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `create_personne` (IN `vstatut` CHAR(50), IN `vnom` CHAR(50), IN `vprenom` CHAR(50), IN `vdate_naissance` DATE, IN `vtelephone` VARCHAR(15), IN `vpermis` VARCHAR(20), IN `vville` CHAR(50), IN `vcode_postal` VARCHAR(255), IN `vpays` CHAR(50), IN `vnumero_rue` INT, IN `vrue` CHAR(50), IN `vvoie` CHAR(50), IN `vsecu` VARCHAR(13), IN `vbees` VARCHAR(20), IN `vcontrat` CHAR(50), IN `vembauche` DATE, IN `vmedical` DATE, IN `vpassword` VARCHAR(30))  BEGIN
 
 IF NOT EXISTS 
@@ -33,8 +37,9 @@ IF NOT EXISTS
  (Statut = vstatut and
   personne.Nom = vnom and 
   personne.Prenom = vprenom and
-  personne.Date_Naissance = vdate_naissance and
-  personne.N_Permis = vpermis))
+  personne.Date_Naissance = vdate_naissance or
+  personne.N_Permis = vpermis or 
+  personne.N_BEES = vbees))
   THEN
 
   IF EXISTS
@@ -90,10 +95,10 @@ SELECT ID_Personne, Nom, Prenom, DATE_FORMAT(Date_Naissance, "%d/%m/%Y") as anni
 FROM personne 
 LEFT JOIN adresse ON Personne.ID_Adresse = Adresse.ID_Adresse
 LEFT JOIN ville ON adresse.ID_Ville = ville.ID_Ville
-
 WHERE ( 
 Statut = 'Client'
-)$$
+)
+ORDER BY `personne`.ID_Personne DESC$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `select_employe` (IN `VID_Personne` INT)  BEGIN
     SELECT personne.ID_Personne, Nom, Prenom, DATE_FORMAT(Date_Naissance, "%d/%m/%Y") as anniv, Telephone, N_Permis, N_Securite_Sociale, N_BEES, N_Permis, Contrat, DATE_FORMAT(Date_Embauche, "%d/%m/%Y") as dateembau, DATE_FORMAT(Date_Visite_Medicale, "%d/%m/%Y") as datevisit ,Adresse.ID_Adresse, Rue, Numero_Rue, Nom_Ville, Code_Postal, Type_Voie, Nom_Pays, Motif, DATE_FORMAT(Date_Debut_Inactivite, "%d/%m/%Y") as max_date_debut, DATE_FORMAT(Date_Fin_Inactivite, "%d/%m/%Y") as max_date_fin
@@ -108,8 +113,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `select_employe` (IN `VID_Personne` 
     	);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `select_employe_all` ()  BEGIN
-    SELECT 	personne.ID_Personne, Nom, Prenom, DATE_FORMAT(Date_Naissance, "%d/%m/%Y") as anniv, Telephone, N_Permis, N_Securite_Sociale, N_BEES, N_Permis, Contrat, DATE_FORMAT(Date_Embauche, "%d/%m/%Y") as dateembau, DATE_FORMAT(Date_Visite_Medicale, "%d/%m/%Y") as datevisit ,Adresse.ID_Adresse, Rue, Numero_Rue, Type_Voie, Nom_Ville, Code_Postal, Nom_Pays, Motif, DATE_FORMAT(Date_Debut_Inactivite, "%d/%m/%Y") as max_date_debut, DATE_FORMAT(Date_Fin_Inactivite, "%d/%m/%Y") as max_date_fin
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_employe_all` ()  SELECT 	personne.ID_Personne, Nom, Prenom, DATE_FORMAT(Date_Naissance, "%d/%m/%Y") as anniv, Telephone, N_Permis, N_Securite_Sociale, N_BEES, N_Permis, Contrat, DATE_FORMAT(Date_Embauche, "%d/%m/%Y") as dateembau, DATE_FORMAT(Date_Visite_Medicale, "%d/%m/%Y") as datevisit ,Adresse.ID_Adresse, Rue, Numero_Rue, Type_Voie, Nom_Ville, Code_Postal, Nom_Pays, Motif, DATE_FORMAT(Date_Debut_Inactivite, "%d/%m/%Y") as max_date_debut, DATE_FORMAT(Date_Fin_Inactivite, "%d/%m/%Y") as max_date_fin
     FROM personne 
     LEFT JOIN adresse ON Personne.ID_Adresse = Adresse.ID_Adresse
     LEFT JOIN ville ON adresse.ID_Ville = ville.ID_Ville
@@ -117,15 +121,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `select_employe_all` ()  BEGIN
     LEFT JOIN (SELECT MAX(ID_Inactivite) as maxid FROM periode_inactivite) AS pi ON EPM.ID_Personne = pi.maxid
     LEFT JOIN periode_inactivite as pi2 ON pi.maxid = pi2.ID_Inactivite
 
-    WHERE ( 
-        Statut = 'Employé'
-    	);
-END$$
+WHERE (Statut = 'Employé')
+ORDER BY `personne`.ID_Personne DESC$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `select_equipement` (IN `videquipement` INT)  READS SQL DATA
 SELECT ID_Equipement, Nom_Equipement, Commentaire, Puissance, Service FROM equipement WHERE(ID_Equipement = videquipement)$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `select_equipement_all` ()  SELECT ID_Equipement, Nom_Equipement, Commentaire, Puissance, Service FROM equipement$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_equipement_all` ()  SELECT ID_Equipement, Nom_Equipement, Commentaire, Puissance, Service FROM equipement
+ORDER BY `equipement`.Service DESC$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_adresse` (IN `vid_adresse` INT, IN `vnumero_rue` INT, IN `vrue` CHAR(50), IN `vvoie` CHAR(50))  MODIFIES SQL DATA
 BEGIN
@@ -136,7 +139,7 @@ BEGIN
     WHERE (adresse.ID_Adresse = vid_adresse);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_equipement` (IN `vid_equipement` INT, IN `vnom` CHAR(50), IN `vcommentaire` CHAR(50), IN `vpuissance` INT, IN `vservice` TINYINT(1))  MODIFIES SQL DATA
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_equipement` (IN `vid_equipement` INT, IN `vnom` CHAR(50), IN `vcommentaire` CHAR(100), IN `vpuissance` INT, IN `vservice` TINYINT(1))  MODIFIES SQL DATA
 BEGIN
 	UPDATE equipement
     SET equipement.Nom_Equipement = vnom,
@@ -276,7 +279,7 @@ CREATE TABLE `equipement` (
 
 INSERT INTO `equipement` (`ID_Equipement`, `Nom_Equipement`, `Commentaire`, `Puissance`, `Service`) VALUES
 (1, 'JETSKI', 'Kawasaki STX 15F', 152, 0),
-(2, 'JETSKI', 'See-Doo 4tec', 155, 0),
+(2, 'JETSKI', 'See-Doo 4tec', 155, 1),
 (3, 'JETSKI', 'Yamaha Fx SHO', 210, 1),
 (4, 'BOUEE', 'Bouée', 0, 1),
 (5, 'WAKE-BOARD', 'Wake-board', 0, 1),
@@ -603,7 +606,7 @@ CREATE TABLE `personne` (
 
 INSERT INTO `personne` (`ID_Personne`, `Statut`, `Nom`, `Prenom`, `Date_Naissance`, `Telephone`, `Password`, `N_Securite_Sociale`, `N_BEES`, `N_Permis`, `Contrat`, `Date_Embauche`, `Date_Visite_Medicale`, `ID_Adresse`) VALUES
 (4, 'Client', 'Marcon', 'Baptiste', '1999-06-30', '+33666666376', NULL, NULL, NULL, '', NULL, NULL, NULL, 4),
-(8, 'Employé', 'Foillard', 'Jean', '1965-02-22', '+33606078606', NULL, '1234547687', '432543564', '432567883', 'CDD', '2020-04-01', '2020-04-03', 3),
+(8, 'Employé', 'Foillard', 'Jean', '1965-02-22', '+33606078606', NULL, '1234547687', '432543564', '432027483', 'CDD', '2020-04-01', '2020-04-03', 3),
 (9, 'Client', 'Foillard', 'Benoit', '2000-12-03', '+33643537645', NULL, NULL, NULL, '', NULL, NULL, NULL, 27),
 (10, 'Client', 'Foillard', 'Fabienne', '2000-12-03', '+33643537645', NULL, NULL, NULL, '', NULL, NULL, NULL, 28),
 (11, 'Employé', 'Reynaud', 'Bastien', '2000-07-06', '+33672781633', NULL, '1234547687', '3232453433', '43256788', 'CDI', '2020-05-01', '2020-05-03', 29),
@@ -621,6 +624,15 @@ CREATE TABLE `prix_horaire` (
   `Duree` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Déchargement des données de la table `prix_horaire`
+--
+
+INSERT INTO `prix_horaire` (`ID_Prix_Horaire`, `Duree`) VALUES
+(1, '00:30:00'),
+(2, '01:00:00'),
+(3, '02:00:00');
+
 -- --------------------------------------------------------
 
 --
@@ -632,6 +644,26 @@ CREATE TABLE `prix_horaire_equipement` (
   `ID_Equipement` int(11) NOT NULL,
   `Prix` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `prix_horaire_equipement`
+--
+
+INSERT INTO `prix_horaire_equipement` (`ID_Prix_Horaire`, `ID_Equipement`, `Prix`) VALUES
+(1, 1, 80),
+(1, 2, 70),
+(1, 3, 90),
+(1, 4, 40),
+(1, 5, 40),
+(1, 7, 40),
+(2, 1, 130),
+(2, 2, 120),
+(2, 3, 140),
+(2, 6, 100),
+(3, 1, 220),
+(3, 2, 200),
+(3, 3, 240),
+(3, 6, 180);
 
 -- --------------------------------------------------------
 
@@ -776,7 +808,7 @@ ALTER TABLE `adresse`
 -- AUTO_INCREMENT pour la table `equipement`
 --
 ALTER TABLE `equipement`
-  MODIFY `ID_Equipement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID_Equipement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pour la table `periode_inactivite`
@@ -794,7 +826,7 @@ ALTER TABLE `personne`
 -- AUTO_INCREMENT pour la table `prix_horaire`
 --
 ALTER TABLE `prix_horaire`
-  MODIFY `ID_Prix_Horaire` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Prix_Horaire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `reservation`

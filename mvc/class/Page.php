@@ -84,7 +84,13 @@ class Page
 
             if($nomPage[0] == "infoclient" && $model->getClient($_GET["id"]) == null)
             {
-                header("location: /index");
+                header("location: /client");
+                exit;
+            }
+
+            if($nomPage[0] == "infoequipement" && $model->getEquipement($_GET["id"]) == null)
+            {
+                header("location: /equipement");
                 exit;
             }
 
