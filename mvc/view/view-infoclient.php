@@ -14,6 +14,9 @@ $pays = $model->getPays();
                     <div class="card">
                         <div class="card-header">
                             <strong>Fiche client : </strong><?php echo $client['Prenom']." ".$client['Nom'];?>
+                            <button style="margin-left: 2vh" onclick="backp()" class="btn btn-outline-danger btn-sm">
+                                <i class="fa fa-caret-square-o-left"></i> Retour
+                            </button>
                         </div>
                         <div class="card-body card-block">
                             <form action="" method="post" class="form-horizontal ajax">
@@ -146,6 +149,10 @@ $pays = $model->getPays();
             $("#hidebtnValider").css("display", "");
             $('#etape').val('delete_client');
             $("#modif").css("display", "none");
+        }
+
+        function backp(){
+            window.location.assign("/client")
         }
 
         function reload() {

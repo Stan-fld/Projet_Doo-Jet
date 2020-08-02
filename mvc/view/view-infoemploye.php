@@ -17,6 +17,9 @@ $pays = $model->getPays();
                     <div class="card">
                         <div class="card-header">
                             <strong>Fiche employé : </strong><?php echo $employe['Prenom']." ".$employe['Nom'];?>
+                            <button style="margin-left: 2vh" onclick="backp()" class="btn btn-outline-danger btn-sm">
+                                <i class="fa fa-caret-square-o-left"></i> Retour
+                            </button>
                         </div>
                         <div class="card-body card-block">
                             <form action="" method="post" class="form-horizontal ajax">
@@ -241,6 +244,10 @@ $pays = $model->getPays();
         function aff_inact() {
             var id = "<?php echo $idemploye ?>";
             window.location.assign("infoinact?id="+id);
+        }
+
+        function backp(){
+            window.location.assign("/employe")
         }
 
         function reload() {

@@ -11,7 +11,6 @@ else {
     foreach ($id_inact as $inactivite) {
         $aff_inact = $model->getPeriodeinact($inactivite['ID_Inactivite']);
     }
-}
 ?>
 <!-- Title Page-->
 <title>Périodes d'inactivité</title>
@@ -72,3 +71,4 @@ else {
         history.back();
     }
 </script>
+<?php } ?>

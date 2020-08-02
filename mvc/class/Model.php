@@ -91,6 +91,15 @@ class Model{
 
         return $result;
     }
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getEquipementAll()
+    {
+        $query  = "CALL select_equipement_all";
+        $stmt   = $this->executeSQL($query);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
 
     //----------------------------------------------------------------------------------------------------------------------------------
     function getClient($idclient)
@@ -118,6 +127,16 @@ class Model{
     {
         $query  = "CALL select_employe(:idemploye)";
         $bind   = [":idemploye" => $idemploye,];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getEquipement($idequipement)
+    {
+        $query  = "CALL select_equipement(:idequipement)";
+        $bind   = [":idequipement" => $idequipement,];
         $stmt   = $this->executeSQL($query, $bind);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -208,6 +227,18 @@ class Model{
             ":numero" => $num,
             ":rue" => $rue,
             ":voie" => $voie];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function updateEquipement($id_equipement, $nom, $commentaire, $puissance, $service)
+    {
+        $query  = "CALL update_equipement(:id_equipement, :nom, :commentaire, :puissance, :service)";
+        $bind = [":id_equipement" => $id_equipement,
+                ":nom" => $nom,
+                ":commentaire" => $commentaire,
+                ":puissance" => $puissance,
+                ":service" => $service];
         $result   = $this->executeSQL($query, $bind);
         return $result;
     }
@@ -334,6 +365,7 @@ class Model{
         $result   = $this->executeSQL($query, $bind);
         return $result;
     }
+
     //----------------------------------------------------------------------------------------------------------------------------------
     function deletePeriodeInact($idinact)
     {
@@ -341,6 +373,15 @@ class Model{
                     DELETE FROM periode_inactivite WHERE (ID_Inactivite = :id_inact); 
                     ";
         $bind = [":id_inact" => $idinact];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function deleteEquipement($id_equipement)
+    {
+        $query  = "CALL delete_equipement(:id_equipement)";
+        $bind = [":id_equipement" => $id_equipement];
         $result   = $this->executeSQL($query, $bind);
         return $result;
     }

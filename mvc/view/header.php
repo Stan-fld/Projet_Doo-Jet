@@ -84,9 +84,9 @@
                     <a href="/createclient">
                         <i class="far fa-check-square"></i>Ajouter client</a>
                 </li>
-                <li>
-                    <a href="form.html">
-                        <i class="far fa-check-square"></i>Forms</a>
+                <li <?= $nomPage[0] == 'equipement'? ' class="active"' : '' ?>>
+                    <a href="/equipement">
+                        <i class="fas  fa-anchor"></i>Equipements</a>
                 </li>
                 <li>
                     <a href="/calendar">
@@ -155,9 +155,9 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href="form.html">
-                        <i class="far fa-check-square"></i>Forms</a>
+                <li <?= $nomPage[0] == 'equipement'? ' class="active"' : '' ?>>
+                    <a href="/equipement">
+                        <i class="fas  fa-anchor"></i>Equipements</a>
                 </li>
                 <li<?= $nomPage[0] == 'calendar' ? ' class="active"' : '' ?>>
                     <a href="/calendar">

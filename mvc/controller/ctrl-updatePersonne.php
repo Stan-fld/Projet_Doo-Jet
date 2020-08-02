@@ -222,10 +222,6 @@ switch ($etape) {
         }
         break;
 
-    default:
-        $feedback .= '<script type="text/javascript">alert("Erreur");window.location.assign("/");</script>';
-        break;
-
     case 'delete_client':
         // Récupere les ID du formulaire pour supprimer un client
         $id_client = $model->getInput('id_client');
@@ -251,5 +247,9 @@ switch ($etape) {
         $delete_client = $model->deletePersonne($id_employe, "Employé");
         $feedback .= '<script type="text/javascript">alert("Employé supprimé");window.location.assign("employe");</script>';
 
+        break;
+
+    default:
+        $feedback .= '<script type="text/javascript">alert("Erreur");window.location.assign("/");</script>';
         break;
 }
