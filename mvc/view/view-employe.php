@@ -15,6 +15,9 @@ $employes = $model->getEmployeAll();
                     <h2 class="title-1">Liste des employés</h2>
                 </div>
                 <input class ="au-input" id="myInput" style="padding: 0px 16px;  border-radius: 10px; margin-bottom: 1vh; margin-left: 1vh" type="text" placeholder="Rechercher..">
+                <button style="margin-left: 2vh" onclick="createE()" class="btn btn-outline-success">
+                    <i class="fa fa-edit (alias)"></i> Nouvel employé
+                </button>
                 <!-- DATA TABLE-->
                 <div class="table-responsive m-b-40">
                     <table class="table table-borderless table-data3">
@@ -69,4 +72,8 @@ $employes = $model->getEmployeAll();
             });
         });
     });
+
+    function createE(){
+        window.location.assign("/createemploye")
+    }
 </script>

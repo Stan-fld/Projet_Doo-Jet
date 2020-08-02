@@ -50,16 +50,6 @@ class Model{
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
-    function getEmail($name)
-    {
-        $email = $this->getInput($name);
-        // FILTRE L'EMAIL
-        $email = filter_var($email, FILTER_VALIDATE_EMAIL);
-
-        return $email;
-    }
-
-    //----------------------------------------------------------------------------------------------------------------------------------
     function executeSQL($requeteSQL, $tableauBind = [])
     {
         // CONNEXION A LA BASE DE DONNEES
@@ -91,6 +81,7 @@ class Model{
 
         return $result;
     }
+
     //----------------------------------------------------------------------------------------------------------------------------------
     function getEquipementAll()
     {
@@ -132,6 +123,7 @@ class Model{
 
         return $result;
     }
+
     //----------------------------------------------------------------------------------------------------------------------------------
     function getEquipement($idequipement)
     {
@@ -163,6 +155,7 @@ class Model{
 
         return $result;
     }
+
     //----------------------------------------------------------------------------------------------------------------------------------
     function getPeriodeinact($id_inact)
     {
@@ -230,6 +223,7 @@ class Model{
         $result   = $this->executeSQL($query, $bind);
         return $result;
     }
+
     //----------------------------------------------------------------------------------------------------------------------------------
     function updateEquipement($id_equipement, $nom, $commentaire, $puissance, $service)
     {
@@ -341,6 +335,19 @@ class Model{
             echo '<script type="text/javascript">alert("Utilisateur déjà existant")</script>';
             exit;
         }
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function addEquipement($nom, $commentaire, $puissance, $service)
+    {
+        $query  = "CALL create_equipement(:nom, :commentaire, :puissance, :service)";
+        $bind = [":nom" => $nom,
+                ":commentaire" => $commentaire,
+                ":puissance" => $puissance,
+                ":service" => $service];
+        $result   = $this->executeSQL($query, $bind);
 
         return $result;
     }

@@ -15,6 +15,9 @@ $clients = $model->getClientAll();
                     <h2 class="title-1">Liste des clients</h2>
                 </div>
                 <input class ="au-input" id="myInput" style="padding: 0px 16px;  border-radius: 10px; margin-bottom: 1vh; margin-left: 1vh" type="text" placeholder="Search..">
+                <button style="margin-left: 2vh" onclick="createC()" class="btn btn-outline-success">
+                    <i class="fa fa-edit (alias)"></i> Nouveau client
+                </button>
                 <!-- DATA TABLE-->
                 <div class="table-responsive m-b-40">
                     <table class="table table-borderless table-data3">
@@ -67,4 +70,8 @@ $clients = $model->getClientAll();
             });
         });
     });
+
+    function createC(){
+        window.location.assign("/createclient")
+    }
 </script>

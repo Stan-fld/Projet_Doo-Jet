@@ -12,10 +12,13 @@ $pays = $model->getPays();
                     <div class="card">
                         <div class="card-header">
                             <strong>Création fiche client : </strong>
+                            <button style="margin-left: 2vh" onclick="backp()" class="btn btn-outline-danger btn-sm">
+                                <i class="fa fa-caret-square-o-left"></i> Retour
+                            </button>
                         </div>
                         <div class="card-body card-block">
                             <form action="" method="post" class="form-horizontal ajax">
-                                <input type="hidden" name="controller" value="createPersonne">
+                                <input type="hidden" name="controller" value="updatePersonne">
                                 <input type="hidden" id="etape" name="etape" value="create_client">
                                 <div class="row form-group">
                                     <label class="col col-md-3" for="nom">Nom : </label>
@@ -125,4 +128,7 @@ $pays = $model->getPays();
             $('.pays').select2();
         });
 
+        function backp(){
+            window.location.assign("/client")
+        }
     </script>

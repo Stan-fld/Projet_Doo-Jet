@@ -52,41 +52,25 @@
     <nav class="navbar-mobile">
         <div class="container-fluid">
             <ul class="navbar-mobile__list list-unstyled">
-                <li>
+                <li<?= $nomPage[0] == 'index' ? ' class="active"' : '' ?>>
                     <a href="/">
                         <i class="fas fa-tachometer-alt"></i>Accueil</a>
                 </li>
-                <li <?= $nomPage[0] == 'client' || $nomPage[0] == 'createclient'? ' class="active"' : '' ?>>
-                    <a class="js-arrow" href="#" >
+                <li<?= $nomPage[0] == 'client' || $nomPage[0] == 'createclient' || $nomPage[0] == 'infoclient' ? ' class="active"' : '' ?>>
+                    <a href="/client">
                         <i class="fas fa-user"></i>Clients</a>
-                    <ul class="list-unstyled navbar__sub-list js-sub-list">
-                        <li <?= $nomPage[0] == 'client' ? ' class="active"' : '' ?>>
-                            <a class="fas fa-group (alias)" href="/client">Afficher les clients</a>
-                        </li>
-                        <li <?= $nomPage[0] == 'createclient' ? ' class="active"' : '' ?>>
-                            <a class="fas fa-edit (alias)"href="/createclient">Ajouter un client</a>
-                        </li>
-                    </ul>
                 </li>
-                <li <?= $nomPage[0] == 'employe' || $nomPage[0] == 'createemploye'? ' class="active"' : '' ?>>
-                    <a class="js-arrow" href="#" >
+                <li<?= $nomPage[0] == 'employe' || $nomPage[0] == 'createemploye' || $nomPage[0] == 'infoemploye' || $nomPage[0] == 'infoinact' ? ' class="active"' : '' ?>>
+                    <a href="/employe">
                         <i class="fas fa-user"></i>Employés</a>
-                    <ul class="list-unstyled navbar__sub-list js-sub-list">
-                        <li <?= $nomPage[0] == 'employe' ? ' class="active"' : '' ?>>
-                            <a class="fas fa-group (alias)" href="/employe">Afficher les employés</a>
-                        </li>
-                        <li <?= $nomPage[0] == 'createemploye' ? ' class="active"' : '' ?>>
-                            <a class="fas fa-edit href="/createemploye">Ajouter un employé</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="/createclient">
-                        <i class="far fa-check-square"></i>Ajouter client</a>
                 </li>
                 <li <?= $nomPage[0] == 'equipement'? ' class="active"' : '' ?>>
                     <a href="/equipement">
                         <i class="fas  fa-anchor"></i>Equipements</a>
+                </li>
+                <li<?= $nomPage[0] == 'calendar' ? ' class="active"' : '' ?>>
+                    <a href="/calendar">
+                        <i class="fas fa-calendar-alt"></i>Calendrier</a>
                 </li>
                 <li>
                     <a href="/calendar">
@@ -131,29 +115,13 @@
                     <a href="/">
                         <i class="fas fa-tachometer-alt"></i>Accueil</a>
                 </li>
-                <li <?= $nomPage[0] == 'client' || $nomPage[0] == 'createclient'? ' class="active"' : '' ?>>
-                    <a class="js-arrow" href="#" >
+                <li<?= $nomPage[0] == 'client' || $nomPage[0] == 'createclient' || $nomPage[0] == 'infoclient' ? ' class="active"' : '' ?>>
+                    <a href="/client">
                         <i class="fas fa-user"></i>Clients</a>
-                    <ul class="list-unstyled navbar__sub-list js-sub-list">
-                        <li <?= $nomPage[0] == 'client' ? ' class="active"' : '' ?>>
-                            <a class="fas fa-group (alias)" href="/client">Afficher les clients</a>
-                        </li>
-                        <li <?= $nomPage[0] == 'createclient' ? ' class="active"' : '' ?>>
-                            <a class="fas fa-edit (alias)"href="/createclient">Ajouter un client</a>
-                        </li>
-                    </ul>
                 </li>
-                <li <?= $nomPage[0] == 'employe' || $nomPage[0] == 'createemploye'? ' class="active"' : '' ?>>
-                    <a class="js-arrow" href="#" >
+                <li<?= $nomPage[0] == 'employe' || $nomPage[0] == 'createemploye' || $nomPage[0] == 'infoemploye' || $nomPage[0] == 'infoinact' ? ' class="active"' : '' ?>>
+                    <a href="/employe">
                         <i class="fas fa-user"></i>Employés</a>
-                    <ul class="list-unstyled navbar__sub-list js-sub-list">
-                        <li <?= $nomPage[0] == 'employe' ? ' class="active"' : '' ?>>
-                            <a class="fas fa-group (alias)" href="/employe">Afficher les employés</a>
-                        </li>
-                        <li <?= $nomPage[0] == 'createemploye' ? ' class="active"' : '' ?>>
-                            <a class="fas fa-edit" href="/createemploye">Ajouter un employé</a>
-                        </li>
-                    </ul>
                 </li>
                 <li <?= $nomPage[0] == 'equipement'? ' class="active"' : '' ?>>
                     <a href="/equipement">

@@ -228,7 +228,7 @@ $pays = $model->getPays();
             $("#motifs").css("display", "none");
             $("#date_debut_ina").css("display", "none");
             $("#date_fin_ina").css("display", "none");
-            $('#etape').val('new_inact');
+            $('#etape').val('create_inact');
             $(".hiddeninact").prop('hidden', false);
         }
 
