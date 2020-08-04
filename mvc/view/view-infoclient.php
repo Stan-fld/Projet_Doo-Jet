@@ -152,7 +152,7 @@ $pays = $model->getPays();
         }
 
         function backp(){
-            window.location.assign("/client")
+            history.back();
         }
 
         function reload() {

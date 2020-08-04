@@ -159,9 +159,50 @@ class Model{
     //----------------------------------------------------------------------------------------------------------------------------------
     function getPeriodeinact($id_inact)
     {
-            $query  = "SELECT * FROM periode_inactivite WHERE ID_Inactivite = :id_inact";
+        $query  = "SELECT * FROM periode_inactivite WHERE ID_Inactivite = :id_inact";
         $bind = [":id_inact" => $id_inact];
         $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getReservationAll()
+    {
+        $query  = "CALL select_reservation_alL()";
+        $stmt   = $this->executeSQL($query);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getReservation($id_resa){
+        $query  = "CALL select_reservation(:id_resa)";
+        $bind = ["id_resa" => $id_resa];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getPrix($id_eq, $duree){
+        $query  = "CALL select_prix(:id_eq, :duree)";
+        $bind = [":id_eq" => $id_eq,
+                ":duree" => $duree];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getReservationDistinct()
+    {
+        $query  = "SELECT DISTINCT ID_Reservation FROM equipement_reserve";
+        $stmt   = $this->executeSQL($query);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;
@@ -229,10 +270,10 @@ class Model{
     {
         $query  = "CALL update_equipement(:id_equipement, :nom, :commentaire, :puissance, :service)";
         $bind = [":id_equipement" => $id_equipement,
-                ":nom" => $nom,
-                ":commentaire" => $commentaire,
-                ":puissance" => $puissance,
-                ":service" => $service];
+            ":nom" => $nom,
+            ":commentaire" => $commentaire,
+            ":puissance" => $puissance,
+            ":service" => $service];
         $result   = $this->executeSQL($query, $bind);
         return $result;
     }
@@ -292,7 +333,7 @@ class Model{
             ":rueC" => $rueC,
             ":voieC" => $voieC,
 
-            ];
+        ];
         $result   = $this->executeSQL($query, $bind);
 
         //Si la procédure retourne erreur 45000 alors l'utilisateur existe déjà
@@ -326,7 +367,7 @@ class Model{
             ":embauche" => $embauche,
             ":vmedicale" => $vmedicale,
             //":password" => $password,
-            ];
+        ];
         $result   = $this->executeSQL($query, $bind);
 
         //Si la procédure retourne erreur 45000 alors l'utilisateur existe déjà
@@ -344,9 +385,9 @@ class Model{
     {
         $query  = "CALL create_equipement(:nom, :commentaire, :puissance, :service)";
         $bind = [":nom" => $nom,
-                ":commentaire" => $commentaire,
-                ":puissance" => $puissance,
-                ":service" => $service];
+            ":commentaire" => $commentaire,
+            ":puissance" => $puissance,
+            ":service" => $service];
         $result   = $this->executeSQL($query, $bind);
 
         return $result;
@@ -357,7 +398,7 @@ class Model{
     {
         $query  = "CALL delete_personne (:idpersonne, :statut)";
         $bind = [":idpersonne" => $idpersonne,
-                ":statut" => $statut];
+            ":statut" => $statut];
         $result   = $this->executeSQL($query, $bind);
         return $result;
     }

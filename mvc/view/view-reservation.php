@@ -1,72 +1,23 @@
 <?php
-$clients = $model->getClientAll();
 $resa = $model->getReservationAll();
-$countresa = $model->getReservationDistinct();
-$equipements = $model->getEquipementAll();
-$service = 1;
 ?>
 
 <!-- Title Page-->
-<title>Accueil</title>
+<title>Liste des réservations</title>
 
 <body class="animsition">
 <div class="page-wrapper">
     <!-- MAIN CONTENT-->
     <div class="main-content">
-        <div class="section__content section__content--p30">
-            <div class="col-md-12">
-                <div class="overview-wrap">
-                    <h2 class="title-1">Vue d'ensemble</h2>
-                </div>
-            </div>
-            <div class="row m-t-25">
-                <div class="col-sm-6 col-lg-4">
-                    <div class="overview-item overview-item--c1">
-                        <div class="overview-box clearfix">
-                            <div class="icon">
-                                <i class="zmdi zmdi-account-o"></i>
-                            </div>
-                            <div class="text">
-                                <h2><?php echo(count($clients)); ?></h2>
-                                <span>Nombre total de clients</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-4">
-                    <div class="overview-item overview-item--c2">
-                        <div class="overview-box clearfix">
-                            <div class="icon">
-                                <i class="zmdi  zmdi-boat"></i>
-                            </div>
-                            <div class="text">
-                                <h2><?php echo array_count_values(array_column($equipements, 'Service'))[$service]; ?></h2>
-                                <span>Équipements en service</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-4">
-                    <div class="overview-item overview-item--c3">
-                        <div class="overview-box clearfix">
-                            <div class="icon">
-                                <i class="zmdi  zmdi-calendar-check"></i>
-                            </div>
-                            <div class="text">
-                                <h2><?php echo(count($countresa)); ?></h2>
-                                <span>Réservations courant <?php echo date("Y"); ?></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row m-t-30">
             <div class="col-md-12">
                 <div style="margin-bottom: 2vh!important; text-align: center!important;">
                     <h2 class="title-1">Liste des réservations</h2>
                 </div>
                 <input class ="au-input" id="myInput" style="padding: 0px 16px;  border-radius: 10px; margin-bottom: 1vh; margin-left: 1vh" type="text" placeholder="Rechercher..">
+                <button style="margin-left: 2vh" onclick="createE()" class="btn btn-outline-success">
+                    <i class="fa fa-edit (alias)"></i> Nouvel réservation
+                </button>
                 <!-- DATA TABLE-->
                 <div class="table-responsive m-b-40">
                     <table class="table table-borderless table-data3 text-center">
@@ -119,4 +70,8 @@ $service = 1;
             });
         });
     });
+
+    function createE(){
+        window.location.assign("/creatreservation")
+    }
 </script>

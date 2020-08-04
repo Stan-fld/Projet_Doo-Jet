@@ -247,7 +247,7 @@ $pays = $model->getPays();
         }
 
         function backp(){
-            window.location.assign("/employe")
+            history.back();
         }
 
         function reload() {
