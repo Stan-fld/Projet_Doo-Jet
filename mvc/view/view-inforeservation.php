@@ -48,7 +48,7 @@ $pays = $model->getPays();
                                 </div>
                             </div>
                             <form action="" method="post" class="form-horizontal ajax">
-                                <input type="hidden" name="controller" value="updateReservation">
+                                <input type="hidden" name="controller" value="updateResa">
                                 <input type="hidden" id="etape" name="etape" value="">
                                 <input type="hidden" name="id_personne" value="<?php echo $reservation[0]['ID_Personne'];?>">
                                 <div class="row form-group">

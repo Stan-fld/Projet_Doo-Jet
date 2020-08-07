@@ -28,7 +28,11 @@
     <link href="css/theme.css" rel="stylesheet" media="all">
 
     <!-- Jquery JS-->
-    <script src="vendor/jquery-3.5.1.min.js"></script>
+    <script src="/vendor/jquery-3.5.1.min.js"></script>
+    <script src="/vendor/jquery-ui.min.js"></script>
+    <script src="/js/jquery-ui-timepicker-addon.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/css/jquery-ui-timepicker-addon.css">
 
     <!-- Script JS-->
     <script src="js/script.js"></script>

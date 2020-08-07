@@ -1,5 +1,6 @@
 <?php
 
+$feedback = "";
 $model    = new Model;
 
 $etape  = $model->getInput('etape');
