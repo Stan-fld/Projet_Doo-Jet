@@ -76,21 +76,31 @@ class Page
             include($cheminSolo);
         }else if (is_file($cheminPage)) {
 
+            // Si l'id présent d'en l'url n'existe pas on r'envoie à la page souhaité
             if($nomPage[0] == "infoemploye" && $model->getEmploye($_GET["id"]) == null)
             {
                 header("location: /employe");
                 exit;
             }
 
+            // Si l'id présent d'en l'url n'existe pas on r'envoie à la page souhaité
             if($nomPage[0] == "infoclient" && $model->getClient($_GET["id"]) == null)
             {
                 header("location: /client");
                 exit;
             }
 
+            // Si l'id présent d'en l'url n'existe pas on r'envoie à la page souhaité
             if($nomPage[0] == "infoequipement" && $model->getEquipement($_GET["id"]) == null)
             {
                 header("location: /equipement");
+                exit;
+            }
+
+            // Si l'id présent d'en l'url n'existe pas on r'envoie à la page souhaité
+            if($nomPage[0] == "createreservation1" && $model->getClient($_GET["id"]) == null)
+            {
+                header("location: /createreservation");
                 exit;
             }
 

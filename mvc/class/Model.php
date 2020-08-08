@@ -134,6 +134,15 @@ class Model{
 
         return $result;
     }
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getEquipementAllOn()
+    {
+        $query  = "SELECT Nom_Equipement FROM equipement GROUP BY Nom_Equipement";
+        $stmt   = $this->executeSQL($query);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
 
     //----------------------------------------------------------------------------------------------------------------------------------
     function getPays()
