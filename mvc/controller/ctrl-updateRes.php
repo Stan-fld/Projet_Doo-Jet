@@ -53,8 +53,8 @@ switch ($etape) {
         $dateRes = substr($dateFr, 6, 4) . '-' . substr($dateFr, 3, 2) . '-' . substr($dateFr, 0, 2);
 
         //Convertir l'heure de début et de fin choisie en minutes
-        $debut_min = (substr($timeDeb, 0, 2)*60) + substr($timeDeb, 4, 2);
-        $fin_min = (substr($timeFin, 0, 2)*60) + substr($timeFin, 4, 2);
+        $debut_min = (substr($timeDeb, 0, 2)*60) + substr($timeDeb, 3, 2);
+        $fin_min = (substr($timeFin, 0, 2)*60) + substr($timeFin, 3, 2);
         $res = $fin_min - $debut_min ;
 
         // Date du jour format US
@@ -66,19 +66,19 @@ switch ($etape) {
         if($equipement == "JETSKI" && ($res == 30 || $res == 60 || $res == 120)){
 
             $valid = "time_resa";
-            // Si la temps de la réservation est de 30 mins ou 1h ou 2h,
+            // Si le temps de la réservation est de 30 mins ou 1h ou 2h,
             // on peut faire de réservation.
 
         }else if($equipement == "BATEAU" && ($res == 60 || $res== 120)){
 
             $valid = "time_resa";
-            // Si la temps de la réservation est de 1h ou 2h,
+            // Si le temps de la réservation est de 1h ou 2h,
             // on peut faire de réservation.
 
-        }else if(($equipement == "BOUEE" || $equipement == "WAKE-BOARD" || $equipement == "SKI-NAUTIQUE") && $res == 30){
+        }else if(($equipement == ("BOUEE" || "WAKE-BOARD" || "SKI-NAUTIQUE")) && $res == 30){
 
             $valid = "time_resa";
-            // Si la temps de la réservation est de 30 mins
+            // Si le temps de la réservation est de 30 mins
             // on peut faire de réservation.
 
         }else{
