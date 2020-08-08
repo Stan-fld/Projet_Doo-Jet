@@ -20,7 +20,7 @@ switch ($etape) {
         $equipement = $model->getInput('equipement');
 
         // On met en session les informations
-        $_SESSION['reservation']['$id_client']     = $id_client;
+        $_SESSION['reservation']['id_client']     = $id_client;
         $_SESSION['reservation']['nom_equipement'] = $equipement;
 
         // On passe à l'étape suivante
@@ -105,6 +105,34 @@ switch ($etape) {
             // On passe à l'étape suivante
             $feedback .= '<script>window.location.assign("createreservation3");</script>';
 
+        }
+        break;
+
+
+    case 'et3':
+        if(isset($_SESSION['reservation']['date_res']) && $_SESSION['reservation']['$id_client'] && $_SESSION['reservation']['time_deb'] )
+        {
+            // On récupére l'ID de l'aquipement
+            $id_eq = $model->getInput('ideq');
+
+            // On créer une nouvelle réservation
+            $newresa = $model->addIdresa();
+            $id_resa = $newresa['id'];
+
+            // On récupere les infos en session
+            $dateRes = $_SESSION['reservation']['date_res'];
+            $debut = $dateRes." ".$_SESSION['reservation']['time_deb'];
+            $fin = $dateRes." ". $_SESSION['reservation']['time_fin'];
+            $id_client =  $_SESSION['reservation']['id_client'];
+            $_SESSION['reservation']['id_equipement'] = $id_eq;
+            $_SESSION['reservation']['id_reservation'] = $id_resa;
+
+            $addResaEC = $model->addResaEC($id_resa, $id_client);
+            $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin);
+
+        }
+        else {
+            $feedback .= '<script type="text/javascript">alert("Votre session a expiré, merci de recommencer votre sélection");window.location.assign("/createreservation");</script>';
         }
         break;
 
@@ -338,7 +366,5 @@ switch ($etape) {
 
             break;
     */
-    default:
-        $feedback .= '<script type="text/javascript">window.location.assign("/");</script>';
-        break;
+
 }

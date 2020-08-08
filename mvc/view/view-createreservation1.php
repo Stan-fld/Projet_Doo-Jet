@@ -17,40 +17,41 @@ $equipement = $model->getEquipementAllOn();
                                 <i class="fa fa-caret-square-o-left"></i> Retour
                             </button>
                         </div>
-                        <div class="card-body card-block">
-                            <form action="" method="post" class="form-horizontal ajax">
+                        <form action="" method="post" class="form-horizontal ajax">
+                            <div class="card-body card-block">
                                 <input type="hidden" name="controller" value="updateRes">
                                 <input type="hidden" id="etape" name="etape" value="et1">
                                 <input type="hidden" name="id_client" value="<?php echo $idclient;?>">
-                                <div class="row form-group">
-                                    <label class="col col-md-3 form-control-label" for="equipement">Equipements : </label>
-                                    <div class="col col-md-3">
-                                        <select name="equipement" id="equipement" class="text-center form-control equipement" required  >
-                                            <?php foreach($equipement as $equipements){ ?>
-                                                <option value="<?php echo $equipements['Nom_Equipement'];?>"><?php echo $equipements['Nom_Equipement'];?></option>
-                                            <?php } ?>
-                                        </select>
+                                <?php foreach($equipement as $equipements){?>
+                                    <div class="row form-group">
+                                        <label id="equipement" class="col col-md-3 form-control-label"><?php echo $equipements['Nom_Equipement'];?></label>
+                                        <div class="col col-md-3">
+                                            <label class="switch switch-default switch-primary-outline-alt switch-pill mr-2">
+                                                <input type="checkbox" class="switch-input" name="<?php echo $equipements['Nom_Equipement'];?>" value="<?php echo $equipements['Nom_Equipement'];?>">
+                                                <span class="switch-label" style="background-color: #d1ecf1"></span>
+                                                <span class="switch-handle"></span>
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="card-footer text-right">
-                                    <button class="btn btn-success btn-sm">
-                                        <i class="fa fa-check"></i> Valider
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                                    <hr>
+                                <?php } ?>
+                            </div>
+                            <div class="card-footer text-right">
+                                <button class="btn btn-success btn-sm">
+                                    <i class="fa fa-check"></i> Valider
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        $(document).ready(function() {
-            $('.equipement').select2();
-        });
+<script>
 
-        function backp(){
-            history.back();
-        }
-    </script>
+    function backp(){
+        history.back();
+    }
+</script>

@@ -1,5 +1,5 @@
 <?php
-if (!isset($_SESSION['reservation']['$id_client']) && !isset($_SESSION['reservation']['nom_equipement'])) {
+if (!isset($_SESSION['reservation']['$id_client']) || !isset($_SESSION['reservation']['nom_equipement'])) {
     echo '<script type="text/javascript">window.location.assign("/createreservation");</script>';
 } else {?>
 

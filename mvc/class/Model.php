@@ -146,6 +146,20 @@ class Model{
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
+    function getEquipementDispo($date_deb, $date_fin, $nom_eq, $duree)
+    {
+        $query  = "CALL select_equipement_dispo(:date_deb, :date_fin, :nom_eq, :duree)";
+        $bind   = [":date_deb" => $date_deb,
+                   ":date_fin" => $date_fin,
+                   ":nom_eq" => $nom_eq,
+                   ":duree" => $duree];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
     function getPays()
     {
         $query  = "SELECT Nom_Pays FROM pays";
@@ -399,6 +413,42 @@ class Model{
             ":puissance" => $puissance,
             ":service" => $service];
         $result   = $this->executeSQL($query, $bind);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function addIdresa()
+    {
+        $query  = "CALL create_resa_id()";
+        $stmt   = $this->executeSQL($query);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function addResaEC($idres, $idpersonne)
+    {
+        $query  = "INSERT INTO reservation_client_employe (ID_Reservation, ID_Personne) VALUES (:idres, :idpersonne)";
+        $bind = [":idres" => $idres,
+            ":idpersonne" => $idpersonne];
+        $result   = $this->executeSQL($query, $bind);;
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function addResaEq($idres, $ideq, $debut, $fin)
+    {
+        $query  = "INSERT INTO equipement_reserve 
+                    (ID_Equipement, ID_Reservation, Date_Heure_Debut_Reservation, Date_Heure_Fin_Reservation) 
+                    VALUES (:ideq, :idres, :debut, :fin)";
+        $bind = [":idres" => $idres,
+            ":ideq" => $ideq,
+            ":debut" => $debut,
+            ":fin" => $fin];
+        $result   = $this->executeSQL($query, $bind);;
 
         return $result;
     }
