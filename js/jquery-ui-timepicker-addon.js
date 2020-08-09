@@ -52,7 +52,7 @@
             isRTL: false
         };
         this._defaults = { // Global defaults for all the datetime picker instances
-            showButtonPanel: true,
+            showButtonPanel: false,
             timeOnly: false,
             timeOnlyShowDate: false,
             showHour: null,
@@ -63,7 +63,7 @@
             showTimezone: null,
             showTime: true,
             stepHour: 1,
-            stepMinute: 1,
+            stepMinute: 5,
             stepSecond: 1,
             stepMillisec: 1,
             stepMicrosec: 1,
@@ -73,12 +73,12 @@
             millisec: 0,
             microsec: 0,
             timezone: null,
-            hourMin: 0,
+            hourMin: 9,
             minuteMin: 0,
             secondMin: 0,
             millisecMin: 0,
             microsecMin: 0,
-            hourMax: 23,
+            hourMax: 18,
             minuteMax: 59,
             secondMax: 59,
             millisecMax: 999,

@@ -32,6 +32,16 @@ $equipement = $model->getEquipementAllOn();
                                                 <span class="switch-handle"></span>
                                             </label>
                                         </div>
+                                        <?php if($equipements['Nom_Equipement'] == "JETSKI" || $equipements['Nom_Equipement'] == "BATEAU"){}else{ ?>
+                                            <div class="col col-md-3">
+                                                <label id="equipement" class="form-control-label">Nombre de personne : </label>
+                                                <select name="<?php echo $equipements['Nom_Equipement']."pers_num";?>">
+                                                    <?php for($i=1; $i<=5; $i++){?>
+                                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        <?php } ?>
                                     </div>
                                     <hr>
                                 <?php } ?>
@@ -50,7 +60,6 @@ $equipement = $model->getEquipementAllOn();
 </div>
 
 <script>
-
     function backp(){
         history.back();
     }
