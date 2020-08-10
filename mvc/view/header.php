@@ -72,9 +72,9 @@
                     <a href="/equipement">
                         <i class="fas  fa-anchor"></i>Equipements</a>
                 </li>
-                <li<?= $nomPage[0] == 'calendar' ? ' class="active"' : '' ?>>
-                    <a href="/calendar">
-                        <i class="fas fa-calendar-alt"></i>Calendrier</a>
+                <li<?= $nomPage[0] == 'reservation' ? ' class="active"' : '' ?>>
+                    <a href="/reservation">
+                        <i class="fas fa-calendar-alt"></i>Réservations</a>
                 </li>
                 <li>
                     <a href="/calendar">
@@ -127,13 +127,13 @@
                     <a href="/employe">
                         <i class="fas fa-user"></i>Employés</a>
                 </li>
-                <li <?= $nomPage[0] == 'equipement'? ' class="active"' : '' ?>>
+                <li <?= $nomPage[0] == 'equipement' ? ' class="active"' : '' ?>>
                     <a href="/equipement">
                         <i class="fas  fa-anchor"></i>Equipements</a>
                 </li>
-                <li<?= $nomPage[0] == 'calendar' ? ' class="active"' : '' ?>>
-                    <a href="/calendar">
-                        <i class="fas fa-calendar-alt"></i>Calendrier</a>
+                <li<?= $nomPage[0] == 'reservation' || $nomPage[0] == 'inforeservation' || $nomPage[0] == 'createreservation' || $nomPage[0] == 'createreservation1' || $nomPage[0] == 'createreservation2' || $nomPage[0] == 'createreservation3' || $nomPage[0] == 'createreservation4' ? ' class="active"' : '' ?>>
+                    <a href="/reservation">
+                        <i class="fas fa-calendar-alt"></i>Réservations</a>
                 </li>
                 <li>
                     <a href="map.html">

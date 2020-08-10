@@ -158,6 +158,18 @@ class Model{
 
         return $result;
     }
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getEqmployeDispo($date, $date_deb, $date_fin)
+    {
+        $query  = "CALL select_employe_dispo(:date, :date_deb, :date_fin)";
+        $bind   = [":date" => $date,
+                   ":date_deb" => $date_deb,
+                   ":date_fin" => $date_fin];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
 
     //----------------------------------------------------------------------------------------------------------------------------------
     function getPays()

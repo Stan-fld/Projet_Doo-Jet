@@ -34,7 +34,7 @@ $resa = $model->getReservationAll();
                             <th>Détails client</th>
                         </tr>
                         </thead>
-                        <tbody id="TableClient">
+                        <tbody id="TableResa">
                         <?php foreach ($resa as $Resa){ ?>
                             <tr>
                                 <td><?php echo $Resa['Nom'];?></td>
@@ -62,16 +62,16 @@ $resa = $model->getReservationAll();
 </div>
 </body>
 <script>
-    $(document).ready(function(){
-        $("#myInput").on("keyup", function() {
+    $(document).ready(function() {
+        $("#myInput").on("keyup", function () {
             var value = $(this).val().toLowerCase();
-            $("#TableClient tr").filter(function() {
+            $("#TableResa tr").filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
     });
 
     function createE(){
-        window.location.assign("/creatreservation")
+        window.location.assign("/createreservation")
     }
 </script>

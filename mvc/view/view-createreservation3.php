@@ -3,7 +3,7 @@ if(isset($_SESSION['reservation']))
 {
     foreach ($_SESSION['reservation'] as $resa){
         $eq = $resa['equipement'];
-        $date = $resa['date'];
+        $date = $resa['date_us'];
         $debut = $resa['datetime_deb'];
         $fin = $resa['datetime_fin'];
         $duree = $resa['duree'];
@@ -12,8 +12,10 @@ if(isset($_SESSION['reservation']))
     {
         echo '<script type="text/javascript">alert("Votre session a expiré, merci de recommencer votre sélection !");window.location.assign("/createreservation");</script>';
 
-    }else {?>
-
+    }else {
+        $id_client = $_SESSION['reservation'][0]['id_client'];
+        $client = $model->getClient($id_client);
+        ?>
         <!-- Title Page-->
         <title>Reservation</title>
         <div class="main-content">
@@ -33,16 +35,18 @@ if(isset($_SESSION['reservation']))
                                     <input type="hidden" name="controller" value="updateRes">
                                     <input type="hidden" id="etape" name="etape" value="et3">
                                     <?php foreach ($_SESSION['reservation'] as $resa){
-                                        $eq_dispo = $model->getEquipementDispo($resa['datetime_deb'], $resa['datetime_fin'], $resa['equipement'], $resa['duree']);?>
+                                        $eq_dispo = $model->getEquipementDispo($resa['datetime_deb'], $resa['datetime_fin'], $resa['equipement'], $resa['duree']);
+                                        $employe_dispo = $model->getEqmployeDispo($resa['date_us'], $resa['datetime_deb'], $resa['datetime_fin'])?>
                                         <div class="row form-group">
                                             <label class="col col-md-3 form-control-label" for="ideq">Equipements : <?php echo $resa['equipement'] ?> </label>
                                             <div class="col col-md-3">
                                                 <select name="ideq_<?php echo $resa['equipement']; ?>" id="ideq" class="text-center form-control" required>
                                                     <?php foreach($eq_dispo as $eq_dispos){
+                                                        $val = $eq_dispos['ID_Equipement']."-".$eq_dispos['Prix'];
                                                         if($eq_dispos['Nom_Equipement'] == "JETSKI"){?>
-                                                            <option value="<?php echo $eq_dispos['ID_Equipement'];?>"><?php echo $eq_dispos['Commentaire']." - ".$eq_dispos['Puissance']." cv - ".$eq_dispos['Prix'] ;?> &euro;</option>
+                                                            <option value="<?php echo $val;?>"><?php echo $eq_dispos['Commentaire']." - ".$eq_dispos['Prix'] ;?> &euro;</option>
                                                         <?php }else{ ?>
-                                                            <option value="<?php echo $eq_dispos['ID_Equipement'];?>"><?php echo $eq_dispos['Commentaire']." - ".$eq_dispos['Prix'] ;?> &euro;</option>
+                                                            <option value="<?php echo $val;?>"><?php echo $eq_dispos['Commentaire']." - ".$eq_dispos['Prix'] ;?> &euro;</option>
                                                         <?php } ?>
                                                     <?php } ?>
                                                 </select>
@@ -50,7 +54,41 @@ if(isset($_SESSION['reservation']))
                                                     <strong style="color: red">Par Personne !!!</strong>
                                                 <?php } ?>
                                             </div>
+                                            <div class="col col-md-3">
+                                                <?php if($resa['equipement'] == "JETSKI"){?>
+                                                    <select name="idemp_<?php echo $resa['equipement']; ?>" id="idemp" class="text-center form-control" <?= $client['N_Permis'] == NULl ? 'required' : '' ?>>
+                                                        <option disabled selected value=""><?= $client['N_Permis'] == NULl ? 'MONITEUR OBLIGATOIRE' : 'MONITEUR FACULTATIF' ?></option>
+                                                        <?php foreach ($employe_dispo as $emp){
+                                                            if($emp['N_BEES'] !== NULL){?>
+                                                                <option value="<?php echo $emp['ID_Personne'];?>"><?php echo $emp['Prenom']." - ".$emp['Nom']." - ".$emp['N_BEES'] ;?></option>
+                                                            <?php } ?>
+                                                        <?php } ?>
+                                                    </select>
+                                                <?php } ?>
+                                                <?php if($resa['equipement'] == "BATEAU" ||$resa['equipement'] == "BOUEE"){?>
+                                                    <select name="idemp_<?php echo $resa['equipement']; ?>" id="idem" class="text-center form-control" required>
+                                                        <option disabled selected value="">MONITEUR OBLIGATOIRE</option>
+                                                        <?php foreach ($employe_dispo as $emp){
+                                                            if($emp['N_Permis'] !== NULL){?>
+                                                                <option value="<?php echo $emp['ID_Personne'];?>"><?php echo $emp['Prenom']." - ".$emp['Nom']." - ".$emp['N_Permis'] ;?></option>
+                                                            <?php } ?>
+                                                        <?php } ?>
+                                                    </select>
+                                                <?php } ?>
+                                                <?php if($resa['equipement'] == "WAKE-BOARD" ||$resa['equipement'] == "SKI-NAUTIQUE"){?>
+                                                    <select name="idemp_<?php echo $resa['equipement']; ?>" id="idemp" class="text-center form-control" required>
+                                                        <option disabled selected value="">MONITEUR OBLIGATOIRE</option>
+                                                        <?php foreach ($employe_dispo as $emp){
+                                                            if($emp['N_Permis'] !== NULL && $emp['N_BEES'] !== NULL){?>
+                                                                <option value="<?php echo $emp['ID_Personne'];?>"><?php echo $emp['Prenom']." - ".$emp['Nom']." - ".$emp['N_Permis'] ;?></option>
+                                                            <?php } ?>
+                                                        <?php } ?>
+                                                    </select>
+                                                <?php } ?>
+                                            </div>
+                                            <label style="color: #00a2e3" class="col col-md-3 form-control-label" for="service"><?php echo $resa['heure_deb'].'-'.$resa['heure_fin'] ?></label>
                                         </div>
+                                        <hr>
                                     <?php } ?>
                                     <hr>
                                     <div class="card-footer text-right">
@@ -66,6 +104,11 @@ if(isset($_SESSION['reservation']))
             </div>
         </div>
         <script>
+            /*
+            $('select').on('change',function(){
+                alert("change");
+            });
+            */
             function backp(){
                 window.location.assign("createreservation2");
             }

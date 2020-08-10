@@ -1,0 +1,72 @@
+<?php
+if(isset($_SESSION['reservation']))
+{
+    foreach ($_SESSION['reservation'] as $resa){
+        $eq = $resa['equipement'];
+        $date = $resa['date'];
+        $debut = $resa['heure_deb'];
+        $fin = $resa['heure_fin'];
+        $duree = $resa['duree'];
+        $id_resa = ['id_resa'];
+    }
+    if (!isset($eq) || !isset($date) || !isset($debut) || !isset($fin) || !isset($duree) || !isset($id_resa))
+    {
+        echo '<script type="text/javascript">alert("Votre session a expiré, merci de recommencer votre sélection !");window.location.assign("/createreservation");</script>';
+    }else {
+        $id_client = $_SESSION['reservation'][0]['id_client'];
+        $client = $model->getClient($id_client); ?>
+        <!-- Title Page-->
+        <title>Récap réservation : <?php echo $client['Prenom']." ".$client['Nom'];?></title>
+        <div class="page-wrapper">
+            <!-- MAIN CONTENT-->
+            <div class="main-content">
+                <div class="row m-t-30">
+                    <div class="col-md-12">
+                        <div style="margin-bottom: 2vh!important; text-align: center!important;">
+                            <h2 class="title-1">Récapitulatif réservation : <?php echo $client['Prenom']." ".$client['Nom'].", N° ". $_SESSION['reservation'][0]['id_resa'];?></h2>
+                        </div>
+                        <!-- DATA TABLE-->
+                        <div class="table-responsive m-b-40">
+                            <table class="table table-borderless table-data3">
+                                <thead>
+                                <tr >
+                                    <th>Équipement</th>
+                                    <th>Nombre de personnes</th>
+                                    <th>Date</th>
+                                    <th>Heure de début</th>
+                                    <th>Heure de fin</th>
+                                    <th>Prix par personne</th>
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                <?php foreach ($_SESSION['reservation'] as $resa){ ?>
+                                    <tr>
+                                        <td><?php echo $resa['equipement'];?></td>
+                                        <td><?php echo $resa['nb_personne'];?></td>
+                                        <td><?php echo $resa['date'];?></td>
+                                        <td><?php echo $resa['heure_deb'];?></td>
+                                        <td><?php echo $resa['heure_fin'];?></td>
+                                        <td><?php echo $resa['prix'];?> &euro;</td>
+                                        <?php if($resa['equipement'] == "JETSKI" && $resa['id_empolye'] !== NULL){ ?>
+                                            <td><?php echo ((($resa['prix']*$resa['nb_personne'])*20/100)+$resa['prix']);?> &euro;</td>
+                                        <?php }else{ ?>
+                                            <td><?php echo ($resa['prix']*$resa['nb_personne']);?> &euro;</td>
+                                        <?php } ?>
+                                    </tr>
+                                <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- END DATA TABLE-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+}
+else{
+    echo '<script type="text/javascript">alert("Votre session a expiré, merci de recommencer votre sélection !");window.location.assign("/createreservation");</script>';
+}
+?>

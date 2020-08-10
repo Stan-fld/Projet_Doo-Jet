@@ -15,11 +15,16 @@ switch ($etape) {
 
     case 'et1':
 
+        // On vide la session réservation à chaque nouvelles réservations par sécurité
         unset($_SESSION['reservation']);
+
+        // On récupére les équipement en service
         $equipement = $model->getEquipementAllOn();
 
-        // Récupere les infos
+        // Récupere les infos du formulaire
         $id_client = $model->getInput('id_client');
+
+        // On initialise notre compteur
         $valuecount=0;
 
 
@@ -31,12 +36,13 @@ switch ($etape) {
 
             if($value !== "")
             {
-                //On compte le nombre de valeur sélectionné
+                // On compte le nombre de valeurs sélectionnés
                 $valuecount ++;
 
+                // Si c'est jetski ou bateau on met le compteur de personne sur 1
                 if($eq['Nom_Equipement'] == "JETSKI" || $eq['Nom_Equipement'] == "BATEAU")
                 {
-                    // On créer un table par équipement
+                    // On créer un tableau par équipement
                     $array[] = ["id_client" => $id_client, "equipement" => $value, "nb_personne" => 1];
 
                     // On met en session les informations
@@ -44,7 +50,7 @@ switch ($etape) {
                 }
                 else
                 {
-                    // On créer un table par équipement
+                    // On créer un tableau par équipement
                     $array[] = ["id_client" => $id_client, "equipement" => $value, "nb_personne" => $pers_num];
 
                     // On met en session les informations
@@ -72,8 +78,11 @@ switch ($etape) {
 
     case 'et2':
 
+        // On initialise nos différents compteurs
         $valid = 0;
         $valid2 = 0;
+        $valid3 = 0;
+        $count = 0;
 
         // Recupére les infos
         $dateFr = $model->getInput('date_res');
@@ -100,8 +109,10 @@ switch ($etape) {
         }
         else
         {
+            // Pour chaque groupe d'équipement réservé
             foreach ($_SESSION['reservation'] as $resa)
             {
+                // On récupère les valeurs en session et du formulaire
                 $name = $resa['equipement'];
                 $debut = $model->getInput('time_deb_'."$name");
                 $fin = $model->getInput('time_fin_'."$name");
@@ -111,6 +122,7 @@ switch ($etape) {
                 $fin_min = (substr($fin, 0, 2)*60) + substr($fin, 3, 2);
                 $res = $fin_min - $debut_min ;
 
+                // Si on a des plage horaires de 30 mins en 30 mins c'est ok
                 if($res == 30 || $res == 60 || $res == 90 || $res == 120 || $res == 150 || $res == 180 || $res == 210 || $res == 240 || $res == 270 || $res == 300)
                 {
                     // On met les infos en session
@@ -125,11 +137,13 @@ switch ($etape) {
                         "heure_fin"=> $fin,
                         "duree" => $res,];
                     $_SESSION['reservation'] = $array;
+                    // On ajoute +1 au passage de chaque équipement pour pouvoir passer à létape suivante
                     $valid ++;
                 }
 
                 else
                 {
+                    //On remet quand même les anciennes info en session ar sécurité
                     $array[] = ["id_client" => $resa['id_client'],
                         "equipement" => $resa['equipement'],
                         "nb_personne" => $resa['nb_personne'],];
@@ -139,13 +153,46 @@ switch ($etape) {
                 }
             }
 
+            // On compte le nombre de réservation pour le comparer avec celui plus haut
             foreach ($_SESSION['reservation'] as $r) { $valid2++; }
 
-
+            // On fait cette vérification seulement si la plage horaire sélectionné est valide
             if($valid == $valid2)
             {
+                // Pour groupe d'équipement on va vérifier si au moin un équipement est disponible avant de passer à la suite
+                foreach ($_SESSION['reservation'] as $resa)
+                {
+                    // On appelle la fonction qui appelle la procédure stockée
+                    $eq_dispo = $model->getEquipementDispo($resa['datetime_deb'], $resa['datetime_fin'], $resa['equipement'], $resa['duree']);
+
+                    // Pour chaque équipement appartenant au groupe sélectionner que retourne la requête
+                    foreach($eq_dispo as $eq_dispos)
+                    {
+                        // Si l'équipement est dispo on lui attribut la valeur 1
+                        if($eq_dispos['Nom_Equipement'] !== "" || $eq_dispos['ID_Equipement'] !== "")
+                        {
+                            $count = 1;
+                        }
+                    }
+
+                    // Si le groupe d'équipement retourne 0 cela veux dire que aucun équipement n'est disponible
+                    if($count == 0)
+                    {
+                        // On retourne une erreur et on ajoute la valeur 1 à la validation 3
+                        $feedback .= '<script>alert("Pas de '.$resa['equipement'].' disponibles pour cette tranche horaire!");</script>';
+                        $valid3 = 1;
+                    }
+                    // On remet le compteur à 0 afin que si il y est plusieurs groupe d'équipements dans la réservation,
+                    // la vérification se fasse bien
+                    $count = 0;
+                }
+            }
+
+            // On passe à létape suivante si il n'y à eu aucuns problèmes
+            if($valid == $valid2 && $valid3 == 0)
+            {
                 // On passe à l'étape suivante
-                $feedback .= '<script>window.location.assign("/createreservation3");</script>';
+                $feedback .= '<script>alert("Équipements disponibles !");window.location.assign("/createreservation3");</script>';
             }
         }
 
@@ -154,55 +201,80 @@ switch ($etape) {
 
     case 'et3':
 
+        // On initialise nos compteurs
         $valid = 0;
         $valid2 = 0;
 
         foreach ($_SESSION['reservation'] as $resa){
             $eq = $resa['equipement'];
-            $id = $resa['id_client'];
+            $id_client = $resa['id_client'];
             $nb_pers = ['nb_personne'];
             $debut = ['datetime_deb'];
             $fin = ['datetime_fin'];
             $duree = ['duree'];
             $valid2++;
         }
-        if(isset($eq) && isset($id) && isset($debut) && isset($fin) && isset($duree) && isset($nb_pers))
+
+        // On vérifie si les infos sont bien toujours présentent en session
+        if(isset($eq) && isset($id_client) && isset($debut) && isset($fin) && isset($duree) && isset($nb_pers))
         {
 
-            // On créer une nouvelle réservation
+            // On créer une nouvelle réservation dans la table réservation
             $newresa = $model->addIdresa();
+
+            // On récupère l'ID de cette réservation
             $id_resa = $newresa['id'];
 
-            $addResaEC = $model->addResaEC($id_resa, $id);
+            // On ajoute le client à la table réservtion_client_employé
+            $addResaEC = $model->addResaEC($id_resa, $id_client);
 
+            // Pour chaque groupe d'équipement réservé
             foreach ($_SESSION['reservation'] as $resa)
             {
+                // On récupére les infos en session
                 $name = $resa['equipement'];
-                $eq = $resa['equipement'];
-                $id = $resa['id_client'];
+                $id_client = $resa['id_client'];
                 $nb_pers = $resa['nb_personne'];
                 $debut = $resa['datetime_deb'];
                 $fin = $resa['datetime_fin'];
                 $duree = $resa['duree'];
 
                 // On récupére l'id de l'équipement
-                $id_eq = $model->getInput('ideq_'."$name");
+                $val = $model->getInput('ideq_'."$name");
+                list($id_eq, $prix) = explode('-',$val);
 
-                $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin);
+                // On récupére l'id de l'employé
+                $id_employe = $model->getInput('idemp_'."$name");
+
+                if($id_employe !== NULL)
+                {
+                    // On ajoute l'employé à la table réservtion_client_employé
+                    $addResaEC = $model->addResaEC($id_resa, $id_employe);
+
+                    // On ajoute la réservation dans la table equipements réservés
+                    $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin);
+                }
+                else
+                {
+                    // On ajoute la réservation dans la table equipements réservés
+                    $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin);
+                }
 
                 // On met les infos en session
-                $array[] = ["id_client" => $resa['id_client'],
-                    "equipement" => $resa['equipement'],
-                    "nb_personne" => $resa['nb_personne'],
-                    "date" => $resa['date'],
-                    "date_us" => $resa['date_us'],
-                    "heure_deb" => $resa['heure_deb'],
-                    "heure_fin"=> $resa['heure_fin'],
-                    "duree" => $resa['duree'],
-                    "id_eq"=> $id_eq,
-                ];
+                $array[] = ["id_client" => $id_client,
+                           "equipement" => $name,
+                          "nb_personne" => $resa['nb_personne'],
+                                 "date" => $resa['date'],
+                            "heure_deb" => $resa['heure_deb'],
+                            "heure_fin" => $resa['heure_fin'],
+                                "duree" => $duree,
+                                "id_eq" => $id_eq,
+                              "id_resa" =>$id_resa,
+                           "id_empolye" => $id_employe,
+                                 "prix" => $prix];
                 $_SESSION['reservation'] = $array;
 
+                // On vérifie si l'action se fait bien pour les deux
                 $valid++;
             }
         }
