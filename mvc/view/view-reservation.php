@@ -3,7 +3,7 @@ $resa = $model->getReservationAll();
 ?>
 
 <!-- Title Page-->
-<title>Liste des réservations</title>
+<title>Liste des réservations clients</title>
 
 <body class="animsition">
 <div class="page-wrapper">
@@ -12,11 +12,11 @@ $resa = $model->getReservationAll();
         <div class="row m-t-30">
             <div class="col-md-12">
                 <div style="margin-bottom: 2vh!important; text-align: center!important;">
-                    <h2 class="title-1">Liste des réservations</h2>
+                    <h2 class="title-1">Liste des réservations clients</h2>
                 </div>
                 <input class ="au-input" id="myInput" style="padding: 0px 16px;  border-radius: 10px; margin-bottom: 1vh; margin-left: 1vh" type="text" placeholder="Rechercher..">
                 <button style="margin-left: 2vh" onclick="createE()" class="btn btn-outline-success">
-                    <i class="fa fa-edit (alias)"></i> Nouvel réservation
+                    <i class="fa fa-edit (alias)"></i> Nouvelle réservation
                 </button>
                 <!-- DATA TABLE-->
                 <div class="table-responsive m-b-40">

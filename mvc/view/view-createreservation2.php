@@ -20,6 +20,9 @@ if(isset($_SESSION['reservation']))
                             <h2 class="title-1">Date souhaitée pour la réservation :</h2>
                         </div>
                     </div>
+                    <button style="margin-left: 2vh" onclick="backp()" class="btn btn-outline-danger btn-danger">
+                        <i class="fa fa-caret-square-o-left"></i> Retour
+                    </button>
                     <form id="form-reservation" class="ajax" action="" method="post">
                         <input type="hidden" name="controller" value="updateRes">
                         <input type="hidden" name="etape" value="et2">
@@ -87,6 +90,10 @@ if(isset($_SESSION['reservation']))
                 $(".time_fin").timepicker({
                     timeOnlyTitle: 'Choisir l\'heure de fin',});
             });
+
+            function backp(){
+                window.location.assign("createreservation1?id=<?php echo $_SESSION['reservation'][0]['id_client'] ?>");
+            };
         </script>
         <?php
     }

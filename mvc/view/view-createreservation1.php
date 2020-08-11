@@ -27,6 +27,14 @@ $equipement = $model->getEquipementAllOn();
                                         <label id="equipement" class="col col-md-3 form-control-label"><?php echo $equipements['Nom_Equipement'];?></label>
                                         <div class="col col-md-3">
                                             <label class="switch switch-default switch-primary-outline-alt switch-pill mr-2">
+                                                <?php if(isset($_SESSION['reservation'])){
+                                                    foreach ($_SESSION['reservation'] as $resa){
+                                                        if($resa['equipement'] == $equipements['Nom_Equipement']){?>
+                                                            <input type="checkbox" checked class="switch-input" name="<?php echo $equipements['Nom_Equipement'];?>" value="<?php echo $equipements['Nom_Equipement'];?>">
+                                                        <?php } ?>
+                                                    <?php } ?>
+                                                <?php } ?>
+
                                                 <input type="checkbox" class="switch-input" name="<?php echo $equipements['Nom_Equipement'];?>" value="<?php echo $equipements['Nom_Equipement'];?>">
                                                 <span class="switch-label" style="background-color: #d1ecf1"></span>
                                                 <span class="switch-handle"></span>
@@ -36,15 +44,15 @@ $equipement = $model->getEquipementAllOn();
                                             <div class="col col-md-3">
                                                 <label id="equipement" class="form-control-label">Nombre de personne : </label>
                                                 <select name="<?php echo $equipements['Nom_Equipement']."pers_num";?>">
-                                                    <?php for($i=1; $i<=5; $i++){?>
-                                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                                    <?php for($i=1; $i<=5; $i++){ ?>
+                                                        <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
                                         <?php } ?>
                                     </div>
                                     <hr>
-                                <?php } ?>
+                                <?php }?>
                             </div>
                             <div class="card-footer text-right">
                                 <button class="btn btn-success btn-sm">
