@@ -231,6 +231,8 @@ switch ($etape) {
             // Pour chaque groupe d'équipement réservé
             foreach ($_SESSION['reservation'] as $resa)
             {
+                $total = 0;
+
                 // On récupére les infos en session
                 $name = $resa['equipement'];
                 $id_client = $resa['id_client'];
@@ -251,27 +253,42 @@ switch ($etape) {
                     // On ajoute l'employé à la table réservtion_client_employé
                     $addResaEC = $model->addResaEC($id_resa, $id_employe);
 
-                    // On ajoute la réservation dans la table equipements réservés
-                    $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin);
+                    if($resa['equipement'] == "JETSKI")
+                    {
+                        $total = ((($prix*$resa['nb_personne'])*20/100)+$prix);
+
+                        // On ajoute la réservation dans la table equipements réservés
+                        $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin, $total, $nb_pers);
+                    }
+                    else
+                    {
+                        $total = ($prix*$resa['nb_personne']);
+
+                        // On ajoute la réservation dans la table equipements réservés
+                        $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin, $total, $nb_pers);
+                    }
+
                 }
                 else
                 {
+                    $total = ($prix*$resa['nb_personne']);
+
                     // On ajoute la réservation dans la table equipements réservés
-                    $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin);
+                    $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin, $total, $nb_pers);
                 }
 
                 // On met les infos en session
                 $array[] = ["id_client" => $id_client,
-                           "equipement" => $name,
-                          "nb_personne" => $resa['nb_personne'],
-                                 "date" => $resa['date'],
-                            "heure_deb" => $resa['heure_deb'],
-                            "heure_fin" => $resa['heure_fin'],
-                                "duree" => $duree,
-                                "id_eq" => $id_eq,
-                              "id_resa" =>$id_resa,
-                           "id_empolye" => $id_employe,
-                                 "prix" => $prix];
+                    "equipement" => $name,
+                    "nb_personne" => $resa['nb_personne'],
+                    "date" => $resa['date'],
+                    "heure_deb" => $resa['heure_deb'],
+                    "heure_fin" => $resa['heure_fin'],
+                    "duree" => $duree,
+                    "id_eq" => $id_eq,
+                    "id_resa" =>$id_resa,
+                    "id_empolye" => $id_employe,
+                    "prix" => $prix];
                 $_SESSION['reservation'] = $array;
 
                 // On vérifie si l'action se fait bien pour les deux
@@ -290,8 +307,57 @@ switch ($etape) {
 
         break;
 
-    case 'et4':
+    case 'etPDF':
+        //$id_resa = $_SESSION['reservation'][0]['id_resa'];
+        $nom = $model->getInput('nom');
+        $prenom = $model->getInput('prenom');
+        $tel = $model->getInput('tel');
+
+        require_once __DIR__.'/../../vendor/autoload.php';
+
+
+        $mpdf = new \Mpdf\Mpdf();
+
+        // Creation du PDF
+        $data = '';
+
+        $data .='<h1>Votre réservation</h1>';
+
+        $data .= '<strong>Nom : </strong>'. $nom .'<br/>';
+        $data .= '<strong>Prenom : </strong>'. $prenom .'<br/>';
+        $data .= '<strong>Téléphone : </strong>'. $tel .'<br/>';
+
+        // Ecrit le PDF
+        $mpdf->writeHTML($data);
+
+        // Envoie au navigateur
+        $mpdf->Output('reservation.pdf');
+
+        $feedback.='<script>window.location.assign("/reservation.pdf")</script>';
+        /*
+        foreach ($_SESSION['reservation'] as $resa)
+        {
+            $id_eq = $resa['id_eq'];
+            $id_empolye = $resa['id_empolye'];
+            $nb_pers = $resa['nb_personne'];
+            $date = $resa['date'];
+            $debut = $resa['heure_deb'];
+            $fin = $resa['heure_fin'];
+            $prix = $resa['prix'];
+            $eq = $model->getEquipement($id_eq);
+            $commentaire = $eq['Commentaire'];
+
+        }*/
+        break;
+
+    case 'etFini':
         // On vide la session réservation à la fin de la réservations par sécurité
         unset($_SESSION['reservation']);
         $feedback .= '<script>window.location.assign("/reservation");</script>';
+        break;
+
+
+    default:
+        $feedback .= '<script type="text/javascript">alert("Erreur");window.location.assign("/");</script>';
+        break;
 }

@@ -73,12 +73,19 @@ if(isset($_SESSION['reservation']))
                             </table>
                             <form action="" method="post" class="form-horizontal ajax">
                                 <input type="hidden" name="controller" value="updateRes">
-                                <input type="hidden" id="etape" name="etape" value="et4">
+                                <input type="hidden" name="nom" value="<?php echo $client['Nom'] ?>">
+                                <input type="hidden" name="prenom" value="<?php echo $client['Prenom'] ?>">
+                                <input type="hidden" name="tel" value="<?php echo $client['Telephone'] ?>">
+                                <input type="hidden" id="etape" name="etape" value="">
                                 <div class="card-body card-block text-right">
-                                    <button style="margin-left: 2vh;" class="btn btn-success btn-sm">
+                                    <button style="margin-left: 2vh" onclick="pdf()" class="btn btn-outline-danger btn-sm">
+                                        <i class="fa fa-edit (alias)"></i> Génerer PDF
+                                    </button>
+                                    <button style="margin-left: 2vh;" onclick="val()" class="btn btn-success btn-sm">
                                         <i class="fa fa-check"></i> Valider
                                     </button>
                                 </div>
+
                             </form>
                         </div>
                         <!-- END DATA TABLE-->
@@ -86,6 +93,15 @@ if(isset($_SESSION['reservation']))
                 </div>
             </div>
         </div>
+        <script>
+            function val() {
+                $('#etape').val('etFini');
+            };
+
+            function pdf() {
+                $('#etape').val('etPDF');
+            }
+        </script>
         <?php
     }
 }

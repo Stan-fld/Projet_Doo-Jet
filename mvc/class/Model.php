@@ -451,15 +451,17 @@ class Model{
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
-    function addResaEq($idres, $ideq, $debut, $fin)
+    function addResaEq($idres, $ideq, $debut, $fin, $total, $nb_pers)
     {
         $query  = "INSERT INTO equipement_reserve 
-                    (ID_Equipement, ID_Reservation, Date_Heure_Debut_Reservation, Date_Heure_Fin_Reservation) 
-                    VALUES (:ideq, :idres, :debut, :fin)";
+                    (ID_Equipement, ID_Reservation, Date_Heure_Debut_Reservation, Date_Heure_Fin_Reservation, Prix_Total, Nombre_Personne) 
+                    VALUES (:ideq, :idres, :debut, :fin, :total, :nb_pers)";
         $bind = [":idres" => $idres,
             ":ideq" => $ideq,
             ":debut" => $debut,
-            ":fin" => $fin];
+            ":fin" => $fin,
+            ":total" => $total,
+            "nb_pers" => $nb_pers];
         $result   = $this->executeSQL($query, $bind);;
 
         return $result;

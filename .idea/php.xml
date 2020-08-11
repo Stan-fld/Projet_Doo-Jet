@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/fullcalendar-3.10.0/locale" />
+      <path value="$PROJECT_DIR$/vendor/lightbox2/dist" />
+      <path value="$PROJECT_DIR$/vendor/lightbox2/src" />
+      <path value="$PROJECT_DIR$/vendor/font-awesome-4.7/fonts" />
+      <path value="$PROJECT_DIR$/vendor/slick/fonts" />
+      <path value="$PROJECT_DIR$/vendor/font-awesome-4.7/css" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/font-awesome-5/css" />
+      <path value="$PROJECT_DIR$/vendor/mdi-font/css" />
+      <path value="$PROJECT_DIR$/vendor/font-awesome-5/webfonts" />
+      <path value="$PROJECT_DIR$/vendor/mdi-font/fonts" />
+      <path value="$PROJECT_DIR$/vendor/fullcalendar-3.10.0/lib" />
+    </include_path>
+  </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />
 </project>
