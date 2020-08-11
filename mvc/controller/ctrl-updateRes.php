@@ -333,7 +333,7 @@ switch ($etape) {
         // Envoie au navigateur
         $mpdf->Output('reservation.pdf');
 
-        $feedback.='<script>window.location.assign("/reservation.pdf")</script>';
+        $feedback.='<script>window.open("/reservation.pdf", "_blank");</script>';
         /*
         foreach ($_SESSION['reservation'] as $resa)
         {
