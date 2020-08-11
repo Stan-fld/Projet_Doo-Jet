@@ -290,4 +290,8 @@ switch ($etape) {
 
         break;
 
+    case 'et4':
+        // On vide la session réservation à la fin de la réservations par sécurité
+        unset($_SESSION['reservation']);
+        $feedback .= '<script>window.location.assign("/reservation");</script>';
 }
