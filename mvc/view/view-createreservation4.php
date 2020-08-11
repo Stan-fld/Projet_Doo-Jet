@@ -1,6 +1,9 @@
 <?php
 if(isset($_SESSION['reservation']))
 {
+    $total = 0;
+    $totalF = 0;
+
     foreach ($_SESSION['reservation'] as $resa){
         $eq = $resa['equipement'];
         $date = $resa['date'];
@@ -31,30 +34,41 @@ if(isset($_SESSION['reservation']))
                                 <thead>
                                 <tr >
                                     <th>Équipement</th>
-                                    <th>Nombre de personnes</th>
                                     <th>Date</th>
                                     <th>Heure de début</th>
                                     <th>Heure de fin</th>
+                                    <th>Nombre de personnes</th>
                                     <th>Prix par personne</th>
-                                    <th>Total</th>
+                                    <th class="total_column">Total</th>
                                 </tr>
                                 </thead>
                                 <tbody class="text-center">
                                 <?php foreach ($_SESSION['reservation'] as $resa){ ?>
                                     <tr>
                                         <td><?php echo $resa['equipement'];?></td>
-                                        <td><?php echo $resa['nb_personne'];?></td>
                                         <td><?php echo $resa['date'];?></td>
                                         <td><?php echo $resa['heure_deb'];?></td>
                                         <td><?php echo $resa['heure_fin'];?></td>
+                                        <td><?php echo $resa['nb_personne'];?></td>
                                         <td><?php echo $resa['prix'];?> &euro;</td>
-                                        <?php if($resa['equipement'] == "JETSKI" && $resa['id_empolye'] !== NULL){ ?>
-                                            <td><?php echo ((($resa['prix']*$resa['nb_personne'])*20/100)+$resa['prix']);?> &euro;</td>
-                                        <?php }else{ ?>
-                                            <td><?php echo ($resa['prix']*$resa['nb_personne']);?> &euro;</td>
+                                        <?php if($resa['equipement'] == "JETSKI" && $resa['id_empolye'] !== ""){
+                                            $total += ((($resa['prix']*$resa['nb_personne'])*20/100)+$resa['prix']);?>
+                                            <td><?php echo $total;?> &euro;</td>
+                                        <?php }else{
+                                            $total = ($resa['prix']*$resa['nb_personne']);?>
+                                            <td><?php echo $total;?> &euro;</td>
                                         <?php } ?>
                                     </tr>
-                                <?php } ?>
+                                <?php $totalF += $total; $total = 0;} ?>
+                                </tbody>
+                                <tbody class="text-center">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="color: #1b1b1b; font-weight: bolder">TOTAL : </td>
+                                <td style="color: #1b1b1b"><?php echo $totalF; ?> &euro;</td>
                                 </tbody>
                             </table>
                         </div>

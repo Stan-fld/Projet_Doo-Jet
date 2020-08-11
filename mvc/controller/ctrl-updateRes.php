@@ -246,7 +246,7 @@ switch ($etape) {
                 // On récupére l'id de l'employé
                 $id_employe = $model->getInput('idemp_'."$name");
 
-                if($id_employe !== NULL)
+                if($id_employe !== "")
                 {
                     // On ajoute l'employé à la table réservtion_client_employé
                     $addResaEC = $model->addResaEC($id_resa, $id_employe);

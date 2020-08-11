@@ -44,9 +44,9 @@ if(isset($_SESSION['reservation']))
                                                     <?php foreach($eq_dispo as $eq_dispos){
                                                         $val = $eq_dispos['ID_Equipement']."-".$eq_dispos['Prix'];
                                                         if($eq_dispos['Nom_Equipement'] == "JETSKI"){?>
-                                                            <option value="<?php echo $val;?>"><?php echo $eq_dispos['Commentaire']." - ".$eq_dispos['Prix'] ;?> &euro;</option>
+                                                            <option value="<?php echo $val;?>"><?php echo $eq_dispos['Commentaire']." - ".$eq_dispos['Puissance']." cv - ".$eq_dispos['Prix'] ;?> &euro;</option>
                                                         <?php }else{ ?>
-                                                            <option value="<?php echo $val;?>"><?php echo $eq_dispos['Commentaire']." - ".$eq_dispos['Prix'] ;?> &euro;</option>
+                                                            <option value="<?php echo $val;?>"><?php echo $eq_dispos['Commentaire']." - ".$eq_dispos['Puissance']." cv - ".$eq_dispos['Prix'] ;?> &euro;</option>
                                                         <?php } ?>
                                                     <?php } ?>
                                                 </select>
