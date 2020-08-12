@@ -35,7 +35,7 @@ $equipements = $model->getEquipementAll();
                             <tr>
                                 <td><?php echo $equipement['Nom_Equipement'];?></td>
                                 <td><?php echo $equipement['Commentaire'];?></td>
-                                <td><?php echo $equipement['Puissance'];?></td>
+                                <td><?= $equipement['Puissance'] == 0 ? 'Non renseigné' : $equipement['Puissance'].' cv' ?></td>
                                 <?php if($equipement['Service'] == 1){ ?>
                                     <td>En service</td>
                                 <?php }else{ ?>

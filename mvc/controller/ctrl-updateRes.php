@@ -373,8 +373,7 @@ switch ($etape) {
             if ($nom_eq == "JETSKI") {
                 $data .= '<strong>Nom du Jetski : </strong>' . $commentaire . '<br/>';
                 $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
-            } else {
-            }
+            } else {}
 
             $data .= '<strong>Nombre de personnes : </strong>' . $nb_pers . '<br/>';
             $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
@@ -403,7 +402,7 @@ switch ($etape) {
             $totalF += $total;
         }
 
-        $data .=  '<h2 style="text-align: center; margin-top: 60px">TOTAL : <span style="font-weight: normal">'.$totalF.' &euro;</span></h2>';
+        $data .=  '<h2 style="text-align: center; margin-top: 30px">TOTAL : <span style="font-weight: normal">'.$totalF.' &euro;</span></h2>';
 
         // Ecrit le PDF
         $mpdf->writeHTML($data);
@@ -411,11 +410,11 @@ switch ($etape) {
 
         $dateUS = substr($date, 6, 4) . '-' . substr($date, 3, 2) . '-' . substr($date, 0, 2);
 
-        $pdfFilePath = '[reservation]'.$dateUS.'.pdf';
+        $pdfFilePath = '[reservation_N°'.$id_resa.']'.$dateUS.'.pdf';
         // Envoie au navigateur
         $mpdf->Output("reservations/".$pdfFilePath, "F");
 
-        $feedback.='<script>$( document ).ready(function() {$("#pdfhide").css("display", "none");$("#pdfhide").prop("disabled", false);});window.open("reservations/[reservation]'.$dateUS.'.pdf", "_blank");</script>';
+        $feedback.='<script>$( document ).ready(function() {$("#pdfhide").css("display", "none");$("#pdfhide").prop("disabled", false);});window.open("reservations/'.$pdfFilePath.'", "_blank");</script>';
 
         break;
 
