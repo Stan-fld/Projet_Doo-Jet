@@ -15,6 +15,11 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/lightbox2/src" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/mdi-font/css" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/mdi-font/fonts" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/mpdf/mpdf" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/myclabs/deep-copy" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/log" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/setasign/fpdi" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/slick/fonts" />
     </content>
     <orderEntry type="inheritedJdk" />

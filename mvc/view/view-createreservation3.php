@@ -112,6 +112,33 @@ if(isset($_SESSION['reservation']))
             function backp(){
                 window.location.assign("createreservation2");
             }
+            let forbidden_value = [];
+            $(document).on('focus', 'select', function(){
+                console.log(this.value)
+                $(this).data('val', this.value);
+            }).on('change','select', function(){
+                var prev = $(this).data('val');
+                var current = $(this).val();
+                if ($.inArray(prev, forbidden_value) !== -1){
+                    forbidden_value = $.grep(forbidden_value, function(value) {
+                        return value != prev;
+                    });
+                }
+                forbidden_value.push(current);
+                let selected = $(this).val();
+                forbidden_value.push(selected);
+
+                $('select').not(this).children().each(function(){
+                    let otherval = $(this).val();
+                    if ($.inArray(otherval, forbidden_value) !== -1){
+                        $(this).prop('disabled', true);
+                    }else{
+                        $(this).prop('disabled', false);
+                    }
+                })
+                $(this).blur();
+            });
+
         </script>
         <?php
     }

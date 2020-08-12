@@ -287,7 +287,7 @@ switch ($etape) {
                     "duree" => $duree,
                     "id_eq" => $id_eq,
                     "id_resa" =>$id_resa,
-                    "id_empolye" => $id_employe,
+                    "id_employe" => $id_employe,
                     "prix" => $prix];
                 $_SESSION['reservation'] = $array;
 
@@ -308,10 +308,21 @@ switch ($etape) {
         break;
 
     case 'etPDF':
-        //$id_resa = $_SESSION['reservation'][0]['id_resa'];
+
+        $total = 0;
+        $totalF = 0;
+
+        $id_resa = $_SESSION['reservation'][0]['id_resa'];
+        $id_client = $_SESSION['reservation'][0]['id_client'];
+        $date = $_SESSION['reservation'][0]['date'];
+
+        $client = $model->getClient($id_client);
+
         $nom = $model->getInput('nom');
         $prenom = $model->getInput('prenom');
         $tel = $model->getInput('tel');
+        $adresse = $client['Numero_Rue']." ".$client['Type_Voie']." ".$client['Rue']." - ".$client['Code_Postal']." ".$client['Nom_Ville']." - ".$client['Nom_Pays'];
+
 
         require_once __DIR__.'/../../vendor/autoload.php';
 
@@ -321,34 +332,93 @@ switch ($etape) {
         // Creation du PDF
         $data = '';
 
-        $data .='<h1>Votre réservation</h1>';
+        $data .='<img src="../../images/icon/logo.png"/>
+                 <p style="text-align: right; margin-top: -50px"><strong>reservation numéro : </strong>'.$id_resa.'</p>
+                 <h1 style="text-align: center; margin-top: 60px">Réservation pour le : <span style="font-weight: normal">'.$date.'</span></h1>';
 
-        $data .= '<strong>Nom : </strong>'. $nom .'<br/>';
-        $data .= '<strong>Prenom : </strong>'. $prenom .'<br/>';
+
+        $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
+        $data .= '<h2 style="font-weight: normal; margin-top: 0px;">De : </h2>';
+        $data .= '<strong>Nom : </strong>'.$nom.'<br/>';
+        $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
+        $data .= '<strong>Prénom : </strong>'. $prenom .'<br/>';
+        $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
         $data .= '<strong>Téléphone : </strong>'. $tel .'<br/>';
+        $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
+        $data .= '<strong>Adresse : </strong>'. $adresse .'<br/>';
+        $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
+        $data .= '<hr>';
+
+        foreach ($_SESSION['reservation'] as $resa) {
+
+            $id_eq = $resa['id_eq'];
+            $id_employe = $resa['id_employe'];
+            $nb_pers = $resa['nb_personne'];
+            $debut = $resa['heure_deb'];
+            $fin = $resa['heure_fin'];
+            $prix = $resa['prix'];
+            $nom_eq = $resa['equipement'];
+
+            $employe = $model->getEmploye($id_employe);
+            $nom_emp = $employe['Nom'];
+            $prenom_emp = $employe['Prenom'];
+
+
+            $eq = $model->getEquipement($id_eq);
+            $commentaire = $eq['Commentaire'];
+
+            $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
+            $data .= '<h2 style="font-weight: normal; margin-top: 0px;">Activité : <span style="font-weight: bold">' . $nom_eq . '</span></h2>';
+
+            if ($nom_eq == "JETSKI") {
+                $data .= '<strong>Nom du Jetski : </strong>' . $commentaire . '<br/>';
+                $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
+            } else {
+            }
+
+            $data .= '<strong>Nombre de personnes : </strong>' . $nb_pers . '<br/>';
+            $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
+            $data .= '<strong>Heure de début : </strong>' . $debut . '<br/>';
+            $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
+            $data .= '<strong>Heure de fin : </strong>' . $fin . '<br/>';
+            $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
+            if ($id_employe !== "") {
+                $data .= '<strong>Nom employé : </strong>' . $nom_emp . '<br/>';
+                $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
+                $data .= '<strong>Prénom employé : </strong>' . $prenom_emp . '<br/>';
+            }else{}
+            $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
+            $data .= '<strong>Prix par personne : </strong>' . $prix . ' &euro;<br/>';
+            $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
+
+            if ($nom_eq == "JETSKI" && $id_employe !== "") {
+                $total += ((($prix * $nb_pers) * 20 / 100) + $prix);
+            } else {
+                $total = ($prix * $nb_pers);
+            }
+            $data .= '<strong>Total pour l\'activité ' . $commentaire . ' : </strong>' . $total . ' &euro;<br/>';
+            $data .= '<p style="margin-top: 5px; margin-bottom: 5px"> </p>';
+            $data .= '<hr>';
+
+            $totalF += $total;
+        }
+
+        $data .=  '<h2 style="text-align: center; margin-top: 60px">TOTAL : <span style="font-weight: normal">'.$totalF.' &euro;</span></h2>';
 
         // Ecrit le PDF
         $mpdf->writeHTML($data);
 
+
+        $dateUS = substr($date, 6, 4) . '-' . substr($date, 3, 2) . '-' . substr($date, 0, 2);
+
+        $pdfFilePath = '[reservation]'.$dateUS.'.pdf';
         // Envoie au navigateur
-        $mpdf->Output('reservation.pdf');
+        $mpdf->Output("reservations/".$pdfFilePath, "F");
 
-        $feedback.='<script>window.open("/reservation.pdf", "_blank");</script>';
-        /*
-        foreach ($_SESSION['reservation'] as $resa)
-        {
-            $id_eq = $resa['id_eq'];
-            $id_empolye = $resa['id_empolye'];
-            $nb_pers = $resa['nb_personne'];
-            $date = $resa['date'];
-            $debut = $resa['heure_deb'];
-            $fin = $resa['heure_fin'];
-            $prix = $resa['prix'];
-            $eq = $model->getEquipement($id_eq);
-            $commentaire = $eq['Commentaire'];
+        $feedback.='<script>$( document ).ready(function() {$("#pdfhide").css("display", "none");$("#pdfhide").prop("disabled", false);});window.open("reservations/[reservation]'.$dateUS.'.pdf", "_blank");</script>';
 
-        }*/
         break;
+
 
     case 'etFini':
         // On vide la session réservation à la fin de la réservations par sécurité

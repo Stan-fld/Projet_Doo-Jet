@@ -51,15 +51,15 @@ if(isset($_SESSION['reservation']))
                                         <td><?php echo $resa['heure_fin'];?></td>
                                         <td><?php echo $resa['nb_personne'];?></td>
                                         <td><?php echo $resa['prix'];?> &euro;</td>
-                                        <?php if($resa['equipement'] == "JETSKI" && $resa['id_empolye'] !== ""){
-                                            $total += ((($resa['prix']*$resa['nb_personne'])*20/100)+$resa['prix']);?>
+                                        <?php if($resa['equipement'] == "JETSKI" && $resa['id_employe'] !== ""){
+                                            $total = ((($resa['prix']*$resa['nb_personne'])*20/100)+$resa['prix']);?>
                                             <td><?php echo $total;?> &euro;</td>
                                         <?php }else{
                                             $total = ($resa['prix']*$resa['nb_personne']);?>
                                             <td><?php echo $total;?> &euro;</td>
                                         <?php } ?>
                                     </tr>
-                                    <?php $totalF += $total; $total = 0;} ?>
+                                    <?php $totalF += $total;} ?>
                                 </tbody>
                                 <tbody class="text-center">
                                 <td></td>
@@ -78,14 +78,13 @@ if(isset($_SESSION['reservation']))
                                 <input type="hidden" name="tel" value="<?php echo $client['Telephone'] ?>">
                                 <input type="hidden" id="etape" name="etape" value="">
                                 <div class="card-body card-block text-right">
-                                    <button style="margin-left: 2vh" onclick="pdf()" class="btn btn-outline-danger btn-sm">
+                                    <button style="margin-left: 2vh" onclick="pdf()" id="pdfhide" class="btn btn-outline-danger btn-sm">
                                         <i class="fa fa-edit (alias)"></i> Génerer PDF
                                     </button>
                                     <button style="margin-left: 2vh;" onclick="val()" class="btn btn-success btn-sm">
-                                        <i class="fa fa-check"></i> Valider
+                                        <i class="fa fa-check"></i> Réservation finie
                                     </button>
                                 </div>
-
                             </form>
                         </div>
                         <!-- END DATA TABLE-->
@@ -96,7 +95,7 @@ if(isset($_SESSION['reservation']))
         <script>
             function val() {
                 $('#etape').val('etFini');
-            };
+            }
 
             function pdf() {
                 $('#etape').val('etPDF');
