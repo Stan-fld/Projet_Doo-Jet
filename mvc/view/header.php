@@ -115,15 +115,15 @@
     <div class="menu-sidebar__content js-scrollbar1">
         <nav class="navbar-sidebar">
             <ul class="list-unstyled navbar__list">
-                <li<?= $nomPage[0] == 'index' ? ' class="active"' : '' ?>>
+                <li <?= $nomPage[0] == 'index' ? ' class="active"' : '' ?>>
                     <a href="/">
                         <i class="fas fa-tachometer-alt"></i>Accueil</a>
                 </li>
-                <li<?= $nomPage[0] == 'client' || $nomPage[0] == 'createclient' || $nomPage[0] == 'infoclient' ? ' class="active"' : '' ?>>
+                <li <?= $nomPage[0] == 'client' || $nomPage[0] == 'createclient' || $nomPage[0] == 'infoclient' ? ' class="active"' : '' ?>>
                     <a href="/client">
                         <i class="fas fa-user"></i>Clients</a>
                 </li>
-                <li<?= $nomPage[0] == 'employe' || $nomPage[0] == 'createemploye' || $nomPage[0] == 'infoemploye' || $nomPage[0] == 'infoinact' ? ' class="active"' : '' ?>>
+                <li <?= $nomPage[0] == 'employe' || $nomPage[0] == 'createemploye' || $nomPage[0] == 'infoemploye' || $nomPage[0] == 'infoinact' ? ' class="active"' : '' ?>>
                     <a href="/employe">
                         <i class="fas fa-user"></i>Employés</a>
                 </li>
@@ -131,7 +131,7 @@
                     <a href="/equipement">
                         <i class="fas  fa-anchor"></i>Equipements</a>
                 </li>
-                <li<?= $nomPage[0] == 'reservation' || $nomPage[0] == 'inforeservation' || $nomPage[0] == 'createreservation' || $nomPage[0] == 'createreservation1' || $nomPage[0] == 'createreservation2' || $nomPage[0] == 'createreservation3' || $nomPage[0] == 'createreservation4' ? ' class="active"' : '' ?>>
+                <li <?= $nomPage[0] == 'reservation' || $nomPage[0] == 'inforeservation' || $nomPage[0] == 'createreservation' || $nomPage[0] == 'createreservation1' || $nomPage[0] == 'createreservation2' || $nomPage[0] == 'createreservation3' || $nomPage[0] == 'createreservation4' ? ' class="active"' : '' ?>>
                     <a href="/reservation">
                         <i class="fas fa-calendar-alt"></i>Réservations</a>
                 </li>

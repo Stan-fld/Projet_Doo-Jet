@@ -1,3 +1,4 @@
+<?php $equipements = $model->getEquipementDistinct() ?>
 <!-- Title Page-->
 <title>Création fiche équipement : </title>
 <div class="main-content">
@@ -17,9 +18,14 @@
                                 <input type="hidden" name="controller" value="updateEquipement">
                                 <input type="hidden" id="etape" name="etape" value="create_equipement">
                                 <div class="row form-group">
-                                    <label class="col col-md-3" for="nom">Nom : </label>
+                                    <label class="col col-md-3 form-control-label" for="nom">Nom : </label>
                                     <div class="col col-md-3">
-                                        <input name="nom" id="nom" class="text-center form-control"  type="text" required value="">
+                                        <select name="nom" id="nom" class="text-center form-control" required >
+                                            <option selected disabled> Liste des équipements</option>
+                                            <?php foreach($equipements as $equipement){ ?>
+                                                <option value="<?php echo $equipement['Nom_Equipement'];?>"><?php echo $equipement['Nom_Equipement'];?></option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                 </div>
                                 <hr>
@@ -37,10 +43,13 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="row form-group" >
+                                <div class="row form-group">
                                     <label class="col col-md-3 form-control-label" for="service">Service : </label>
                                     <div class="col col-md-3">
-                                        <input name="service" id="service" class="text-center form-control"  type="text" required value="">
+                                        <select name="service" id="service" class="text-center form-control" required >
+                                            <option value="1">En service</option>
+                                            <option value="0">Hors service</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="card-footer text-right">

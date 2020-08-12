@@ -340,7 +340,7 @@ switch ($etape) {
         else
         {
             $add_cient = $model->addClient($nom, $prenom, $newanniv, $telephone, $permis, $ville, $code_post, $pays, $num_rue, $rue, $voie);
-            $feedback .= '<script type="text/javascript">alert("Client ajouté");window.location.assign("/")</script>';
+            $feedback .= '<script type="text/javascript">alert("Client ajouté");window.location.assign("/client")</script>';
         }
         break;
 

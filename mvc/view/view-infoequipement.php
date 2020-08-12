@@ -4,6 +4,8 @@
 //On récupère les infos de l'equipement à partir de son id
 $idequipement = $_GET["id"];
 $equipement = $model->getEquipement($idequipement);
+
+$equipementAlls = $model->getEquipementDistinct()
 ?>
 <!-- Title Page-->
 <title>Fiche équipement : <?php echo $equipement['Nom_Equipement']." ".$equipement['Commentaire'];?></title>
@@ -25,9 +27,13 @@ $equipement = $model->getEquipement($idequipement);
                                 <input type="hidden" id="etape" name="etape" value="">
                                 <input type="hidden" name="id_equipement" value="<?php echo $equipement['ID_Equipement'];?>">
                                 <div class="row form-group">
-                                    <label class="col col-md-3" for="nom">Nom : </label>
+                                    <label class="col col-md-3 form-control-label" for="nom">Nom : </label>
                                     <div class="col col-md-3">
-                                        <input name="nom" id="nom" class="text-center form-control"  type="text" required disabled value="<?php echo $equipement['Nom_Equipement'];?>">
+                                        <select name="nom" id="nom" class="text-center form-control" required disabled>
+                                            <?php foreach($equipementAlls as $equipementAll){ ?>
+                                                <option <?= $equipement['Nom_Equipement'] == $equipementAll['Nom_Equipement'] ? 'selected' : '' ?> value="<?php echo $equipementAll['Nom_Equipement'];?>"><?php echo $equipementAll['Nom_Equipement'];?></option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                 </div>
                                 <hr>
@@ -45,10 +51,13 @@ $equipement = $model->getEquipement($idequipement);
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="row form-group" >
+                                <div class="row form-group">
                                     <label class="col col-md-3 form-control-label" for="service">Service : </label>
                                     <div class="col col-md-3">
-                                        <input name="service" id="service" class="text-center form-control"  type="text" required disabled value="<?php echo $equipement['Service'];?>">
+                                        <select name="service" id="service" class="text-center form-control" required disabled>
+                                            <option <?= $equipement['Service'] == 1 ? 'selected' : '' ?> value="1">En service</option>
+                                            <option <?= $equipement['Service'] == 0 ? 'selected' : '' ?> value="0">Hors service</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="card-footer text-right">
@@ -78,6 +87,7 @@ $equipement = $model->getEquipement($idequipement);
     <script>
         function modif() {
             $("input").prop('disabled', false);
+            $("select").prop('disabled', false);
             $("#hidebtnAnnuler").css("display", "");
             $("#hidebtnValider").css("display", "");
             $("#supp").css("display", "none");

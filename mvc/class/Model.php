@@ -146,6 +146,16 @@ class Model{
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
+    function getEquipementDistinct()
+    {
+        $query  = "SELECT Nom_Equipement FROM equipement GROUP BY Nom_Equipement";
+        $stmt   = $this->executeSQL($query);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
     function getEquipementDispo($date_deb, $date_fin, $nom_eq, $duree)
     {
         $query  = "CALL select_equipement_dispo(:date_deb, :date_fin, :nom_eq, :duree)";
