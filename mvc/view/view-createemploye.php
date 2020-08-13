@@ -42,9 +42,16 @@ $pays = $model->getPays();
                                 </div>
                                 <hr>
                                 <div class="row form-group">
-                                    <label class="col col-md-3 form-control-label" for="telephone">Téléphone : </label>
+                                    <label class="col col-md-3 form-control-label" for="telephone">Téléphone : (identifiant)</label>
                                     <div class="col col-md-3">
                                         <input name="telephone" id="telephone" class="text-center form-control" type="text" required  value="">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row form-group">
+                                    <label class="col col-md-3 form-control-label" for="password">Mot de passe : </label>
+                                    <div class="col col-md-3">
+                                        <input name="password" id="password" class="text-center form-control" type="text" required  value="">
                                     </div>
                                 </div>
                                 <hr>

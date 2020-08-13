@@ -63,8 +63,11 @@ class Page
     //- pour afficher la page demandée en fonction de l'URL
     function afficherPage()
     {
-        $model         = $this->getModel();
+
+        $model   = $this->getModel();
         $nomPage = $this->getUrl();
+
+
         if ($nomPage[0] == $this->home) {
             $nomPage[0] = "index";
         }
@@ -73,7 +76,9 @@ class Page
         $cheminPage = 'mvc/view/view-' . $nomPage[0] . '.php';
 
         if (is_file($cheminSolo)) {
+            include ('mvc/view/head.php');
             include($cheminSolo);
+            include("mvc/view/footer.php");
         }else if (is_file($cheminPage)) {
 
             // Si l'id présent d'en l'url n'existe pas on r'envoie à la page souhaité
@@ -104,7 +109,9 @@ class Page
                 exit;
             }
 
+            include ('mvc/view/head.php');
             include("mvc/view/header.php");
+            include ('mvc/view/deconnexion.php');
             include($cheminPage);
             include("mvc/view/footer.php");
 

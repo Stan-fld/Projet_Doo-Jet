@@ -160,9 +160,9 @@ class Model{
     {
         $query  = "CALL select_equipement_dispo(:date_deb, :date_fin, :nom_eq, :duree)";
         $bind   = [":date_deb" => $date_deb,
-                   ":date_fin" => $date_fin,
-                   ":nom_eq" => $nom_eq,
-                   ":duree" => $duree];
+            ":date_fin" => $date_fin,
+            ":nom_eq" => $nom_eq,
+            ":duree" => $duree];
         $stmt   = $this->executeSQL($query, $bind);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -173,8 +173,8 @@ class Model{
     {
         $query  = "CALL select_employe_dispo(:date, :date_deb, :date_fin)";
         $bind   = [":date" => $date,
-                   ":date_deb" => $date_deb,
-                   ":date_fin" => $date_fin];
+            ":date_deb" => $date_deb,
+            ":date_fin" => $date_fin];
         $stmt   = $this->executeSQL($query, $bind);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -237,7 +237,7 @@ class Model{
     function getPrix($id_eq, $duree){
         $query  = "CALL select_prix(:id_eq, :duree)";
         $bind = [":id_eq" => $id_eq,
-                ":duree" => $duree];
+            ":duree" => $duree];
         $stmt   = $this->executeSQL($query, $bind);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -392,9 +392,9 @@ class Model{
         return $result;
     }
     //----------------------------------------------------------------------------------------------------------------------------------
-    function addEmploye($nomC, $prenomC, $annivC, $telC, $permisC, $villeC, $code_postC, $paysC, $num_rueC, $rueC, $voieC, $secu, $bees, $contrat, $embauche, $vmedicale)
+    function addEmploye($nomC, $prenomC, $annivC, $telC, $permisC, $villeC, $code_postC, $paysC, $num_rueC, $rueC, $voieC, $secu, $bees, $contrat, $embauche, $vmedicale,$password)
     {
-        $query  = "CALL create_personne('Employé', :nomC, :prenomC, :annivC, :telC, :permisC, :villeC, :code_postC, :paysC, :num_rueC, :rueC, :voieC, :secu, :bees, :contrat, :embauche, :vmedicale, NULL)";
+        $query  = "CALL create_personne('Employé', :nomC, :prenomC, :annivC, :telC, :permisC, :villeC, :code_postC, :paysC, :num_rueC, :rueC, :voieC, :secu, :bees, :contrat, :embauche, :vmedicale, :password)";
         $bind = [
             ":nomC" => $nomC,
             ":prenomC" => $prenomC,
@@ -412,7 +412,7 @@ class Model{
             ":contrat" => $contrat,
             ":embauche" => $embauche,
             ":vmedicale" => $vmedicale,
-            //":password" => $password,
+            ":password" => $password,
         ];
         $result   = $this->executeSQL($query, $bind);
 
@@ -515,6 +515,23 @@ class Model{
         $query  = "CALL delete_equipement(:id_equipement)";
         $bind = [":id_equipement" => $id_equipement];
         $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getPassword($identifiant)
+    {
+        $query  = "CALL connexion(:identifiant);";
+        $bind = [":identifiant" => $identifiant];
+        $stmt   = $this->executeSQL($query, $bind);
+
+        //Si la procédure retourne erreur 45000 alors l'utilisateur existe déjà
+        if($stmt->errorCode() == '45000')
+        {
+            echo '<script type="text/javascript">alert("Mauvais nom d\'utilisateur ou mot de passe");window.location.assign("/connexion")</script>';
+            exit;
+        }
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
 }

@@ -261,6 +261,7 @@ switch ($etape) {
         $prenom    = $model->getInput('prenom');
         $anniv     = $model->getInput('date_naissance');
         $telephone = $model->getInput('telephone');
+        $password = $model->getInput('password');
         $permis    = $model->getInput('num_permis');
         $secu      = $model->getInput('num_secu');
         $bees      = $model->getInput('num_bees');
@@ -278,6 +279,9 @@ switch ($etape) {
         $rue         = $model->getInput('nom_voie');
         $voie        = $model->getInput('type_voie');
 
+
+        // On Hash le mot de passe
+        $pswd = password_hash($password, PASSWORD_DEFAULT);
 
         // Conversion des dates au format US
         $newanniv    = substr($anniv, 6, 4) . '-' . substr($anniv, 3, 2) . '-' . substr($anniv, 0, 2);
@@ -297,7 +301,7 @@ switch ($etape) {
         }
         else
         {
-            $add_employe= $model->addEmploye($nom, $prenom, $newanniv, $telephone, $permis, $ville, $code_post, $pays, $num_rue, $rue, $voie, $secu, $bees, $contrat, $newembauche, $newmedical);
+            $add_employe= $model->addEmploye($nom, $prenom, $newanniv, $telephone, $permis, $ville, $code_post, $pays, $num_rue, $rue, $voie, $secu, $bees, $contrat, $newembauche, $newmedical, $pswd);
             $feedback .= '<script type="text/javascript">alert("Employé ajouté");window.location.assign("/")</script>';
         }
 
