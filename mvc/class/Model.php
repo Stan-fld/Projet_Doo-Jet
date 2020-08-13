@@ -528,7 +528,7 @@ class Model{
         //Si la procédure retourne erreur 45000 alors l'utilisateur existe déjà
         if($stmt->errorCode() == '45000')
         {
-            echo '<script type="text/javascript">alert("Mauvais nom d\'utilisateur ou mot de passe");window.location.assign("/connexion")</script>';
+            echo '<script type="text/javascript">alert("Mauvais nom d\'utilisateur ou mot de passe");</script>';
             exit;
         }
         $result = $stmt->fetch(PDO::FETCH_ASSOC);

@@ -25,7 +25,7 @@ switch ($etape) {
             $feedback .= '<script type="text/javascript">alert("Vous êtes connecté");window.location.assign("/");</script>';
 
         } else {
-            $feedback .= '<script type="text/javascript">alert("Mauvais nom d\'utilisateur ou mot de passe");window.location.assign("/connexion")</script>';
+            $feedback .= '<script type="text/javascript">alert("Mauvais nom d\'utilisateur ou mot de passe");</script>';
         }
 
         break;
