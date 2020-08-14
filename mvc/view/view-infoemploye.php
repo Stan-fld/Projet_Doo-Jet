@@ -58,7 +58,7 @@ $pays = $model->getPays();
                                 <div class="row form-group">
                                     <label class="col col-md-3 form-control-label" for="num_permis">Numéro de permis : </label>
                                     <div class="col col-md-3">
-                                        <input name="num_permis" id="num_permis" class="text-center form-control"  type="text" required disabled value="<?php echo $employe['N_Permis'];?>">
+                                        <input name="num_permis" id="num_permis" class="text-center form-control"  type="text" disabled value="<?php echo $employe['N_Permis'];?>">
                                     </div>
                                 </div>
                                 <hr>
@@ -72,7 +72,7 @@ $pays = $model->getPays();
                                 <div class="row form-group">
                                     <label class="col col-md-3 form-control-label" for="num_bees">Numéro BEES : </label>
                                     <div class="col col-md-3">
-                                        <input name="num_bees" id="num_bees" class="text-center form-control"  type="text" required disabled value="<?php echo $employe['N_BEES'];?>">
+                                        <input name="num_bees" id="num_bees" class="text-center form-control"  type="text" disabled value="<?php echo $employe['N_BEES'];?>">
                                     </div>
                                 </div>
                                 <hr>

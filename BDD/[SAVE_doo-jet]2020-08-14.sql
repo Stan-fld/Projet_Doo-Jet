@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : ven. 14 août 2020 à 18:35
+-- Généré le : ven. 14 août 2020 à 18:58
 -- Version du serveur :  5.7.24
 -- Version de PHP : 7.2.19
 
@@ -48,7 +48,7 @@ IF NOT EXISTS
   personne.Nom = vnom and 
   personne.Prenom = vprenom and
   personne.Date_Naissance = vdate_naissance or
-  (vpermis != NULL and personne.N_Permis = vpermis) or personne.N_BEES = vbees or
+  (vpermis != NULL and personne.N_Permis = vpermis) or (personne.N_BEES = vbees and personne.N_BEES != NULL) or
 personne.Telephone = vtelephone))
   THEN
 
@@ -346,7 +346,7 @@ CREATE TABLE `adresse` (
 
 INSERT INTO `adresse` (`ID_Adresse`, `Rue`, `Numero_Rue`, `Type_Voie`, `ID_Ville`) VALUES
 (1, 'Neil Armstrong', 245, 'Rue', 1),
-(2, 'Neil Armstrong', 295, 'Rue', 2),
+(2, 'Neil Armstrong', 295, 'Rue', 1),
 (3, 'des Platanes', 240, 'Chemin', 3),
 (4, 'des Platrières', 1255, 'Chemin', 4),
 (27, 'du Mas', 13, 'Chemin', 46342),
@@ -359,7 +359,8 @@ INSERT INTO `adresse` (`ID_Adresse`, `Rue`, `Numero_Rue`, `Type_Voie`, `ID_Ville
 (34, 'des Foustier', 70, 'Rue', 46344),
 (35, 'Neil Armstrong', 245, 'Rue', 1),
 (36, 'des Foustier', 70, 'Rue', 46345),
-(37, 'de la Présidente', 1895, 'Chemin', 1);
+(37, 'de la Présidente', 1895, 'Chemin', 1),
+(38, 'des prunes', 20, 'Chemin', 46344);
 
 -- --------------------------------------------------------
 
@@ -378,7 +379,8 @@ CREATE TABLE `employe_malade` (
 
 INSERT INTO `employe_malade` (`ID_Personne`, `ID_Inactivite`) VALUES
 (11, 6),
-(8, 12);
+(8, 12),
+(15, 13);
 
 -- --------------------------------------------------------
 
@@ -430,7 +432,9 @@ CREATE TABLE `equipement_reserve` (
 INSERT INTO `equipement_reserve` (`ID_Equipement`, `ID_Reservation`, `Date_Heure_Debut_Reservation`, `Date_Heure_Fin_Reservation`, `Prix_Total`, `Nombre_Personne`, `id_employe`) VALUES
 (3, 7, '2020-08-16 13:00:00', '2020-08-16 15:00:00', 240, 1, NULL),
 (4, 6, '2020-08-15 11:00:00', '2020-08-15 11:30:00', 120, 3, 15),
-(7, 6, '2020-08-15 12:00:00', '2020-08-15 12:30:00', 120, 3, 11);
+(4, 8, '2020-08-20 09:00:00', '2020-08-20 09:30:00', 200, 5, 8),
+(7, 6, '2020-08-15 12:00:00', '2020-08-15 12:30:00', 120, 3, 11),
+(7, 8, '2020-08-20 14:00:00', '2020-08-20 14:30:00', 120, 3, 23);
 
 -- --------------------------------------------------------
 
@@ -708,7 +712,8 @@ CREATE TABLE `periode_inactivite` (
 
 INSERT INTO `periode_inactivite` (`ID_Inactivite`, `Motif`, `Date_Debut_Inactivite`, `Date_Fin_Inactivite`) VALUES
 (6, 'Maladie', '2020-08-05', '2020-08-09'),
-(12, 'Grippe', '2020-07-01', '2020-07-09');
+(12, 'Grippe', '2020-07-01', '2020-07-09'),
+(13, 'Maladie', '2020-08-14', NULL);
 
 -- --------------------------------------------------------
 
@@ -740,14 +745,13 @@ CREATE TABLE `personne` (
 INSERT INTO `personne` (`ID_Personne`, `Statut`, `Nom`, `Prenom`, `Date_Naissance`, `Telephone`, `Password`, `N_Securite_Sociale`, `N_BEES`, `N_Permis`, `Contrat`, `Date_Embauche`, `Date_Visite_Medicale`, `ID_Adresse`) VALUES
 (4, 'Client', 'Marcon', 'Baptiste', '1999-06-30', '+336664366312', NULL, NULL, NULL, '433247383', NULL, NULL, NULL, 4),
 (8, 'Employé', 'Foillard', 'Jean', '1965-02-22', '+33606078606', NULL, '1234547687', '432543564', '432027483', 'CDD', '2020-04-01', '2020-04-03', 3),
-(9, 'Client', 'Foillard', 'Benoit', '2000-12-03', '+33643537645', NULL, NULL, NULL, '', NULL, NULL, NULL, 27),
 (10, 'Client', 'Foillard', 'Fabienne', '2000-12-03', '+33643537645', NULL, NULL, NULL, '', NULL, NULL, NULL, 28),
 (11, 'Employé', 'Reynaud', 'Bastien', '2000-07-06', '+33672781633', NULL, '1234547687', '3232453433', '43256788', 'CDI', '2020-05-01', '2020-05-03', 29),
-(15, 'Employé', 'Foillard', 'Maxime', '2000-03-25', '+33606060606', '$2y$10$f8iXY68GRdwoqI9NB3/TTeMexSZQuq12xoK8wp/NMnuE/oyweySVK', '1234547687', NULL, '432567883', 'CDI', '2020-04-01', '2020-04-03', 2),
+(15, 'Employé', 'Foillard', 'Maxime', '2000-03-25', '+33606060606', '$2y$10$f8iXY68GRdwoqI9NB3/TTeMexSZQuq12xoK8wp/NMnuE/oyweySVK', '1234547687', '', '432567883', 'CDI', '2020-04-01', '2020-04-03', 2),
 (16, 'Employé', 'Tétrault', 'Alexandrie', '1998-10-22', '+33629384921', NULL, '23468651829', '2849371039', NULL, 'CDI', '2019-07-01', '2020-07-10', 30),
 (17, 'Client', 'Sevier', 'Dominique', '1973-11-16', '+33671058526', NULL, NULL, NULL, '564037513', NULL, NULL, NULL, 31),
-(21, 'Client', 'Brunaly', 'Charles', '1983-06-11', '+336064168312', NULL, NULL, NULL, '', NULL, NULL, NULL, 36),
-(22, 'Client', 'Courtais', 'Clémence', '2001-04-04', '+33673826492', NULL, NULL, NULL, '', NULL, NULL, NULL, 37);
+(22, 'Client', 'Courtais', 'Clémence', '2001-04-04', '+33673826492', NULL, NULL, NULL, '', NULL, NULL, NULL, 37),
+(23, 'Employé', 'Brunaly', 'Charles', '1983-06-11', '+33625232221', '$2y$10$WQ.wD/gRwn/AGoSK06iqp.8rd4CBFgmNQ0uo1cGgTWNlUe1oNxNSG', '2135759864', '', '', 'CDD', '2020-08-14', '2020-08-10', 38);
 
 -- --------------------------------------------------------
 
@@ -880,7 +884,8 @@ CREATE TABLE `reservation` (
 
 INSERT INTO `reservation` (`ID_Reservation`) VALUES
 (6),
-(7);
+(7),
+(8);
 
 -- --------------------------------------------------------
 
@@ -899,9 +904,12 @@ CREATE TABLE `reservation_client_employe` (
 
 INSERT INTO `reservation_client_employe` (`ID_Reservation`, `ID_Personne`) VALUES
 (7, 4),
+(8, 8),
+(8, 10),
 (6, 11),
 (6, 15),
-(6, 22);
+(6, 22),
+(8, 23);
 
 -- --------------------------------------------------------
 
@@ -1021,7 +1029,7 @@ ALTER TABLE `ville`
 -- AUTO_INCREMENT pour la table `adresse`
 --
 ALTER TABLE `adresse`
-  MODIFY `ID_Adresse` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `ID_Adresse` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT pour la table `equipement`
@@ -1033,13 +1041,13 @@ ALTER TABLE `equipement`
 -- AUTO_INCREMENT pour la table `periode_inactivite`
 --
 ALTER TABLE `periode_inactivite`
-  MODIFY `ID_Inactivite` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ID_Inactivite` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT pour la table `personne`
 --
 ALTER TABLE `personne`
-  MODIFY `ID_Personne` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `ID_Personne` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT pour la table `prix_horaire`
@@ -1051,7 +1059,7 @@ ALTER TABLE `prix_horaire`
 -- AUTO_INCREMENT pour la table `reservation`
 --
 ALTER TABLE `reservation`
-  MODIFY `ID_Reservation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID_Reservation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pour la table `ville`
