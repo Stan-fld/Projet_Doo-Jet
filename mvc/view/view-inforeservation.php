@@ -24,10 +24,12 @@ $pays = $model->getPays();
                         </div>
                         <div class="card-body card-block">
                             <div class="row form-group">
-                                <label class="col col-md-3" for="nom">Nom : </label>
-                                <div class="col col-md-3">
-                                    <input name="nom" id="nom" class="text-center form-control"  type="text" disabled value="<?php echo $reservation[0]['Nom'];?>">
-                                </div>
+                                <label class="col col-md-3" for="nom">Nom moniteurs : </label>
+                                <?php foreach($reservation as $resa){?>
+                                    <div class="col col-md-3">
+                                        <input name="nom" id="nom" class="text-center form-control"  type="text" disabled value="<?php echo $resa['Nom'];?>">
+                                    </div>
+                                <?php } ?>
                             </div>
                             <div class="row form-group">
                                 <label class="col col-md-3" for="prenom">Prénom : </label>
@@ -53,17 +55,17 @@ $pays = $model->getPays();
                                 <input type="hidden" name="id_personne" value="<?php echo $reservation[0]['ID_Personne'];?>">
                                 <div class="row form-group">
                                     <label class="col col-md-3" for="equipement">Équipement(s) : </label>
-                                <?php foreach($reservation as $resa){
-                                    $debut = (substr($resa['debut'], 11, 2)*60) + substr($resa['debut'], 14, 2);
-                                    $fin = (substr($resa['fin'], 11, 2)*60) + substr($resa['fin'], 14, 2);
-                                    $res = $fin - $debut ;
-                                    $prix = $model->getPrix($resa['ID_Equipement'], $res);
-                                    $allprix[] = $prix['Prix'];
-                                ?>
-                                    <div class="col col-md-3">
-                                        <input name="equipement" id="equipement" class="text-center form-control"  type="text" disabled required value="<?php echo $resa['Nom_Equipement']?>">
-                                    </div>
-                                <?php } ?>
+                                    <?php foreach($reservation as $resa){
+                                        $debut = (substr($resa['debut'], 11, 2)*60) + substr($resa['debut'], 14, 2);
+                                        $fin = (substr($resa['fin'], 11, 2)*60) + substr($resa['fin'], 14, 2);
+                                        $res = $fin - $debut ;
+                                        $prix = $model->getPrix($resa['ID_Equipement'], $res);
+                                        $allprix[] = $prix['Prix'];
+                                        ?>
+                                        <div class="col col-md-3">
+                                            <input name="equipement" id="equipement" class="text-center form-control"  type="text" disabled required value="<?php echo $resa['Nom_Equipement']?>">
+                                        </div>
+                                    <?php } ?>
                                 </div>
                                 <input type="hidden" name="id_equipement" value="<?php echo $resa['ID_Equipement'];?>">
                             </form>

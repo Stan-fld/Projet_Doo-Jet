@@ -104,17 +104,11 @@ if(isset($_SESSION['reservation']))
             </div>
         </div>
         <script>
-            /*
-            $('select').on('change',function(){
-                alert("change");
-            });
-            */
             function backp(){
                 window.location.assign("createreservation2");
             }
             let forbidden_value = [];
             $(document).on('focus', 'select', function(){
-                console.log(this.value)
                 $(this).data('val', this.value);
             }).on('change','select', function(){
                 var prev = $(this).data('val');
@@ -125,12 +119,10 @@ if(isset($_SESSION['reservation']))
                     });
                 }
                 forbidden_value.push(current);
-                let selected = $(this).val();
-                forbidden_value.push(selected);
-
+                $(this).attr('valu', current)
                 $('select').not(this).children().each(function(){
-                    let otherval = $(this).val();
-                    if ($.inArray(otherval, forbidden_value) !== -1){
+                    let otherval = $(this).attr('value');
+                    if ($.inArray(otherval, forbidden_value) !== -1 && $(this).parent().attr('valu') !== otherval ){
                         $(this).prop('disabled', true);
                     }else{
                         $(this).prop('disabled', false);

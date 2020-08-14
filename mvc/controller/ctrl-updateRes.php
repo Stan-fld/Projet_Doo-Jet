@@ -258,14 +258,14 @@ switch ($etape) {
                         $total = ((($prix*$resa['nb_personne'])*20/100)+$prix);
 
                         // On ajoute la réservation dans la table equipements réservés
-                        $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin, $total, $nb_pers);
+                        $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin, $total, $nb_pers, $id_employe);
                     }
                     else
                     {
                         $total = ($prix*$resa['nb_personne']);
 
                         // On ajoute la réservation dans la table equipements réservés
-                        $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin, $total, $nb_pers);
+                        $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin, $total, $nb_pers, $id_employe);
                     }
 
                 }
@@ -274,7 +274,7 @@ switch ($etape) {
                     $total = ($prix*$resa['nb_personne']);
 
                     // On ajoute la réservation dans la table equipements réservés
-                    $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin, $total, $nb_pers);
+                    $addresaEq = $model->addResaEq($id_resa, $id_eq, $debut, $fin, $total, $nb_pers, NULL);
                 }
 
                 // On met les infos en session

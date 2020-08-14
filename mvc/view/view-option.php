@@ -47,7 +47,6 @@ else{?>
             </div>
         </div>
     </div>
-<?php print_r($_SESSION); ?>
     <script>
         function backp(){
             history.back();

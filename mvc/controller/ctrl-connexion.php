@@ -18,12 +18,10 @@ switch ($etape) {
 
         if (password_verify($password, $hash)) {
 
-            // On Hash le mot de passe
-            $pswd = password_hash($password, PASSWORD_DEFAULT);
 
             $_SESSION['connexion']['id_connexion'] = $id;
             $_SESSION['connexion']['identifiant'] = $identifiant;
-            $_SESSION['connexion']['passsword'] = $pswd;
+            $_SESSION['connexion']['passsword'] = $hash;
 
             $feedback .= '<script type="text/javascript">alert("Vous êtes connecté");window.location.assign("/");</script>';
 
