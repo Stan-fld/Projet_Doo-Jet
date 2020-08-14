@@ -18,7 +18,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Mot de passe</label>
-                                    <input style="border-radius: 16px" class="au-input au-input--full" type="text" name="password" placeholder="Mot de passe" required>
+                                    <input style="border-radius: 16px" class="au-input au-input--full" type="password" name="password" placeholder="Mot de passe" required>
                                 </div>
                                 <button style="border-radius: 16px" class="au-btn au-btn--block au-btn--green m-b-20">Se connecter</button>
                             </form>

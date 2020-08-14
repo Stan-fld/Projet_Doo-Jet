@@ -18,9 +18,12 @@ switch ($etape) {
 
         if (password_verify($password, $hash)) {
 
+            // On Hash le mot de passe
+            $pswd = password_hash($password, PASSWORD_DEFAULT);
+
             $_SESSION['connexion']['id_connexion'] = $id;
             $_SESSION['connexion']['identifiant'] = $identifiant;
-            $_SESSION['connexion']['passsword'] = $password;
+            $_SESSION['connexion']['passsword'] = $pswd;
 
             $feedback .= '<script type="text/javascript">alert("Vous êtes connecté");window.location.assign("/");</script>';
 
@@ -30,8 +33,33 @@ switch ($etape) {
 
         break;
 
-    case 'logout':
-        session_destroy();
-        $feedback .= '<script type="text/javascript">alert("Déconnexion");window.location.assign("/connexion")</script>';
+    case'updatepassword':
+
+        $hash = $_SESSION['connexion']['passsword'];
+        $id = $_SESSION['connexion']['id_connexion'];
+        $old_password         = $model->getInput('old_password');
+        $new_password         = $model->getInput('new_password');
+
+        if(password_verify($old_password, $hash))
+        {
+            // On Hash le mot de passe
+            $pswd = password_hash($new_password, PASSWORD_DEFAULT);
+            $_SESSION['connexion']['passsword'] = $pswd;
+
+            $newpswd = $model->updatePassword($id, $pswd);
+            $feedback.= '<script>window.location.assign("/")</script>';
+
+        }
+        else
+        {
+            $feedback.= '<script>alert("Ancien mot de passe incorect")</script>';
+        }
+
         break;
+    /*
+        case 'logout':
+            session_destroy();
+            $feedback .= '<script type="text/javascript">alert("Déconnexion");window.location.assign("/connexion")</script>';
+            break;
+    */
 }

@@ -77,7 +77,7 @@ class Page
             if($nomPage['0'] == "connexion")
             {
                 include ('mvc/view/head.php');
-                include ('mvc/view/deconnexion.php');
+                include('mvc/view/deconnexion.php.old');
                 include($cheminSolo);
                 include("mvc/view/footer.php");
             }
@@ -113,7 +113,7 @@ class Page
 
             include ('mvc/view/head.php');
             include("mvc/view/header.php");
-            include ('mvc/view/deconnexion.php');
+            include('mvc/view/deconnexion.php.old');
             include($cheminPage);
             include("mvc/view/footer.php");
 

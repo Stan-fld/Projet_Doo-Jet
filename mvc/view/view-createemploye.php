@@ -51,7 +51,7 @@ $pays = $model->getPays();
                                 <div class="row form-group">
                                     <label class="col col-md-3 form-control-label" for="password">Mot de passe : </label>
                                     <div class="col col-md-3">
-                                        <input name="password" id="password" class="text-center form-control" type="text" required  value="">
+                                        <input name="password" id="password" class="text-center form-control" type="password" required  value="">
                                     </div>
                                 </div>
                                 <hr>

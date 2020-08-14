@@ -255,6 +255,23 @@ class Model{
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
+    function getPassword($identifiant)
+    {
+        $query  = "CALL connexion(:identifiant);";
+        $bind = [":identifiant" => $identifiant];
+        $stmt   = $this->executeSQL($query, $bind);
+
+        //Si la procédure retourne erreur 45000 alors l'utilisateur existe déjà
+        if($stmt->errorCode() == '45000')
+        {
+            echo '<script type="text/javascript">alert("Mauvais nom d\'utilisateur ou mot de passe");</script>';
+            exit;
+        }
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
     function updateEmploye($idemploye, $nomE, $prenomE, $annivE, $telE, $permisE, $secu, $bees, $contrat, $embauche, $medical)
     {
         $query  = "CALL update_tb_personne_employe(:idemploye, :nomE, :prenomE, :annivE, :telE, :permisE, :secu, :bees, :contrat, :embauche, :medical)";
@@ -340,6 +357,16 @@ class Model{
             ":motif" => $motif,
             ":date_debut" => $debut,
             ":date_fin" => $fin];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function updatePassword($ipers, $password)
+    {
+        $query  = "UPDATE personne SET personne.Password = :password WHERE(ID_Personne = :ipers)";
+        $bind = [":ipers" => $ipers,
+                 ":password" => $password];
         $result   = $this->executeSQL($query, $bind);
         return $result;
     }
@@ -515,23 +542,6 @@ class Model{
         $query  = "CALL delete_equipement(:id_equipement)";
         $bind = [":id_equipement" => $id_equipement];
         $result   = $this->executeSQL($query, $bind);
-        return $result;
-    }
-
-    //----------------------------------------------------------------------------------------------------------------------------------
-    function getPassword($identifiant)
-    {
-        $query  = "CALL connexion(:identifiant);";
-        $bind = [":identifiant" => $identifiant];
-        $stmt   = $this->executeSQL($query, $bind);
-
-        //Si la procédure retourne erreur 45000 alors l'utilisateur existe déjà
-        if($stmt->errorCode() == '45000')
-        {
-            echo '<script type="text/javascript">alert("Mauvais nom d\'utilisateur ou mot de passe");</script>';
-            exit;
-        }
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
 }

@@ -4,6 +4,14 @@ if(!isset($_SESSION['connexion']))
 {
     echo'<script type="text/javascript">window.location.assign("/connexion");</script>';
 }
+else
+{
+    $id = $_SESSION['connexion']['id_connexion'];
+    $user = $model->getEmploye($id);
+
+    $nom = $user['Nom'];
+    $prenom = $user['Prenom'];
+}
 ?>
 <header class="header-mobile d-block d-lg-none">
     <div class="header-mobile__bar">
@@ -43,29 +51,6 @@ if(!isset($_SESSION['connexion']))
                     <a href="/reservation">
                         <i class="fas fa-calendar-alt"></i>Réservations</a>
                 </li>
-                <li>
-                    <a href="/calendar">
-                        <i class="fas fa-calendar-alt"></i>Calendrier</a>
-                </li>
-                <li>
-                    <a href="map.html">
-                        <i class="fas fa-map-marker-alt"></i>Maps</a>
-                </li>
-                <li class="has-sub">
-                    <a class="js-arrow" href="#">
-                        <i class="fas fa-copy"></i>Pages</a>
-                    <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
-                        <li>
-                            <a href="login.html">Login</a>
-                        </li>
-                        <li>
-                            <a href="register.html">Register</a>
-                        </li>
-                        <li>
-                            <a href="forget-pass.html">Forget Password</a>
-                        </li>
-                    </ul>
-                </li>
             </ul>
         </div>
     </nav>
@@ -102,25 +87,6 @@ if(!isset($_SESSION['connexion']))
                     <a href="/reservation">
                         <i class="fas fa-calendar-alt"></i>Réservations</a>
                 </li>
-                <li>
-                    <a href="map.html">
-                        <i class="fas fa-map-marker-alt"></i>Maps</a>
-                </li>
-                <li class="has-sub">
-                    <a class="js-arrow" href="#">
-                        <i class="fas fa-copy"></i>Pages</a>
-                    <ul class="list-unstyled navbar__sub-list js-sub-list">
-                        <li>
-                            <a href="login.html">Login</a>
-                        </li>
-                        <li>
-                            <a href="register.html">Register</a>
-                        </li>
-                        <li>
-                            <a href="forget-pass.html">Forget Password</a>
-                        </li>
-                    </ul>
-                </li>
             </ul>
         </nav>
     </div>
@@ -137,29 +103,29 @@ if(!isset($_SESSION['connexion']))
                     <div class="header-button">
                         <div class="account-wrap">
                             <div class="account-item clearfix js-item-menu">
-                                <div class="content">
-                                    <a class="js-acc-btn" href="#">john doe</a>
+                                <div class="content col-md-12">
+                                    <a class="js-acc-btn" href="#"><?php echo $prenom." ".$nom ?></a>
                                 </div>
                                 <div class="account-dropdown js-dropdown">
                                     <div class="info clearfix">
                                         <div class="content">
                                             <h5 class="name">
-                                                <a href="#">john doe</a>
+                                                <a><?php echo $prenom." ".$nom ?></a>
                                             </h5>
                                         </div>
                                     </div>
                                     <div class="account-dropdown__body">
                                         <div class="account-dropdown__item">
-                                            <a href="#">
+                                            <a href="/infoemploye?id=<?php echo $id;?>">
                                                 <i class="zmdi zmdi-account"></i>Account</a>
                                         </div>
-                                        <div class="account-dropdown__item">
-                                            <a href="#">
-                                                <i class="zmdi zmdi-settings"></i>Setting</a>
-                                        </div>
+                                    </div>
+                                    <div class="account-dropdown__item">
+                                        <a href="/option">
+                                            <i class="zmdi zmdi-settings"></i>Setting</a>
                                     </div>
                                     <div class="account-dropdown__footer">
-                                        <a onclick="aff()">
+                                        <a href="/deconnexion">
                                             <i class="zmdi zmdi-power"></i>Logout</a>
                                     </div>
                                 </div>
@@ -171,6 +137,7 @@ if(!isset($_SESSION['connexion']))
         </div>
     </header>
     <!-- END HEADER DESKTOP-->
+    <!--
     <script>
         function aff(){
             $("#popup").css({"display":"", "margin":"auto"});
@@ -181,3 +148,4 @@ if(!isset($_SESSION['connexion']))
             });
         });
     </script>
+    -->
