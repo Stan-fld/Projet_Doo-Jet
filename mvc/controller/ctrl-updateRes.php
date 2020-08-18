@@ -13,6 +13,7 @@ switch ($etape) {
     //| CHOIX DE L'EQUIPEMENT |\\
     //|||||||||||||||||||||||||\\
 
+
     case 'et1':
 
         // On vide la session réservation à chaque nouvelles réservations par sécurité
@@ -76,6 +77,7 @@ switch ($etape) {
     //| CHOIX DE LA DATE |\\
     //||||||||||||||||||||\\
 
+
     case 'et2':
 
         // On initialise nos différents compteurs
@@ -101,11 +103,11 @@ switch ($etape) {
         // Formatage de la date pour n'obtenir que des chiffres.
         $dateChoisie = substr($dateRes, 0, 4) . substr($dateRes, 5, 2) . substr($dateRes, 8, 2);
 
-        if ($dateChoisie <= $now)
+        if ($dateChoisie < $now)
         {
             // Si date de réservation souhaitée antérieure ou égale à la date du jour,
             // on ne peut pas faire de réservation.
-            $feedback .= '<script type="text/javascript">alert("La date doit etre supérieure à la date du jour ! merci de réessayer.");document.getElementById("date_res").focus();</script>';
+            $feedback .= '<script type="text/javascript">alert("La date ne doit pas être inférieur à la date du jour ! merci de réessayer.");document.getElementById("date_res").focus();</script>';
         }
         else
         {
@@ -307,6 +309,7 @@ switch ($etape) {
 
         break;
 
+
     case 'etPDF':
 
         $total = 0;
@@ -411,6 +414,7 @@ switch ($etape) {
         $dateUS = substr($date, 6, 4) . '-' . substr($date, 3, 2) . '-' . substr($date, 0, 2);
 
         $pdfFilePath = '[reservation_N°'.$id_resa.']'.$dateUS.'.pdf';
+
         // Envoie au navigateur
         $mpdf->Output("reservations/".$pdfFilePath, "F");
 
@@ -425,6 +429,161 @@ switch ($etape) {
         $feedback .= '<script>window.location.assign("/reservation");</script>';
         break;
 
+
+    case 'update':
+
+        $bool1 = 0;
+        $bool2 = 0;
+
+        // On récupère les infos
+        $date = $model->getInput('date');
+
+        // On récupére les équipement en service
+        $equipement = $model->getEquipementAllOn();
+
+        // Date du jour format US
+        $now = date('Y-m-d');
+
+        // Converti la date au format US
+        $dateRes = substr($date, 6, 4) . '-' . substr($date, 3, 2) . '-' . substr($date, 0, 2);
+
+        /* if($dateRes >= $now)
+         {*/
+
+        foreach ($equipement as $eq) {
+            $name = $eq['Nom_Equipement'];
+            $eq = $model->getInput('eq_'."$name");
+
+            if($eq !== "")
+            {
+                // On récupère les infos
+                $id_client = $model->getInput('id_personne');
+                $id_employe = $model->getInput('id_employe'."$name");
+                $id_employe_old = $model->getInput('old_id_emp_'."$name");
+                $id_eq = $model->getInput('equipement_'."$name");
+                $id_resa = $model->getInput('id_resa');
+
+                $debut = $model->getInput('debut_'."$name");
+                $fin = $model->getInput('fin_'."$name");
+
+                $debut_init = $model->getInput('debut_init_'."$name");
+                $fin_init = $model->getInput('fin_init_'."$name");
+
+                $nb_pers = $model->getInput('nb_pers_'."$name");
+                $prix = $model->getInput('total_'."$name");
+
+                // On récupére les équipments et les employés disponibles
+                $dispo = $model->getEquipementDispoUpdate($dateRes.' '.$debut.':00', $dateRes.' '.$fin.':00', $name, $id_resa);
+                $employe_dispo = $model->getEqmployeDispoUpdate($dateRes, $dateRes.' '.$debut.':00', $dateRes.' '.$fin.':00',$id_resa);
+
+                // Convertir l'heure de début et de fin choisie en minutes
+                $debut_min = (substr($debut, 0, 2)*60) + substr($debut, 3, 2);
+                $fin_min = (substr($fin, 0, 2)*60) + substr($fin, 3, 2);
+                $res = $fin_min - $debut_min ;
+
+                // Convertir l'heure de début et de fin initale en minutes
+                $debut_init_min = (substr($debut_init, 0, 2)*60) + substr($debut_init, 3, 2);
+                $fin_init_min = (substr($fin_init, 0, 2)*60) + substr($fin_init, 3, 2);
+                $res_init = $fin_init_min - $debut_init_min ;
+
+                if($res_init !== $res)
+                {
+                    $feedback .= '<script type="text/javascript">alert("La plage horaire doit rester indentique pour '.$name.'");</script>';
+                }
+                else
+                {
+                    if($id_employe !== "" && $id_employe_old !== "")
+                    {
+                        // Pour chaque équipement appartenant au groupe sélectionner que retourne la requête
+                        foreach ($dispo as $eq) {
+                            // Si l'équipement est dispo on lui attribut la valeur 1
+                            if ($eq !== "") {
+                                $bool1 = 1;
+                            }
+                        }
+
+                        // Pour chaque employé appartenant
+                        foreach ($employe_dispo as $emp) {
+                            // Si l'employé est dispo on lui attribut la valeur 1
+                            if ($emp['ID_Personne'] == $id_employe) {
+                                $bool2 = 1;
+                            }
+                        }
+                    }
+                    else if($id_employe !== "" && $id_employe_old == "")
+                    {
+                        // Pour chaque équipement appartenant au groupe sélectionner que retourne la requête
+                        foreach ($dispo as $eq) {
+                            // Si l'équipement est dispo on lui attribut la valeur 1
+                            if ($eq !== "") {
+                                $bool1 = 1;
+                            }
+                        }
+
+                        // Pour chaque employé appartenant
+                        foreach ($employe_dispo as $emp) {
+                            // Si l'employé est dispo on lui attribut la valeur 1
+                            if ($emp['ID_Personne'] == $id_employe) {
+                                $bool2 = 1;
+                            }
+                        }
+                        $id_employe_old = NULL;
+                    }
+                    else if($id_employe_old !== "" && $id_employe == "")
+                    {
+                        $id_employe = NULL;
+                        $bool1 = 1;
+                        $bool2 = 1;
+                    }
+                    else
+                    {
+                        $id_employe = NULL;
+                        $id_employe_old = NULL;
+                        $bool1 = 1;
+                        $bool2 = 1;
+                    }
+                    if($bool1 == 0)
+                    {
+                        $feedback .= '<script type="text/javascript">alert("Equipements indisponible sur cette plage horaire! Pour '.$name.'");</script>';
+                    }
+                    else if($bool2 == 0)
+                    {
+                        $feedback .= '<script type="text/javascript">alert("Employé indisponible sur cette plage horaire! Pour '.$name.'");</script>';
+                    }
+                    else
+                    {
+                        $update = $model->updateReservation($id_eq, $id_resa, $dateRes.' '.$debut.':00', $dateRes.' '.$fin.':00', $prix, $nb_pers, $id_employe, $id_employe_old);
+                        $feedback .= '<script type="text/javascript">alert("Réservation '.$name.' modifiée");window.location.assign("/inforeservation?id='.$id_resa.'");</script>';
+                    }
+                }
+            }
+            $bool1 = 0;
+            $bool2 = 0;
+        }
+        /*  }
+          else
+          {
+              // Si date de réservation souhaitée antérieure ou égale à la date du jour,
+              // on ne peut pas faire de réservation.
+              $feedback .= '<script type="text/javascript">alert("La date ne doit pas être inférieur à la date du jour ! merci de réessayer.");document.getElementById("date").focus();</script>';
+          }
+        */
+        break;
+
+
+    case 'delete':
+
+        $id_resa = $model->getInput('id_resa');
+
+        $deleteEqResa = $model->deleteEqResa($id_resa);
+
+        $deleteEmpClientResa = $model->deleteEmpClientResa($id_resa);
+
+        $deletResa = $model->deleteResa($id_resa);
+
+        $feedback .= '<script type="text/javascript">alert("Réservation supprimé");window.location.assign("/reservation");</script>';
+
+        break;
 
     default:
         $feedback .= '<script type="text/javascript">alert("Erreur");window.location.assign("/");</script>';

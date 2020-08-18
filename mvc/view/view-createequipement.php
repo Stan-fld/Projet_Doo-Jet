@@ -1,4 +1,6 @@
-<?php $equipements = $model->getEquipementDistinct() ?>
+<?php $equipements = $model->getEquipementDistinct();
+$prix = $model->getDuree();
+?>
 <!-- Title Page-->
 <title>Création fiche équipement : </title>
 <div class="main-content">
@@ -52,12 +54,34 @@
                                         </select>
                                     </div>
                                 </div>
+                                <hr>
+                                <div class="row form-group">
+                                    <div class="col col-md-3 text-center">
+                                        <strong style="font-size: large">Durée</strong>
+                                    </div>
+                                    <div class="col col-md-3 text-center">
+                                        <strong style="font-size: large">Prix </strong>(&euro;)
+                                    </div>
+                                </div>
+                                <hr style="border-top: 1px dashed;">
+                                <?php foreach ($prix as $Prix){
+                                    $duree = ($Prix['Duree'])/60;
+                                    $dureeH = substr($duree, 0, 1)."h".(substr($duree,2,1)*6);
+                                    if(strlen($dureeH) == 3){ $dureeH = substr($dureeH,0,3)."0"; }?>
+                                    <input type="hidden" name="id_horaire_<?php echo $Prix['Duree']; ?>" value="<?php echo $Prix['ID_Prix_Horaire']; ?>">
+                                    <div class="row form-group" >
+                                        <label class="col col-md-3 form-control-label text-center" for="prix_<?php echo $Prix['Duree']; ?>"><?php echo $dureeH; ?></label>
+                                        <div class="col col-md-3">
+                                            <input name="prix_<?php echo $Prix['Duree']; ?>" id="prix_<?php echo $Prix['Duree']; ?>" class="text-center form-control"  type="text" required value="">
+                                        </div>
+                                    </div>
+                                <?php } ?>
                                 <div class="card-footer text-right">
                                     <button id="hidebtnAnnuler" type="reset" style="margin-left: 2vh" class="btn btn-danger btn-sm">
                                         <i class="fa fa-ban"></i> Annuler
                                     </button>
                                     <button id="hidebtnValider" style="margin-left: 2vh" class="btn btn-success btn-sm">
-                                        <i class="fa fa-check"></i> Valider
+                                        <i class="fa fa-check"></i> Suivant
                                     </button>
                                 </div>
                             </form>
@@ -75,3 +99,4 @@
             window.location.assign("/equipement")
         }
     </script>
+

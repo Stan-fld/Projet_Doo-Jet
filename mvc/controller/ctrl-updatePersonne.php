@@ -168,30 +168,90 @@ switch ($etape) {
 
 
     case 'delete_client':
+
+        $count = 0;
+
         // Récupere les ID du formulaire pour supprimer un client
         $id_client = $model->getInput('id_client');
 
-        $delete_client = $model->deletePersonne($id_client, 'Client');
-        $feedback .= '<script type="text/javascript">alert("Client supprimé");window.location.assign("client");</script>';
+        $id_adresse    = $model->getInput('id_adresse');
+
+        // Date du jour format US
+        $now = date('Y-m-d');
+
+        $res = $model->getResaClientForDelete($id_client);
+
+        foreach ($res as $resa)
+        {
+            if($resa['date'] >= $now)
+            {
+                $count ++;
+            }
+        }
+
+        if($count !== 0)
+        {
+            $feedback .= '<script type="text/javascript">alert("Client requis pour une réservation future, suppression impossible");window.location.assign("/reservation");</script>';
+        }
+        else
+        {
+            foreach ($res as $resa)
+            {
+                $id_resa = $resa['ID_Reservation'];
+                $delete_resa = $model->deletePersonneResa($id_resa, $id_client);
+            }
+            $delete_client = $model->deletePersonne($id_client, 'Client', $id_adresse);
+            $feedback .= '<script type="text/javascript">alert("Client supprimé");window.location.assign("client");</script>';
+        }
 
         break;
 
 
     case 'delete_employe':
+
+        $count = 0;
+
         // Récupere les ID du formulaire pour supprimer un client
         $id_employe     = $model->getInput('id_employe');
+        $id_adresse    = $model->getInput('id_adresse');
 
         $id_inact = $model->getEmployemalade($id_employe);
 
         $delete_employemalade = $model->deleteEmployemalade($id_employe);
+
+        // Date du jour format US
+        $now = date('Y-m-d');
 
         foreach ($id_inact as $inactivite)
         {
             $delete_inact = $model->deletePeriodeInact($inactivite['ID_Inactivite']);
         }
 
-        $delete_client = $model->deletePersonne($id_employe, "Employé");
-        $feedback .= '<script type="text/javascript">alert("Employé supprimé");window.location.assign("employe");</script>';
+        $res = $model->getResaEmploForDelete($id_employe);
+
+        foreach ($res as $resa)
+        {
+            if($resa['date'] >= $now)
+            {
+                $count ++;
+            }
+        }
+
+        if($count !== 0)
+        {
+            $feedback .= '<script type="text/javascript">alert("Employé requis pour une réservation future, suppression impossible");window.location.assign("/reservation");</script>';
+        }
+        else
+        {
+            foreach ($res as $resa)
+            {
+                $id_resa = $resa['ID_Reservation'];
+                $delete_resa = $model->deletePersonneResa($id_resa, $id_employe);
+            }
+
+            $delete_client = $model->deletePersonne($id_employe, "Employé", $id_adresse);
+            $feedback .= '<script type="text/javascript">alert("Employé supprimé");window.location.assign("/employe");</script>';
+        }
 
         break;
 
@@ -293,6 +353,9 @@ switch ($etape) {
         $now     = date('Y');
         $datenow = ($now - 15).date('-m-d');
 
+        if($permis == ""){$permis = NULL;}
+        if($bees == ""){$bees = NULL;}
+
 
         //Si l'année de naissance est supérieur ou égal à l'année actuel -15 ans on retourne une erreur
         if(substr($newanniv, 0, 4) >=  substr($datenow, 0, 4))
@@ -334,6 +397,8 @@ switch ($etape) {
         // Date du jour format US
         $now     = date('Y');
         $datenow = ($now - 15).date('-m-d');
+
+        if($permis == ""){$permis = NULL;}
 
         //Si l'année de naissance est supérieur ou égal à l'année actuel on retourne une erreur
         if(substr($newanniv, 0, 4) >=  substr($datenow, 0, 4))

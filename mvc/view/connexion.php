@@ -22,6 +22,12 @@
                                 </div>
                                 <button style="border-radius: 16px" class="au-btn au-btn--block au-btn--green m-b-20">Se connecter</button>
                             </form>
+                            <div class="register-link">
+                                <p>
+                                    Vous n'avez pas de compte ?
+                                    <a href="/inscription">S'enregistrer</a>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>

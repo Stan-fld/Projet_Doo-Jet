@@ -168,6 +168,22 @@ class Model{
 
         return $result;
     }
+
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getEquipementDispoUpdate($date_deb, $date_fin, $nom_eq, $id_res)
+    {
+        $query  = "CALL select_equipement_dispo_update(:date_deb, :date_fin, :nom_eq, :id_res)";
+        $bind   = [":date_deb" => $date_deb,
+            ":date_fin" => $date_fin,
+            ":nom_eq" => $nom_eq,
+            ":id_res"=>$id_res];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
     //----------------------------------------------------------------------------------------------------------------------------------
     function getEqmployeDispo($date, $date_deb, $date_fin)
     {
@@ -175,6 +191,20 @@ class Model{
         $bind   = [":date" => $date,
             ":date_deb" => $date_deb,
             ":date_fin" => $date_fin];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getEqmployeDispoUpdate($date, $date_deb, $date_fin, $id_res)
+    {
+        $query  = "CALL select_employe_dispo_update(:date, :date_deb, :date_fin, :id_res)";
+        $bind   = [":date" => $date,
+            ":date_deb" => $date_deb,
+            ":date_fin" => $date_fin,
+            ":id_res"=> $id_res];
         $stmt   = $this->executeSQL($query, $bind);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -226,7 +256,7 @@ class Model{
     //----------------------------------------------------------------------------------------------------------------------------------
     function getReservation($id_resa){
         $query  = "CALL select_reservation(:id_resa)";
-        $bind = ["id_resa" => $id_resa];
+        $bind = [":id_resa" => $id_resa];
         $stmt   = $this->executeSQL($query, $bind);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -234,12 +264,54 @@ class Model{
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
-    function getPrix($id_eq, $duree){
-        $query  = "CALL select_prix(:id_eq, :duree)";
-        $bind = [":id_eq" => $id_eq,
-            ":duree" => $duree];
+    function getResaEmploForDelete($id_personne){
+        $query  = "SELECT ID_Reservation, DATE_FORMAT(equipement_reserve.Date_Heure_Debut_Reservation, '%d/%m/%Y') as date  FROM equipement_reserve
+WHERE equipement_reserve.id_employe = :id";
+        $bind = [":id" => $id_personne];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getResaClientForDelete($id_personne){
+        $query  = "SELECT equipement_reserve.ID_Reservation,DATE_FORMAT(equipement_reserve.Date_Heure_Debut_Reservation, '%d/%m/%Y') as date FROM reservation_client_employe
+LEFT JOIN personne ON reservation_client_employe.ID_Personne = personne.ID_Personne
+LEFT JOIN equipement_reserve ON reservation_client_employe.ID_Reservation = equipement_reserve.ID_Reservation
+WHERE(personne.ID_Personne = :id)";
+        $bind = [":id" => $id_personne];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getReservationClient($id_resa){
+        $query  = "CALL select_reservation_client(:id_resa)";
+        $bind = [":id_resa" => $id_resa];
         $stmt   = $this->executeSQL($query, $bind);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getPrix($id_eq){
+        $query  = "CALL select_prix(:id_eq)";
+        $bind = [":id_eq" => $id_eq];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getDuree(){
+        $query  = "CALL select_duree()";
+        $stmt   = $this->executeSQL($query);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;
     }
@@ -372,6 +444,33 @@ class Model{
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
+    function updateReservation($id_eq, $id_resa, $debut, $fin, $prix, $nb_pers, $id_pers, $id_emp_old)
+    {
+        $query  = "CALL update_reservation(:id_eq, :id_resa, :debut, :fin, :prix, :nb_pers, :id_pers, :id_emp_old)";
+        $bind = [":id_eq" => $id_eq,
+                 ":id_resa" => $id_resa,
+                 ":debut" => $debut,
+                 ":fin" => $fin,
+                 ":prix" => $prix,
+                 ":nb_pers" => $nb_pers,
+                 ":id_pers" => $id_pers,
+                 ":id_emp_old" => $id_emp_old];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function updatePrix($prix, $id_eq, $id_prix)
+    {
+        $query  = "CALL update_prix(:prix, :id_eq, :id_prix);";
+        $bind = [":prix" => $prix,
+                 ":id_eq" => $id_eq,
+                 ":id_prix" => $id_prix];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
     function addPeriodeinact($idemploye, $motif, $debut, $fin)
     {
         $query  = "
@@ -461,6 +560,19 @@ class Model{
             ":commentaire" => $commentaire,
             ":puissance" => $puissance,
             ":service" => $service];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function addPrix($prix, $id_eq, $id_prix)
+    {
+        $query  = "CALL create_prix(:prix, :id_eq, :id_prix);";
+        $bind = [":prix" => $prix,
+            ":id_eq" => $id_eq,
+            ":id_prix" => $id_prix];
         $result   = $this->executeSQL($query, $bind);
 
         return $result;
@@ -506,11 +618,12 @@ class Model{
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
-    function deletePersonne($idpersonne, $statut)
+    function deletePersonne($idpersonne, $statut, $id_adresse)
     {
-        $query  = "CALL delete_personne (:idpersonne, :statut)";
+        $query  = "CALL delete_personne (:idpersonne, :statut, :id_adresse)";
         $bind = [":idpersonne" => $idpersonne,
-            ":statut" => $statut];
+            ":statut" => $statut,
+            ":id_adresse" => $id_adresse];
         $result   = $this->executeSQL($query, $bind);
         return $result;
     }
@@ -542,6 +655,52 @@ class Model{
     {
         $query  = "CALL delete_equipement(:id_equipement)";
         $bind = [":id_equipement" => $id_equipement];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function deletePrix($id_equipement)
+    {
+        $query  = "DELETE FROM prix_horaire_equipement WHERE prix_horaire_equipement.ID_Equipement = :id_equipement";
+        $bind = [":id_equipement" => $id_equipement];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function deletePersonneResa($id_resa, $id_personne)
+    {
+        $query  = "DELETE FROM reservation_client_employe WHERE (ID_Reservation = :id_resa and ID_Personne = :id_personne)";
+        $bind = [":id_resa" => $id_resa,
+                 ":id_personne" => $id_personne];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function deleteEqResa($id_resa)
+    {
+        $query  = "DELETE FROM equipement_reserve WHERE (ID_Reservation = :id_resa)";
+        $bind = [":id_resa" => $id_resa];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function deleteEmpClientResa($id_resa)
+    {
+        $query  = "DELETE FROM reservation_client_employe WHERE (ID_Reservation = :id_resa)";
+        $bind = [":id_resa" => $id_resa];
+        $result   = $this->executeSQL($query, $bind);
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function deleteResa($id_resa)
+    {
+        $query  = "DELETE FROM reservation WHERE (ID_Reservation = :id_resa)";
+        $bind = [":id_resa" => $id_resa];
         $result   = $this->executeSQL($query, $bind);
         return $result;
     }

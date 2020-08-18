@@ -156,6 +156,6 @@ $pays = $model->getPays();
         }
 
         function reload() {
-            window.location.reload();
+                    window.location.reload();
         }
     </script>

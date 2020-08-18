@@ -73,13 +73,16 @@ class Page
         $cheminPage = 'mvc/view/view-' . $nomPage[0] . '.php';
 
         if (is_file($cheminSolo)) {
-            include($cheminSolo);
-            if($nomPage['0'] == "connexion")
+            if($nomPage['0'] == "connexion" || $nomPage['0'] == "inscription" )
             {
                 include ('mvc/view/head.php');
-                include('mvc/view/deconnexion.php.old');
+                //include('mvc/view/deconnexion.php.old');
                 include($cheminSolo);
                 include("mvc/view/footer.php");
+            }
+            else
+            {
+                include($cheminSolo);
             }
         }else if (is_file($cheminPage)) {
 

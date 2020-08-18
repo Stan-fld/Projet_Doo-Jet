@@ -4,6 +4,7 @@
 //On récupère les infos de l'equipement à partir de son id
 $idequipement = $_GET["id"];
 $equipement = $model->getEquipement($idequipement);
+$prix = $model->getPrix($idequipement);
 
 $equipementAlls = $model->getEquipementDistinct()
 ?>
@@ -40,7 +41,7 @@ $equipementAlls = $model->getEquipementDistinct()
                                 <div class="row form-group">
                                     <label class="col col-md-3 form-control-label" for="commentaire">Commentaire : </label>
                                     <div class="col col-md-3">
-                                        <input name="commentaire" id="commentaire" class="text-center form-control" type="text" required disabled value="<?php echo $equipement['Commentaire'];?>">
+                                        <textarea name="commentaire" id="commentaire" class="text-center form-control" type="text" required disabled><?php echo $equipement['Commentaire'];?></textarea>
                                     </div>
                                 </div>
                                 <hr>
@@ -60,6 +61,28 @@ $equipementAlls = $model->getEquipementDistinct()
                                         </select>
                                     </div>
                                 </div>
+                                <hr>
+                                <div class="row form-group">
+                                    <div class="col col-md-3 text-center">
+                                        <strong style="font-size: large">Durée</strong>
+                                    </div>
+                                    <div class="col col-md-3 text-center">
+                                        <strong style="font-size: large">Prix </strong>(&euro;)
+                                    </div>
+                                </div>
+                                <hr style="border-top: 1px dashed;">
+                                <?php foreach ($prix as $Prix){
+                                    $duree = ($Prix['Duree'])/60;
+                                    $dureeH = substr($duree, 0, 1)."h".(substr($duree,2,1)*6);
+                                    if(strlen($dureeH) == 3){ $dureeH = substr($dureeH,0,3)."0"; }?>
+                                        <input type="hidden" name="id_prix_<?php echo $Prix['Duree'] ?>" value="<?php echo $Prix['ID_Prix_Horaire'] ?>">
+                                    <div class="row form-group" >
+                                        <label class="col col-md-3 form-control-label text-center" for="prix_<?php echo $Prix['Duree'] ?>"><?php echo $dureeH; ?></label>
+                                        <div class="col col-md-3">
+                                            <input name="prix_<?php echo $Prix['Duree'] ?>" id="prix_<?php echo $Prix['Duree'] ?>" class="text-center form-control"  type="text" required disabled value="<?php echo $Prix['Prix'] ?>">
+                                        </div>
+                                    </div>
+                                <?php } ?>
                                 <div class="card-footer text-right">
                                     <button id="hidebtnAnnuler" type="button" style="margin-left: 2vh; display:none" onclick="reload()" class="btn btn-danger btn-sm">
                                         <i class="fa fa-ban"></i> Annuler
@@ -88,6 +111,7 @@ $equipementAlls = $model->getEquipementDistinct()
         function modif() {
             $("input").prop('disabled', false);
             $("select").prop('disabled', false);
+            $("textarea").prop('disabled', false);
             $("#hidebtnAnnuler").css("display", "");
             $("#hidebtnValider").css("display", "");
             $("#supp").css("display", "none");
