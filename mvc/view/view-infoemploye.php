@@ -242,7 +242,7 @@ $pays = $model->getPays();
         }
 
         function aff_inact() {
-            var id = "<?php echo $idemploye ?>";
+            var id = "<?php echo $idemploye; ?>";
             window.location.assign("infoinact?id="+id);
         }
 

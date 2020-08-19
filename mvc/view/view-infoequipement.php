@@ -27,6 +27,13 @@ $equipementAlls = $model->getEquipementDistinct()
                                 <input type="hidden" name="controller" value="updateEquipement">
                                 <input type="hidden" id="etape" name="etape" value="">
                                 <input type="hidden" name="id_equipement" value="<?php echo $equipement['ID_Equipement'];?>">
+                                <div class="row form-group" >
+                                    <label class="col col-md-3 form-control-label">Numéro équipement : </label>
+                                    <div class="col col-md-3 text-center">
+                                        <label style="font-size: x-large; color: #17a2b8" class="form-control-label" type="text"><?php echo $equipement['ID_Equipement'];?></label>
+                                    </div>
+                                </div>
+                                <hr>
                                 <div class="row form-group">
                                     <label class="col col-md-3 form-control-label" for="nom">Nom : </label>
                                     <div class="col col-md-3">

@@ -34,7 +34,7 @@ $prix = $model->getDuree();
                                 <div class="row form-group">
                                     <label class="col col-md-3 form-control-label" for="commentaire">Commentaire : </label>
                                     <div class="col col-md-3">
-                                        <input name="commentaire" id="commentaire" class="text-center form-control" type="text" required value="">
+                                        <textarea name="commentaire" id="commentaire" class="text-center form-control" type="text"></textarea>
                                     </div>
                                 </div>
                                 <hr>

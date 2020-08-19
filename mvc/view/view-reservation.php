@@ -1,7 +1,7 @@
 <?php
 $resaC = $model->getReservationAll("Client");
 
-$resaE = $model->getReservationAll("Employé");
+$resaE = $model->getReservationEmp();
 ?>
 
 <!-- Title Page-->
@@ -73,6 +73,7 @@ $resaE = $model->getReservationAll("Employé");
                         <thead>
                         <tr class="text-center">
                             <th>Numéro réservation</th>
+                            <th>Numéro équipement</th>
                             <th>Nom</th>
                             <th>Prénom</th>
                             <th>Téléhpone</th>
@@ -88,6 +89,7 @@ $resaE = $model->getReservationAll("Employé");
                         <?php foreach ($resaE as $ResaE){ ?>
                             <tr>
                                 <td><?php echo $ResaE['ID_Reservation'];?></td>
+                                <td><?php echo $ResaE['ID_Equipement'];?></td>
                                 <td><?php echo $ResaE['Nom'];?></td>
                                 <td><?php echo $ResaE['Prenom'];?></td>
                                 <td><?php echo $ResaE['Telephone'];?></td>

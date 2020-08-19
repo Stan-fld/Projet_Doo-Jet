@@ -3,14 +3,11 @@
 
 //On récupère les infos de l'inacticité à partir de son id
 $idemploye = $_GET["id"];
-$id_inact = $model->getEmployemalade($idemploye);
-if($id_inact == null){
+$aff_inact = $model->getPeriodeinact($idemploye);
+if($aff_inact == null){
     echo '<script type="text/javascript">alert("Aucune période d\'inactivité");history.back();</script>';
 }
 else {
-    foreach ($id_inact as $inactivite) {
-        $aff_inact = $model->getPeriodeinact($inactivite['ID_Inactivite']);
-    }
 ?>
 <!-- Title Page-->
 <title>Périodes d'inactivité</title>
@@ -44,9 +41,9 @@ else {
                         <tbody id="TableInact">
                         <?php foreach ($aff_inact as $inact){ ?>
                             <tr>
-                                <td style="width: 10%"><?php echo $inact['Motif'];?></td>
+                                <td style="width: 20%"><?php echo $inact['Motif'];?></td>
                                 <td style="width: 0%"><?php echo $inact['Date_Debut_Inactivite'];?></td>
-                                <td style="width: 20%"><?php echo $inact['Date_Fin_Inactivite'];?></td>
+                                <td style="width: 10%"><?php echo $inact['Date_Fin_Inactivite'];?></td>
                             </tr>
                         <?php } ?>
                         </tbody>

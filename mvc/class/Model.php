@@ -233,10 +233,13 @@ class Model{
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
-    function getPeriodeinact($id_inact)
+    function getPeriodeinact($id_pers)
     {
-        $query  = "SELECT * FROM periode_inactivite WHERE ID_Inactivite = :id_inact";
-        $bind = [":id_inact" => $id_inact];
+        $query  = "SELECT * FROM periode_inactivite 
+                   LEFT JOIN employe_malade ON periode_inactivite.ID_Inactivite = employe_malade.ID_Inactivite 
+                   WHERE employe_malade.ID_Personne = :id_pers 
+                   ORDER BY DATE_FORMAT(Date_Debut_Inactivite, '%Y-%m-%d') ASC";
+        $bind = [":id_pers" => $id_pers];
         $stmt   = $this->executeSQL($query, $bind);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -249,6 +252,18 @@ class Model{
         $query  = "CALL select_reservation_alL(:statut)";
         $bind = [":statut" => $statut];
         $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    function getReservationEmp()
+    {
+        $query  = "SELECT ID_Equipement, ID_Reservation, DATE_FORMAT(equipement_reserve.Date_Heure_Debut_Reservation, '%d/%m/%Y %Hh%i') as debut, DATE_FORMAT(equipement_reserve.Date_Heure_Fin_Reservation, '%d/%m/%Y %Hh%i') as fin, Nom, Prenom, ID_Personne, Telephone FROM equipement_reserve 
+LEFT JOIN personne ON equipement_reserve.id_employe = personne.ID_Personne
+WHERE (id_employe IS NOT NULL)ORDER BY debut DESC, fin DESC;";
+        $stmt   = $this->executeSQL($query);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;
