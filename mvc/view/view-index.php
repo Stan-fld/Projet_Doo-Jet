@@ -1,7 +1,9 @@
 <?php
+$current_year = date("Y");
+
 $clients = $model->getClientAll();
 $resa = $model->getReservationAll("Client");
-$countresa = $model->getReservationDistinct();
+$countresa = $model->getReservationDistinct($current_year);
 $equipements = $model->getEquipementAll();
 $service = 1;
 ?>
@@ -54,7 +56,7 @@ $service = 1;
                             </div>
                             <div class="text">
                                 <h2><?php echo(count($countresa)); ?></h2>
-                                <span>Réservations courant <?php echo date("Y"); ?></span>
+                                <span>Réservations courant <?php echo $current_year; ?></span>
                             </div>
                         </div>
                     </div>
@@ -80,7 +82,7 @@ $service = 1;
                             <th></th>
                             <th>Heure de fin</th>
                             <th>Détails réservation</th>
-                            <th>Détails client</th>
+                            <th class="text-center">Détails client</th>
                         </tr>
                         </thead>
                         <tbody id="TableClient">

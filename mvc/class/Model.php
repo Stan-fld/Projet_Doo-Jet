@@ -329,10 +329,11 @@ WHERE(personne.ID_Personne = :id)";
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
-    function getReservationDistinct()
+    function getReservationDistinct($current_year)
     {
-        $query  = "SELECT DISTINCT ID_Reservation FROM equipement_reserve";
-        $stmt   = $this->executeSQL($query);
+        $query  = "SELECT DISTINCT ID_Reservation FROM equipement_reserve WHERE DATE_FORMAT(Date_Heure_Fin_Reservation, '%Y') = :current_year";
+        $bind = [":current_year" => $current_year];
+        $stmt   = $this->executeSQL($query, $bind);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;

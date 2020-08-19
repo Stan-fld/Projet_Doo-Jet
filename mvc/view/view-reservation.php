@@ -25,6 +25,7 @@ $resaE = $model->getReservationAll("Employé");
                     <table class="table table-borderless table-data3 text-center">
                         <thead>
                         <tr class="text-center">
+                            <th>Numéro réservation</th>
                             <th>Nom</th>
                             <th>Prénom</th>
                             <th>Téléhpone</th>
@@ -33,12 +34,13 @@ $resaE = $model->getReservationAll("Employé");
                             <th></th>
                             <th>Heure de fin</th>
                             <th>Détails réservation</th>
-                            <th>Détails client</th>
+                            <th class="text-center">Détails client</th>
                         </tr>
                         </thead>
                         <tbody id="TableResaC">
                         <?php foreach ($resaC as $ResaC){ ?>
                             <tr>
+                                <td><?php echo $ResaC['ID_Reservation'];?></td>
                                 <td><?php echo $ResaC['Nom'];?></td>
                                 <td><?php echo $ResaC['Prenom'];?></td>
                                 <td><?php echo $ResaC['Telephone'];?></td>
@@ -70,6 +72,7 @@ $resaE = $model->getReservationAll("Employé");
                     <table class="table table-borderless table-data3 text-center">
                         <thead>
                         <tr class="text-center">
+                            <th>Numéro réservation</th>
                             <th>Nom</th>
                             <th>Prénom</th>
                             <th>Téléhpone</th>
@@ -78,12 +81,13 @@ $resaE = $model->getReservationAll("Employé");
                             <th></th>
                             <th>Heure de fin</th>
                             <th>Détails réservation</th>
-                            <th>Détails client</th>
+                            <th class="text-center">Détails employé</th>
                         </tr>
                         </thead>
                         <tbody id="TableResaE">
                         <?php foreach ($resaE as $ResaE){ ?>
                             <tr>
+                                <td><?php echo $ResaE['ID_Reservation'];?></td>
                                 <td><?php echo $ResaE['Nom'];?></td>
                                 <td><?php echo $ResaE['Prenom'];?></td>
                                 <td><?php echo $ResaE['Telephone'];?></td>
@@ -95,7 +99,7 @@ $resaE = $model->getReservationAll("Employé");
                                     <a href="/inforeservation?id=<?php echo $ResaE['ID_Reservation'];?>" class="btn btn-info">Détails réservation</a>
                                 </td>
                                 <td>
-                                    <a href="/infoemploye?id=<?php echo $ResaE['ID_Personne'];?>" class="btn btn-info">Détails client</a>
+                                    <a href="/infoemploye?id=<?php echo $ResaE['ID_Personne'];?>" class="btn btn-info">Détails employé</a>
                                 </td>
                             </tr>
                         <?php } ?>

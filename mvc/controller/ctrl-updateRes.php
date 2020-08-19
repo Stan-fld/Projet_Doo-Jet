@@ -151,7 +151,7 @@ switch ($etape) {
                         "nb_personne" => $resa['nb_personne'],];
                     $_SESSION['reservation'] = $array;
                     // on ne peut pas faire de réservation.
-                    $feedback .= '<script type="text/javascript">alert("La durée est invalide pour cette activité! merci de réessayer.");</script>';
+                    $feedback .= '<script type="text/javascript">alert("La durée est invalide pour '.$name.' ! merci de réessayer.");</script>';
                 }
             }
 
