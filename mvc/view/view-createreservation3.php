@@ -90,7 +90,6 @@ if(isset($_SESSION['reservation']))
                                         </div>
                                         <hr>
                                     <?php } ?>
-                                    <hr>
                                     <div class="card-footer text-right">
                                         <button class="btn btn-success btn-sm">
                                             <i class="fa fa-check"></i> Valider

@@ -45,7 +45,7 @@ switch ($etape) {
             $_SESSION['connexion']['passsword'] = $pswd;
 
             $newpswd = $model->updatePassword($id, $pswd);
-            $feedback.= '<script>window.location.assign("/")</script>';
+            $feedback.= '<script>alert("Mot de passe changé");window.location.assign("/")</script>';
 
         }
         else

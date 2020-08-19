@@ -211,11 +211,13 @@ switch ($etape) {
 
         $count = 0;
 
-        // Récupere les ID du formulaire pour supprimer un client
-        $id_employe     = $model->getInput('id_employe');
+        // Récupere les infos du formulaire pour supprimer un client
+        $id_employe    = $model->getInput('id_employe');
         $id_adresse    = $model->getInput('id_adresse');
+        $tel           = $model->getInput('identifiant');
+        $identifiant   = $_SESSION['connexion']['identifiant'];
 
-        $id_inact = $model->getEmployemalade($id_employe);
+        $id_inact      = $model->getEmployemalade($id_employe);
 
         $delete_employemalade = $model->deleteEmployemalade($id_employe);
 
@@ -248,9 +250,17 @@ switch ($etape) {
                 $id_resa = $resa['ID_Reservation'];
                 $delete_resa = $model->deletePersonneResa($id_resa, $id_employe);
             }
-
-            $delete_client = $model->deletePersonne($id_employe, "Employé", $id_adresse);
-            $feedback .= '<script type="text/javascript">alert("Employé supprimé");window.location.assign("/employe");</script>';
+            if($tel == $identifiant)
+            {
+                $delete_client = $model->deletePersonne($id_employe, "Employé", $id_adresse);
+                session_destroy();
+                $feedback .= '<script type="text/javascript">alert("Vous avez été supprimé !");window.location.assign("/connexion");</script>';
+            }
+            else
+            {
+                $delete_client = $model->deletePersonne($id_employe, "Employé", $id_adresse);
+                $feedback .= '<script type="text/javascript">alert("Employé supprimé");window.location.assign("/employe");</script>';
+            }
         }
 
         break;
@@ -365,7 +375,7 @@ switch ($etape) {
         else
         {
             $add_employe= $model->addEmploye($nom, $prenom, $newanniv, $telephone, $permis, $ville, $code_post, $pays, $num_rue, $rue, $voie, $secu, $bees, $contrat, $newembauche, $newmedical, $pswd);
-            $feedback .= '<script type="text/javascript">alert("Employé ajouté");window.location.assign("/")</script>';
+            $feedback .= '<script type="text/javascript">alert("Employé ajouté");window.location.assign("/employe")</script>';
         }
 
         break;

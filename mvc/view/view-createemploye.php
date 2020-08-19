@@ -53,6 +53,9 @@ $pays = $model->getPays();
                                     <div class="col col-md-3">
                                         <input name="password" id="password" class="text-center form-control" type="password" required  value="">
                                     </div>
+                                    <div id="erreur" style="color: red; display: none">
+                                        <p>Mot de passe trop court !</p>
+                                    </div>
                                 </div>
                                 <hr>
                                 <div class="row form-group">
@@ -172,4 +175,23 @@ $pays = $model->getPays();
         function backp(){
             window.location.assign("/employe")
         }
+
+        $(document).ready(function(){
+            $("#password").on("keyup", function(){
+                if($(this).val().length < 6){ // si la chaîne de caractères est inférieure à 6
+                    $(this).css({ // on rend le champ rouge
+                        borderColor : 'red',
+                        color : 'red'
+                    });
+                    $("#erreur").css('display', 'block');
+                }
+                else{
+                    $(this).css({ // si tout est bon, on le rend vert
+                        borderColor : 'green',
+                        color : 'green'
+                    });
+                    $("#erreur").css('display', 'none');
+                }
+            });
+        });
     </script>

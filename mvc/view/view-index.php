@@ -1,6 +1,6 @@
 <?php
 $clients = $model->getClientAll();
-$resa = $model->getReservationAll();
+$resa = $model->getReservationAll("Client");
 $countresa = $model->getReservationDistinct();
 $equipements = $model->getEquipementAll();
 $service = 1;

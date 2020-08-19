@@ -27,7 +27,7 @@ class Model{
             $this->pdo = new PDO($dsn, $userDatabase, $mdpDatabase);
 
             // AFFICHER LES MESSAGES D'ERREUR DE MYSQL
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+            //$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
         }
 
         // RENVOIE LA CONNEXION EN COURS
@@ -244,10 +244,11 @@ class Model{
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
-    function getReservationAll()
+    function getReservationAll($statut)
     {
-        $query  = "CALL select_reservation_alL()";
-        $stmt   = $this->executeSQL($query);
+        $query  = "CALL select_reservation_alL(:statut)";
+        $bind = [":statut" => $statut];
+        $stmt   = $this->executeSQL($query, $bind);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;

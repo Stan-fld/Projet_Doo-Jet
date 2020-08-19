@@ -22,8 +22,8 @@ $prix = $model->getDuree();
                                 <div class="row form-group">
                                     <label class="col col-md-3 form-control-label" for="nom">Nom : </label>
                                     <div class="col col-md-3">
-                                        <select name="nom" id="nom" class="text-center form-control" required >
-                                            <option selected disabled> Liste des équipements</option>
+                                        <select name="nom" id="nom" class="text-center form-control" required>
+                                            <option selected disabled value=""> Liste des équipements</option>
                                             <?php foreach($equipements as $equipement){ ?>
                                                 <option value="<?php echo $equipement['Nom_Equipement'];?>"><?php echo $equipement['Nom_Equipement'];?></option>
                                             <?php } ?>

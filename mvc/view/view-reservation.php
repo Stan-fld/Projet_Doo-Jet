@@ -1,9 +1,11 @@
 <?php
-$resa = $model->getReservationAll();
+$resaC = $model->getReservationAll("Client");
+
+$resaE = $model->getReservationAll("Employé");
 ?>
 
 <!-- Title Page-->
-<title>Liste des réservations clients</title>
+<title>Liste des réservations</title>
 
 <body class="animsition">
 <div class="page-wrapper">
@@ -14,7 +16,7 @@ $resa = $model->getReservationAll();
                 <div style="margin-bottom: 2vh!important; text-align: center!important;">
                     <h2 class="title-1">Liste des réservations clients</h2>
                 </div>
-                <input class ="au-input" id="myInput" style="padding: 0px 16px;  border-radius: 10px; margin-bottom: 1vh; margin-left: 1vh" type="text" placeholder="Rechercher..">
+                <input class ="au-input" id="myInputC" style="padding: 0px 16px;  border-radius: 10px; margin-bottom: 1vh; margin-left: 1vh" type="text" placeholder="Rechercher..">
                 <button style="margin-left: 2vh" onclick="createE()" class="btn btn-outline-success">
                     <i class="fa fa-edit (alias)"></i> Nouvelle réservation
                 </button>
@@ -34,21 +36,21 @@ $resa = $model->getReservationAll();
                             <th>Détails client</th>
                         </tr>
                         </thead>
-                        <tbody id="TableResa">
-                        <?php foreach ($resa as $Resa){ ?>
+                        <tbody id="TableResaC">
+                        <?php foreach ($resaC as $ResaC){ ?>
                             <tr>
-                                <td><?php echo $Resa['Nom'];?></td>
-                                <td><?php echo $Resa['Prenom'];?></td>
-                                <td><?php echo $Resa['Telephone'];?></td>
-                                <td><?php echo  substr($Resa['debut'], 0, 10);?></td>
-                                <td><?php echo  substr($Resa['debut'], 10, 6);?></td>
+                                <td><?php echo $ResaC['Nom'];?></td>
+                                <td><?php echo $ResaC['Prenom'];?></td>
+                                <td><?php echo $ResaC['Telephone'];?></td>
+                                <td><?php echo  substr($ResaC['debut'], 0, 10);?></td>
+                                <td><?php echo  substr($ResaC['debut'], 10, 6);?></td>
                                 <td> à </td>
-                                <td><?php echo  substr($Resa['fin'], 10, 6);?></td>
+                                <td><?php echo  substr($ResaC['fin'], 10, 6);?></td>
                                 <td>
-                                    <a href="/inforeservation?id=<?php echo $Resa['ID_Reservation'];?>" class="btn btn-info">Détails réservation</a>
+                                    <a href="/inforeservation?id=<?php echo $ResaC['ID_Reservation'];?>" class="btn btn-info">Détails réservation</a>
                                 </td>
                                 <td>
-                                    <a href="/infoclient?id=<?php echo $Resa['ID_Personne'];?>" class="btn btn-info">Détails client</a>
+                                    <a href="/infoclient?id=<?php echo $ResaC['ID_Personne'];?>" class="btn btn-info">Détails client</a>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -56,6 +58,50 @@ $resa = $model->getReservationAll();
                     </table>
                 </div>
                 <!-- END DATA TABLE-->
+                <div style="margin-bottom: 2vh!important; text-align: center!important;">
+                    <h2 class="title-1">Liste des réservations Employés</h2>
+                </div>
+                <input class ="au-input" id="myInputE" style="padding: 0px 16px;  border-radius: 10px; margin-bottom: 1vh; margin-left: 1vh" type="text" placeholder="Rechercher..">
+                <button style="margin-left: 2vh" onclick="createE()" class="btn btn-outline-success">
+                    <i class="fa fa-edit (alias)"></i> Nouvelle réservation
+                </button>
+                <!-- DATA TABLE-->
+                <div class="table-responsive m-b-40">
+                    <table class="table table-borderless table-data3 text-center">
+                        <thead>
+                        <tr class="text-center">
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Téléhpone</th>
+                            <th>Jour de la réservation</th>
+                            <th>Heure de début</th>
+                            <th></th>
+                            <th>Heure de fin</th>
+                            <th>Détails réservation</th>
+                            <th>Détails client</th>
+                        </tr>
+                        </thead>
+                        <tbody id="TableResaE">
+                        <?php foreach ($resaE as $ResaE){ ?>
+                            <tr>
+                                <td><?php echo $ResaE['Nom'];?></td>
+                                <td><?php echo $ResaE['Prenom'];?></td>
+                                <td><?php echo $ResaE['Telephone'];?></td>
+                                <td><?php echo  substr($ResaE['debut'], 0, 10);?></td>
+                                <td><?php echo  substr($ResaE['debut'], 10, 6);?></td>
+                                <td> à </td>
+                                <td><?php echo  substr($ResaE['fin'], 10, 6);?></td>
+                                <td>
+                                    <a href="/inforeservation?id=<?php echo $ResaE['ID_Reservation'];?>" class="btn btn-info">Détails réservation</a>
+                                </td>
+                                <td>
+                                    <a href="/infoemploye?id=<?php echo $ResaE['ID_Personne'];?>" class="btn btn-info">Détails client</a>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -63,9 +109,18 @@ $resa = $model->getReservationAll();
 </body>
 <script>
     $(document).ready(function() {
-        $("#myInput").on("keyup", function () {
+        $("#myInputC").on("keyup", function () {
             var value = $(this).val().toLowerCase();
-            $("#TableResa tr").filter(function () {
+            $("#TableResaC tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    $(document).ready(function() {
+        $("#myInputE").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#TableResaE tr").filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });

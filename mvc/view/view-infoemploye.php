@@ -25,8 +25,9 @@ $pays = $model->getPays();
                             <form action="" method="post" class="form-horizontal ajax">
                                 <input type="hidden" name="controller" value="updatePersonne">
                                 <input type="hidden" id="etape" name="etape" value="">
-                                <input type="hidden" name="id_employe" value="<?php echo $employe['ID_Personne'];?>">
-                                <input type="hidden" name="id_adresse" value="<?php echo $employe['ID_Adresse'];?>">
+                                <input type="hidden" name="id_employe" value="<?php echo $employe['ID_Personne']; ?>">
+                                <input type="hidden" name="id_adresse" value="<?php echo $employe['ID_Adresse']; ?>">
+                                <input type="hidden" name="identifiant" value="<?php echo $employe['Telephone']; ?>">
                                 <div class="row form-group">
                                     <label class="col col-md-3" for="nom">Nom : </label>
                                     <div class="col col-md-3">
@@ -206,7 +207,6 @@ $pays = $model->getPays();
             </div>
         </div>
     </div>
-
     <script>
         function modif() {
             $("input").prop('disabled', false);
