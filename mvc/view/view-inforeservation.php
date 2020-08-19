@@ -54,8 +54,8 @@ $equipement = $model->getEquipementAll();
                                     <div class="row form-group">
                                         <label class="col col-md-3 form-control-label" for="pays">Moniteur sélectionné : </label>
                                         <div class="col col-md-3">
-                                            <select name="id_employe<?php echo $resa['Nom_Equipement']; ?>" id="id_employe" class="text-center form-control enable" <?= ($resC['N_Permis'] !== NULL && $resa['Nom_Equipement'] !== "JETSKI") ||($resC['N_Permis'] == NULL) ? 'required' : '' ?> disabled>
-                                                <?php if ($resa['id_employe'] == NULL){ ?>
+                                            <select name="id_employe<?php echo $resa['Nom_Equipement']; ?>" id="id_employe" class="text-center form-control enable" <?= $resC['N_Permis'] !== NULL && $resa['Nom_Equipement'] == "JETSKI" ? '' : 'required' ?> disabled>
+                                                <?php if ($resC['N_Permis'] !== NULL && $resa['Nom_Equipement'] == "JETSKI"){ ?>
                                                     <option selected value="">Pas de moniteur requis</option>
                                                 <?php }else{ ?>
                                                 <option value="">Moniteur requis</option>
