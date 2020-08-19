@@ -276,6 +276,17 @@ WHERE equipement_reserve.id_employe = :id";
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
+    function getResaEquipementForDelete($id_eq){
+        $query  = "SELECT ID_Reservation, DATE_FORMAT(equipement_reserve.Date_Heure_Debut_Reservation, '%d/%m/%Y') as date  FROM equipement_reserve
+WHERE equipement_reserve.ID_Equipement = :id";
+        $bind = [":id" => $id_eq];
+        $stmt   = $this->executeSQL($query, $bind);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
     function getResaClientForDelete($id_personne){
         $query  = "SELECT equipement_reserve.ID_Reservation,DATE_FORMAT(equipement_reserve.Date_Heure_Debut_Reservation, '%d/%m/%Y') as date FROM reservation_client_employe
 LEFT JOIN personne ON reservation_client_employe.ID_Personne = personne.ID_Personne

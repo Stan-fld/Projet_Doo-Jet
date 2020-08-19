@@ -41,13 +41,33 @@ switch ($etape) {
 
     case 'delete_equipement':
 
+        $count = 0;
         // Récupere les ID du formulaire pour supprimer un équipement
         $id_equipement = $model->getInput('id_equipement');
 
-        $delete_prix = $model->deletePrix($id_equipement);
+        // Date du jour format US
+        $now = date('Y-m-d');
 
-        $delete_equipement = $model->deleteEquipement($id_equipement);
-        $feedback .= '<script type="text/javascript">alert("Equipement supprimé");window.location.assign("/equipement");</script>';
+        $res = $model->getResaEquipementForDelete($id_equipement);
+        foreach ($res as $resa)
+        {
+            if($resa['date'] >= $now)
+            {
+                $count ++;
+            }
+        }
+
+        if($count !== 0)
+        {
+            $feedback .= '<script type="text/javascript">alert("Équipement requis pour une réservation future, suppression impossible");window.location.assign("/reservation");</script>';
+        }
+        else
+        {
+            $delete_prix = $model->deletePrix($id_equipement);
+
+            $delete_equipement = $model->deleteEquipement($id_equipement);
+            $feedback .= '<script type="text/javascript">alert("Équipement supprimé");window.location.assign("/equipement");</script>';
+        }
 
         break;
 

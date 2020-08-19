@@ -79,7 +79,7 @@ else
                     <a href="/employe">
                         <i class="fas fa-user"></i>Employés</a>
                 </li>
-                <li <?= $nomPage[0] == 'equipement' ? ' class="active"' : '' ?>>
+                <li <?= $nomPage[0] == 'equipement'|| $nomPage[0] == 'createequipement' || $nomPage[0] == 'infoequipement' ? ' class="active"' : '' ?>>
                     <a href="/equipement">
                         <i class="fas  fa-anchor"></i>Equipements</a>
                 </li>
