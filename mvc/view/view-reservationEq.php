@@ -16,9 +16,9 @@ $resaEq = $model->getReservationEq();
         <div class="row m-t-30">
             <div class="col-md-12">
                 <div style="margin-bottom: 2vh!important; text-align: center!important;">
-                    <h2 class="title-1">Liste des réservations clients</h2>
+                    <h2 class="title-1">Liste des réservations équipements</h2>
                 </div>
-                <input class ="au-input" id="myInputC" style="padding: 0px 16px;  border-radius: 10px; margin-bottom: 1vh; margin-left: 1vh" type="text" placeholder="Rechercher..">
+                <input class ="au-input" id="myInputEq" style="padding: 0px 16px;  border-radius: 10px; margin-bottom: 1vh; margin-left: 1vh" type="text" placeholder="Rechercher..">
                 <button style="margin-left: 2vh" onclick="createE()" class="btn btn-outline-success">
                     <i class="fa fa-edit (alias)"></i> Nouvelle réservation
                 </button>
@@ -28,33 +28,33 @@ $resaEq = $model->getReservationEq();
                         <thead>
                         <tr class="text-center">
                             <th>Numéro réservation</th>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Téléhpone</th>
+                            <th>Numéro équipement</th>
+                            <th>Nom équipement</th>
+                            <th>Commentaire</th>
                             <th>Jour de la réservation</th>
                             <th>Heure de début</th>
                             <th></th>
                             <th>Heure de fin</th>
                             <th>Détails réservation</th>
-                            <th class="text-center">Détails client</th>
+                            <th class="text-center">Détails employé</th>
                         </tr>
                         </thead>
-                        <tbody id="TableResaC">
-                        <?php foreach ($resaC as $ResaC){ ?>
+                        <tbody id="TableResaEq">
+                        <?php foreach ($resaEq as $ResaEq){ ?>
                             <tr>
-                                <td><?php echo $ResaC['ID_Reservation'];?></td>
-                                <td><?php echo $ResaC['Nom'];?></td>
-                                <td><?php echo $ResaC['Prenom'];?></td>
-                                <td><?php echo $ResaC['Telephone'];?></td>
-                                <td><?php echo  substr($ResaC['debut'], 0, 10);?></td>
-                                <td><?php echo  substr($ResaC['debut'], 10, 6);?></td>
+                                <td><?php echo $ResaEq['ID_Reservation'];?></td>
+                                <td><?php echo $ResaEq['ID_Equipement'];?></td>
+                                <td><?php echo $ResaEq['Nom_Equipement'];?></td>
+                                <td><?php echo $ResaEq['Commentaire'];?></td>
+                                <td><?php echo  substr($ResaEq['debut'], 0, 10);?></td>
+                                <td><?php echo  substr($ResaEq['debut'], 10, 6);?></td>
                                 <td> à </td>
-                                <td><?php echo  substr($ResaC['fin'], 10, 6);?></td>
+                                <td><?php echo  substr($ResaEq['fin'], 10, 6);?></td>
                                 <td>
-                                    <a href="/inforeservation?id=<?php echo $ResaC['ID_Reservation'];?>" class="btn btn-info">Détails réservation</a>
+                                    <a href="/inforeservation?id=<?php echo $ResaEq['ID_Reservation'];?>" class="btn btn-info">Détails réservation</a>
                                 </td>
                                 <td>
-                                    <a href="/infoclient?id=<?php echo $ResaC['ID_Personne'];?>" class="btn btn-info">Détails client</a>
+                                    <a href="/infoequipement?id=<?php echo $ResaEq['ID_Equipement'];?>" class="btn btn-info">Détails équipement</a>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -69,13 +69,14 @@ $resaEq = $model->getReservationEq();
 </body>
 <script>
     $(document).ready(function() {
-        $("#myInputC").on("keyup", function () {
+        $("#myInputEq").on("keyup", function () {
             var value = $(this).val().toLowerCase();
-            $("#TableResaC tr").filter(function () {
+            $("#TableResaEq tr").filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
     });
+
     function createE(){
         window.location.assign("/createreservation")
     }

@@ -270,6 +270,18 @@ WHERE (id_employe IS NOT NULL)ORDER BY debut DESC, fin DESC;";
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------
+    function getReservationEq()
+    {
+        $query  = "SELECT equipement.ID_Equipement, ID_Reservation, DATE_FORMAT(equipement_reserve.Date_Heure_Debut_Reservation, '%d/%m/%Y %Hh%i') as debut, DATE_FORMAT(equipement_reserve.Date_Heure_Fin_Reservation, '%d/%m/%Y %Hh%i') as fin, Nom_Equipement, Commentaire FROM equipement_reserve 
+LEFT JOIN equipement ON equipement_reserve.ID_Equipement = equipement.ID_Equipement
+ORDER BY debut DESC, fin DESC";
+        $stmt   = $this->executeSQL($query);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
     function getReservation($id_resa){
         $query  = "CALL select_reservation(:id_resa)";
         $bind = [":id_resa" => $id_resa];

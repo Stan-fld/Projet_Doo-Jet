@@ -58,7 +58,7 @@ $equipement = $model->getEquipementAll();
                                                 <?php if ($resC['N_Permis'] !== NULL && $resa['Nom_Equipement'] == "JETSKI"){ ?>
                                                     <option selected value="">Pas de moniteur requis</option>
                                                 <?php }else{ ?>
-                                                <option value="">Moniteur requis</option>
+                                                    <option value="">Moniteur requis</option>
                                                 <?php } ?>
                                                 <?php if($resa['Nom_Equipement'] == "JETSKI"){ ?>
                                                     <?php foreach($employe as $employes){
@@ -95,18 +95,14 @@ $equipement = $model->getEquipementAll();
                                         </div>
                                     </div>
                                     <?php foreach ($equipement as $eq){
-                                        if($eq['Service'] == 1 &&$eq['Commentaire'] == $resa['Commentaire'])
-                                        {
-                                            $count = true;
-                                        } ?>
-                                    <?php }
-                                    if($count == false){ ?>
-                                        <div class="row form-group">
-                                            <label class="col col-md-3 form-control-label"></label>
-                                            <div class="col col-md-3 text-center">
-                                                <strong style="font-size: large; color: #ff0000">Équipement hors service</strong>
+                                        if($eq['Service'] == 0 && $eq['Commentaire'] == $resa['Commentaire']){ ?>
+                                            <div class="row form-group">
+                                                <label class="col col-md-3 form-control-label"></label>
+                                                <div class="col col-md-3 text-center">
+                                                    <strong style="font-size: large; color: #ff0000">Équipement hors service</strong>
+                                                </div>
                                             </div>
-                                        </div>
+                                        <?php } ?>
                                     <?php } ?>
                                     <div class="row form-group">
                                         <?php if($resa['Nom_Equipement'] == "JETSKI"){ ?>

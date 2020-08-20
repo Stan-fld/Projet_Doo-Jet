@@ -64,8 +64,7 @@ if(isset($_SESSION['reservation']))
                                                             <?php } ?>
                                                         <?php } ?>
                                                     </select>
-                                                <?php } ?>
-                                                <?php if($resa['equipement'] == "BATEAU" ||$resa['equipement'] == "BOUEE"){?>
+                                                <?php }else if($resa['equipement'] == "BATEAU" ||$resa['equipement'] == "BOUEE"){?>
                                                     <select name="idemp_<?php echo $resa['equipement']; ?>" id="idem" class="text-center form-control" required>
                                                         <option disabled selected value="">MONITEUR OBLIGATOIRE</option>
                                                         <?php foreach ($employe_dispo as $emp){
@@ -74,8 +73,7 @@ if(isset($_SESSION['reservation']))
                                                             <?php } ?>
                                                         <?php } ?>
                                                     </select>
-                                                <?php } ?>
-                                                <?php if($resa['equipement'] == "WAKE-BOARD" ||$resa['equipement'] == "SKI-NAUTIQUE"){?>
+                                                <?php }else if($resa['equipement'] == "WAKE-BOARD" ||$resa['equipement'] == "SKI-NAUTIQUE"){?>
                                                     <select name="idemp_<?php echo $resa['equipement']; ?>" id="idemp" class="text-center form-control" required>
                                                         <option disabled selected value="">MONITEUR OBLIGATOIRE</option>
                                                         <?php foreach ($employe_dispo as $emp){

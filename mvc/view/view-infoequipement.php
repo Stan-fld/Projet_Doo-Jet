@@ -133,7 +133,7 @@ $equipementAlls = $model->getEquipementDistinct()
         }
 
         function backp(){
-            window.location.assign("/equipement")
+            window.history.back();
         }
 
         function reload() {

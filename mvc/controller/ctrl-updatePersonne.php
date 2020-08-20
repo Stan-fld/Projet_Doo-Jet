@@ -53,6 +53,9 @@ switch ($etape) {
         $newdebut    = substr($date_debut, 6, 4) . '-' . substr($date_debut, 3, 2) . '-' . substr($date_debut, 0, 2);
         $newfin      = substr($date_fin, 6, 4) . '-' . substr($date_fin, 3, 2) . '-' . substr($date_fin, 0, 2);
 
+        if($permis == ""){$permis = NULL;}
+        if($bees == ""){$bees = NULL;}
+
         // Si la date est null on dit que la conversion est null
         if($date_fin == null)
         {
@@ -142,6 +145,8 @@ switch ($etape) {
         $rue         = $model->getInput('nom_voie');
         $voie        = $model->getInput('type_voie');
 
+
+        if($permis == ""){$permis = NULL;}
 
         // Conversion des dates au format US
         $newanniv = substr($anniv, 6, 4) . '-' . substr($anniv, 3, 2) . '-' . substr($anniv, 0, 2);

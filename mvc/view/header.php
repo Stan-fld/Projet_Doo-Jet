@@ -83,9 +83,20 @@ else
                     <a href="/equipement">
                         <i class="fas  fa-anchor"></i>Equipements</a>
                 </li>
-                <li <?= $nomPage[0] == 'reservation' || $nomPage[0] == 'inforeservation' || $nomPage[0] == 'createreservation' || $nomPage[0] == 'createreservation1' || $nomPage[0] == 'createreservation2' || $nomPage[0] == 'createreservation3' || $nomPage[0] == 'createreservation4' ? ' class="active"' : '' ?>>
-                    <a href="/reservation">
+                <li <?= $nomPage[0] == 'reservation' || $nomPage[0] == 'reservationE' || $nomPage[0] == 'reservationEq' ||$nomPage[0] == 'inforeservation' || $nomPage[0] == 'createreservation' || $nomPage[0] == 'createreservation1' || $nomPage[0] == 'createreservation2' || $nomPage[0] == 'createreservation3' || $nomPage[0] == 'createreservation4' ? ' class="active"' : '' ?>>
+                    <a class="js-arrow" href="#">
                         <i class="fas fa-calendar-alt"></i>Réservations</a>
+                    <ul class="list-unstyled navbar__sub-list js-sub-list">
+                        <li <?= $nomPage[0] == 'reservation' ? ' class="active"' : '' ?>>
+                            <a href="/reservation">Clients</a>
+                        </li>
+                        <li <?= $nomPage[0] == 'reservationE' ? ' class="active"' : '' ?>>
+                            <a href="/reservationE">Employés</a>
+                        </li>
+                        <li <?= $nomPage[0] == 'reservationEq' ? ' class="active"' : '' ?>>
+                            <a href="/reservationEq">Équipements</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </nav>
