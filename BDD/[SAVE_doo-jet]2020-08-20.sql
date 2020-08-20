@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : mer. 12 août 2020 à 10:51
+-- Généré le : jeu. 20 août 2020 à 16:37
 -- Version du serveur :  5.7.24
 -- Version de PHP : 7.2.19
 
@@ -25,11 +25,24 @@ DELIMITER $$
 --
 -- Procédures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `create_equipement` (IN `vnom` CHAR(50), IN `vcommentaire` CHAR(100), IN `vpuissance` INT, IN `vservice` TINYINT(1))  BEGIN
-   INSERT INTO equipement (Nom_Equipement, Commentaire, Puissance , Service) VALUES(vnom, vcommentaire, vpuissance, vservice);
+CREATE DEFINER=`root`@`localhost` PROCEDURE `connexion` (IN `videntifiant` VARCHAR(15))  READS SQL DATA
+BEGIN
+IF EXISTS (SELECT personne.Password FROM personne WHERE (personne.Telephone = videntifiant))
+  THEN
+  	SELECT personne.ID_Personne ,personne.Password FROM personne WHERE (personne.Telephone = videntifiant);
+  ELSE
+       SIGNAL SQLSTATE '45000';
+  END IF;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `create_personne` (IN `vstatut` CHAR(50), IN `vnom` CHAR(50), IN `vprenom` CHAR(50), IN `vdate_naissance` DATE, IN `vtelephone` VARCHAR(15), IN `vpermis` VARCHAR(20), IN `vville` CHAR(50), IN `vcode_postal` VARCHAR(255), IN `vpays` CHAR(50), IN `vnumero_rue` INT, IN `vrue` CHAR(50), IN `vvoie` CHAR(50), IN `vsecu` VARCHAR(13), IN `vbees` VARCHAR(20), IN `vcontrat` CHAR(50), IN `vembauche` DATE, IN `vmedical` DATE, IN `vpassword` VARCHAR(30))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `create_equipement` (IN `vnom` CHAR(50), IN `vcommentaire` CHAR(100), IN `vpuissance` INT, IN `vservice` TINYINT(1))  BEGIN
+   INSERT INTO equipement (Nom_Equipement, Commentaire, Puissance , Service) VALUES(vnom, vcommentaire, vpuissance, vservice);
+   
+   SELECT ID_Equipement FROM equipement
+   WHERE equipement.ID_Equipement = LAST_INSERT_ID();
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `create_personne` (IN `vstatut` CHAR(50), IN `vnom` CHAR(50), IN `vprenom` CHAR(50), IN `vdate_naissance` DATE, IN `vtelephone` VARCHAR(15), IN `vpermis` VARCHAR(20), IN `vville` CHAR(50), IN `vcode_postal` VARCHAR(255), IN `vpays` CHAR(50), IN `vnumero_rue` INT, IN `vrue` CHAR(50), IN `vvoie` CHAR(50), IN `vsecu` VARCHAR(13), IN `vbees` VARCHAR(20), IN `vcontrat` CHAR(50), IN `vembauche` DATE, IN `vmedical` DATE, IN `vpassword` VARCHAR(255))  BEGIN
 
 IF NOT EXISTS 
 (SELECT * FROM personne 
@@ -38,8 +51,8 @@ IF NOT EXISTS
   personne.Nom = vnom and 
   personne.Prenom = vprenom and
   personne.Date_Naissance = vdate_naissance or
-  personne.N_Permis = vpermis or 
-  personne.N_BEES = vbees))
+  (vpermis != NULL and personne.N_Permis = vpermis) or (personne.N_BEES = vbees and personne.N_BEES != NULL) or
+personne.Telephone = vtelephone))
   THEN
 
   IF EXISTS
@@ -64,8 +77,13 @@ IF NOT EXISTS
     
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `create_prix` (IN `vprix` INT, IN `vid_eq` INT, IN `vid_prix` INT)  BEGIN
+INSERT INTO prix_horaire_equipement (ID_Prix_Horaire, ID_Equipement, Prix) 
+VALUES(vid_prix, vid_eq, vprix);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `create_resa_id` ()  BEGIN
-INSERT INTO reservation SELECT MAX(ID_Reservation)+1 FROM reservation;
+INSERT INTO reservation (ID_Reservation) VALUES(NULL);
 
 SELECT MAX(ID_Reservation) as id FROM reservation;
 END$$
@@ -75,12 +93,12 @@ BEGIN
 DELETE FROM equipement WHERE(ID_Equipement = videquipement);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_personne` (IN `vid_personne` INT, IN `vstatut` CHAR(50))  MODIFIES SQL DATA
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_personne` (IN `vid_personne` INT, IN `vstatut` CHAR(50), IN `vidadresse` INT)  MODIFIES SQL DATA
 BEGIN
 DELETE FROM Personne
 WHERE (personne.ID_Personne = vid_personne  and Statut = vstatut);
 DELETE FROM Adresse
-WHERE (adresse.ID_Adresse = (SELECT ID_Adresse FROM Personne WHERE (personne.ID_Personne = vid_personne and Statut = vstatut)));
+WHERE (adresse.ID_Adresse = vidadresse);
 
 END$$
 
@@ -105,6 +123,8 @@ WHERE (
 Statut = 'Client'
 )
 ORDER BY `personne`.ID_Personne DESC$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_duree` ()  SELECT ID_Prix_Horaire ,Duree FROM prix_horaire$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `select_employe` (IN `VID_Personne` INT)  BEGIN
     SELECT personne.ID_Personne, Nom, Prenom, DATE_FORMAT(Date_Naissance, "%d/%m/%Y") as anniv, Telephone, N_Permis, N_Securite_Sociale, N_BEES, N_Permis, Contrat, DATE_FORMAT(Date_Embauche, "%d/%m/%Y") as dateembau, DATE_FORMAT(Date_Visite_Medicale, "%d/%m/%Y") as datevisit ,Adresse.ID_Adresse, Rue, Numero_Rue, Nom_Ville, Code_Postal, Type_Voie, Nom_Pays, Motif, DATE_FORMAT(Date_Debut_Inactivite, "%d/%m/%Y") as max_date_debut, DATE_FORMAT(Date_Fin_Inactivite, "%d/%m/%Y") as max_date_fin
@@ -161,11 +181,42 @@ DROP TEMPORARY TABLE resa_indispo_tb;
 
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_employe_dispo_update` (IN `vdebut` DATETIME, IN `vfin` DATETIME, IN `vdate` DATE, IN `id_resa` INT)  READS SQL DATA
+BEGIN 
+
+CREATE TEMPORARY TABLE employe_indispo_tb SELECT ID_Personne FROM periode_inactivite
+LEFT JOIN employe_malade ON periode_inactivite.ID_Inactivite = employe_malade.ID_Inactivite
+WHERE(
+   (vdate BETWEEN Date_Debut_Inactivite AND Date_Fin_Inactivite)
+OR (Date_Debut_Inactivite <= vdate AND Date_Fin_Inactivite IS NULL));
+    
+    
+CREATE TEMPORARY TABLE resa_indispo_tb SELECT rce.ID_Personne FROM equipement_reserve
+LEFT JOIN reservation_client_employe AS rce ON equipement_reserve.ID_Reservation = rce.ID_Reservation
+WHERE(equipement_reserve.ID_Reservation != id_resa AND(
+   (Date_Heure_Debut_Reservation BETWEEN vdebut AND vfin)
+OR (Date_Heure_Fin_Reservation BETWEEN vdebut AND vfin)
+OR (vdebut <= Date_Heure_Debut_Reservation AND vfin >= Date_Heure_Fin_Reservation)
+OR (vdebut BETWEEN Date_Heure_Debut_Reservation AND Date_Heure_Fin_Reservation)
+OR (vfin BETWEEN Date_Heure_Debut_Reservation AND Date_Heure_Fin_Reservation)
+	 ));
+
+SELECT personne.ID_Personne, Nom, Prenom, N_Securite_Sociale, N_BEES, N_Permis FROM personne 
+LEFT JOIN employe_indispo_tb ON personne.ID_Personne = employe_indispo_tb.ID_Personne
+LEFT JOIN resa_indispo_tb ON personne.ID_Personne = resa_indispo_tb.ID_Personne
+WHERE (personne.Statut = "Employé" AND resa_indispo_tb.ID_Personne IS NULL AND employe_indispo_tb.ID_Personne IS NULL AND DATE_ADD(Date_Visite_Medicale, INTERVAL 1 YEAR) > DATE_FORMAT(NOW(),"%Y-%m-%d"));
+
+
+DROP TEMPORARY TABLE employe_indispo_tb;
+DROP TEMPORARY TABLE resa_indispo_tb;
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `select_equipement` (IN `videquipement` INT)  READS SQL DATA
 SELECT ID_Equipement, Nom_Equipement, Commentaire, Puissance, Service FROM equipement WHERE(ID_Equipement = videquipement)$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `select_equipement_all` ()  SELECT ID_Equipement, Nom_Equipement, Commentaire, Puissance, Service FROM equipement
-ORDER BY `equipement`.Service DESC$$
+ORDER BY `equipement`.Service DESC, equipement.Nom_Equipement$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `select_equipement_dispo` (IN `vdebut` DATETIME, IN `vfin` DATETIME, IN `vnom` CHAR(50), IN `vduree` INT)  READS SQL DATA
 BEGIN 
@@ -195,31 +246,53 @@ DROP TEMPORARY TABLE eq_on_tb;
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `select_prix` (IN `videq` INT, IN `vtemp` INT)  BEGIN
-SELECT Prix FROM prix_horaire_equipement 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_equipement_dispo_update` (IN `vdebut` DATETIME, IN `vfin` DATETIME, IN `vnom` CHAR(50), IN `id_resa` INT)  READS SQL DATA
+BEGIN 
+CREATE TEMPORARY TABLE eq_on_tb SELECT * FROM equipement WHERE equipement.Service = 1;
+
+CREATE TEMPORARY TABLE indispo_tb SELECT ID_Equipement FROM `equipement_reserve`  
+WHERE(equipement_reserve.ID_Reservation != id_resa AND(
+   (Date_Heure_Debut_Reservation BETWEEN vdebut AND vfin)
+OR (Date_Heure_Fin_Reservation BETWEEN vdebut AND vfin)
+OR (vdebut <= Date_Heure_Debut_Reservation AND vfin >= Date_Heure_Fin_Reservation)
+OR (vdebut BETWEEN Date_Heure_Debut_Reservation AND Date_Heure_Fin_Reservation)
+OR (vfin BETWEEN Date_Heure_Debut_Reservation AND Date_Heure_Fin_Reservation)
+	 ));
+
+SELECT eq_on_tb.ID_Equipement, Nom_Equipement, Commentaire, Puissance FROM eq_on_tb
+LEFT JOIN indispo_tb ON eq_on_tb.ID_Equipement = indispo_tb.ID_Equipement
+WHERE (indispo_tb.ID_Equipement IS NULL AND Nom_Equipement = vnom);
+
+DROP TEMPORARY TABLE indispo_tb;
+DROP TEMPORARY TABLE eq_on_tb;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_prix` (IN `videq` INT)  SELECT ID_Equipement, prix_horaire_equipement.ID_Prix_Horaire, Duree, Prix FROM `prix_horaire_equipement`
 LEFT JOIN prix_horaire ON prix_horaire_equipement.ID_Prix_Horaire = prix_horaire.ID_Prix_Horaire
-WHERE(prix_horaire.Duree = vtemp and prix_horaire_equipement.ID_Equipement = videq);
-END$$
+WHERE prix_horaire_equipement.ID_Equipement = videq$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `select_reservation` (IN `vidresa` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_reservation` (IN `vidresa` INT)  READS SQL DATA
+SELECT equipement.ID_Equipement, Nom_Equipement, Commentaire, Puissance, Prix_Total, Nombre_Personne, DATE_FORMAT(Date_Heure_Debut_Reservation, "%H:%i") as debut, DATE_FORMAT(Date_Heure_Fin_Reservation, "%H:%i") as fin, DATE_FORMAT(Date_Heure_Fin_Reservation, "%Y-%m-%d") as dateus, id_employe FROM equipement_reserve 
+LEFT JOIN equipement ON equipement_reserve.ID_Equipement = equipement.ID_Equipement
+WHERE equipement_reserve.ID_Reservation = vidresa$$
 
-SELECT equipement_reserve.ID_Equipement, personne.ID_Personne, Nom, Prenom, Telephone, N_Permis, Nom_Equipement, Commentaire, Puissance, DATE_FORMAT(equipement_reserve.Date_Heure_Debut_Reservation, "%d/%m/%Y %H:%i:%s") as debut, DATE_FORMAT(equipement_reserve.Date_Heure_Fin_Reservation, "%d/%m/%Y %H:%i:%s") as fin  FROM equipement_reserve
-LEFT JOIN equipement ON equipement_reserve.ID_Equipement = equipement.ID_Equipement 
-LEFT JOIN reservation_client_employe ON equipement_reserve.ID_Reservation = reservation_client_employe.ID_Reservation
-LEFT JOIN personne ON reservation_client_employe.ID_Personne = personne.ID_Personne
-WHERE(equipement_reserve.ID_Reservation = vidresa);
-
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `select_reservation_all` ()  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_reservation_all` (IN `vstatut` CHAR(50))  BEGIN
 CREATE TEMPORARY TABLE resa SELECT equipement_reserve.ID_Reservation, DATE_FORMAT(MIN(equipement_reserve.Date_Heure_Debut_Reservation), "%d/%m/%Y %Hh%i") as debut, DATE_FORMAT(MAX(equipement_reserve.Date_Heure_Fin_Reservation), "%d/%m/%Y %Hh%i") as fin FROM equipement_reserve GROUP BY ID_Reservation;
 
 SELECT Nom, Prenom, Telephone, resa.ID_Reservation, personne.ID_Personne, resa.debut, resa.fin FROM resa 
 LEFT JOIN reservation_client_employe as rce ON resa.ID_Reservation = rce.ID_Reservation
 LEFT JOIN personne ON rce.ID_Personne = personne.ID_Personne
-WHERE (personne.Statut = "Client")
+WHERE (personne.Statut = vstatut)
 ORDER BY resa.debut DESC, resa.fin DESC;
+
+DROP TEMPORARY TABLE resa;
 END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_reservation_client` (IN `vidresa` INT)  SELECT personne.ID_Personne ,DATE_FORMAT(equipement_reserve.Date_Heure_Debut_Reservation, '%d/%m/%Y') as date, Nom, Prenom, Telephone, N_Permis FROM equipement_reserve
+LEFT JOIN reservation_client_employe AS rce ON equipement_reserve.ID_Reservation = rce.ID_Reservation
+LEFT JOIN personne ON rce.ID_Personne = personne.ID_Personne
+WHERE(rce.ID_Reservation = vidresa and personne.Statut = "Client")$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_adresse` (IN `vid_adresse` INT, IN `vnumero_rue` INT, IN `vrue` CHAR(50), IN `vvoie` CHAR(50))  MODIFIES SQL DATA
 BEGIN
@@ -238,6 +311,44 @@ BEGIN
         equipement.Puissance = vpuissance,
         equipement.Service = vservice
     WHERE (equipement.ID_Equipement = vid_equipement);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_prix` (IN `vprix` INT, IN `vid_eq` INT, IN `vid_prix` INT)  MODIFIES SQL DATA
+BEGIN
+
+UPDATE prix_horaire_equipement SET Prix = vprix WHERE (ID_Prix_Horaire = vid_prix AND ID_Equipement = vid_eq);
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_reservation` (IN `vid_eq` INT, IN `vid_resa` INT, IN `vdebut` DATETIME, IN `vfin` DATETIME, IN `vprix` INT, IN `vnbpers` INT, IN `vid_pers` INT, IN `vid_emp` INT)  MODIFIES SQL DATA
+BEGIN
+	UPDATE equipement_reserve
+    SET equipement_reserve.ID_Equipement = vid_eq,
+        equipement_reserve.Date_Heure_Debut_Reservation = vdebut,
+        equipement_reserve.Date_Heure_Fin_Reservation = vfin,
+        equipement_reserve.Prix_Total = vprix,
+        equipement_reserve.Nombre_Personne = vnbpers,
+        equipement_reserve.id_employe = vid_pers
+    WHERE (equipement_reserve.ID_Reservation = vid_resa and equipement_reserve.ID_Equipement = vid_eq);
+
+IF ((vid_emp IS NOT NULL) AND (vid_pers IS NOT NULL))
+THEN
+UPDATE reservation_client_employe
+SET reservation_client_employe.ID_Personne = vid_pers
+WHERE (reservation_client_employe.ID_Reservation = vid_resa and reservation_client_employe.ID_Personne = vid_emp);
+END IF;
+
+IF((vid_emp IS NULL) AND (vid_pers IS NOT NULL))
+THEN 
+INSERT INTO reservation_client_employe(ID_Reservation, ID_Personne)
+VALUES(vid_resa, vid_pers);
+END IF;
+
+IF((vid_emp IS NOT NULL) AND (vid_pers IS NULL))
+THEN 
+DELETE FROM reservation_client_employe
+WHERE(reservation_client_employe.ID_Personne = vid_emp and reservation_client_employe.ID_Reservation = vid_resa);
+END IF;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_tb_personne_client` (IN `VID_Personne` INT, IN `vnom` CHAR(50), IN `vprenom` CHAR(50), IN `vdate_naissance` DATE, IN `vtelephone` VARCHAR(15), IN `vpermis` VARCHAR(20))  MODIFIES SQL DATA
@@ -323,14 +434,16 @@ CREATE TABLE `adresse` (
 --
 
 INSERT INTO `adresse` (`ID_Adresse`, `Rue`, `Numero_Rue`, `Type_Voie`, `ID_Ville`) VALUES
-(1, 'Neil Armstrong', 245, 'Rue', 1),
-(2, 'Neil Armstrong', 295, 'Rue', 2),
 (3, 'des Platanes', 240, 'Chemin', 3),
 (4, 'des Platrières', 1255, 'Chemin', 4),
-(27, 'du Mas', 13, 'Chemin', 46342),
 (28, 'du Mas', 13, 'Chemin', 46342),
 (29, 'Jean Pierre Saez', 125, 'Rue', 1),
-(30, 'de la République', 56, 'Rue', 46343);
+(30, 'de la République', 56, 'Rue', 46343),
+(31, 'du Fossé des Tanneurs', 59, 'Rue', 46344),
+(37, 'de la Présidente', 1895, 'Chemin', 1),
+(38, 'des prunes', 20, 'Chemin', 46344),
+(40, 'Gustave Eiffel', 18, 'Rue', 46346),
+(49, 'Neil Armstrong', 245, 'Rue', 1);
 
 -- --------------------------------------------------------
 
@@ -349,7 +462,9 @@ CREATE TABLE `employe_malade` (
 
 INSERT INTO `employe_malade` (`ID_Personne`, `ID_Inactivite`) VALUES
 (11, 6),
-(8, 12);
+(34, 8),
+(34, 9),
+(34, 10);
 
 -- --------------------------------------------------------
 
@@ -371,7 +486,7 @@ CREATE TABLE `equipement` (
 
 INSERT INTO `equipement` (`ID_Equipement`, `Nom_Equipement`, `Commentaire`, `Puissance`, `Service`) VALUES
 (1, 'JETSKI', 'Kawasaki STX 15F', 152, 1),
-(2, 'JETSKI', 'See-Doo 4tec', 155, 0),
+(2, 'JETSKI', 'See-Doo 4tec', 155, 1),
 (3, 'JETSKI', 'Yamaha Fx SHO', 210, 1),
 (4, 'BOUEE', 'Bouée', 0, 1),
 (5, 'WAKE-BOARD', 'Wake-board', 0, 1),
@@ -390,8 +505,18 @@ CREATE TABLE `equipement_reserve` (
   `Date_Heure_Debut_Reservation` datetime NOT NULL,
   `Date_Heure_Fin_Reservation` datetime NOT NULL,
   `Prix_Total` int(11) NOT NULL,
-  `Nombre_Personne` int(11) NOT NULL
+  `Nombre_Personne` int(11) NOT NULL,
+  `id_employe` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `equipement_reserve`
+--
+
+INSERT INTO `equipement_reserve` (`ID_Equipement`, `ID_Reservation`, `Date_Heure_Debut_Reservation`, `Date_Heure_Fin_Reservation`, `Prix_Total`, `Nombre_Personne`, `id_employe`) VALUES
+(1, 2, '2020-08-31 14:00:00', '2020-08-31 16:00:00', 220, 1, NULL),
+(3, 1, '2020-08-29 11:00:00', '2020-08-29 13:00:00', 288, 1, 11),
+(7, 1, '2020-08-29 14:00:00', '2020-08-29 14:30:00', 160, 4, 8);
 
 -- --------------------------------------------------------
 
@@ -669,7 +794,9 @@ CREATE TABLE `periode_inactivite` (
 
 INSERT INTO `periode_inactivite` (`ID_Inactivite`, `Motif`, `Date_Debut_Inactivite`, `Date_Fin_Inactivite`) VALUES
 (6, 'Maladie', '2020-08-05', '2020-08-09'),
-(12, 'Grippe', '2020-07-01', '2020-07-09');
+(8, 'Maladie', '2020-06-20', '2020-07-09'),
+(9, 'Fracture jambe', '2019-09-30', '2019-11-15'),
+(10, 'Maladie', '2020-10-20', NULL);
 
 -- --------------------------------------------------------
 
@@ -684,7 +811,7 @@ CREATE TABLE `personne` (
   `Prenom` char(50) NOT NULL,
   `Date_Naissance` date NOT NULL,
   `Telephone` varchar(15) NOT NULL,
-  `Password` varchar(30) DEFAULT NULL,
+  `Password` varchar(255) DEFAULT NULL,
   `N_Securite_Sociale` varchar(13) DEFAULT NULL,
   `N_BEES` varchar(20) DEFAULT NULL,
   `N_Permis` varchar(20) DEFAULT NULL,
@@ -701,11 +828,14 @@ CREATE TABLE `personne` (
 INSERT INTO `personne` (`ID_Personne`, `Statut`, `Nom`, `Prenom`, `Date_Naissance`, `Telephone`, `Password`, `N_Securite_Sociale`, `N_BEES`, `N_Permis`, `Contrat`, `Date_Embauche`, `Date_Visite_Medicale`, `ID_Adresse`) VALUES
 (4, 'Client', 'Marcon', 'Baptiste', '1999-06-30', '+336664366312', NULL, NULL, NULL, '433247383', NULL, NULL, NULL, 4),
 (8, 'Employé', 'Foillard', 'Jean', '1965-02-22', '+33606078606', NULL, '1234547687', '432543564', '432027483', 'CDD', '2020-04-01', '2020-04-03', 3),
-(9, 'Client', 'Foillard', 'Benoit', '2000-12-03', '+33643537645', NULL, NULL, NULL, '', NULL, NULL, NULL, 27),
-(10, 'Client', 'Foillard', 'Fabienne', '2000-12-03', '+33643537645', NULL, NULL, NULL, '', NULL, NULL, NULL, 28),
+(10, 'Client', 'Foillard', 'Fabienne', '2000-12-03', '+33643537645', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 28),
 (11, 'Employé', 'Reynaud', 'Bastien', '2000-07-06', '+33672781633', NULL, '1234547687', '3232453433', '43256788', 'CDI', '2020-05-01', '2020-05-03', 29),
-(15, 'Employé', 'Foillard', 'Maxime', '2000-03-25', '+33606060606', NULL, '1234547687', NULL, '432567883', 'CDI', '2020-04-01', '2020-04-03', 2),
-(16, 'Employé', 'Tétrault', 'Alexandrie', '1998-10-22', '+33629384921', NULL, '23468651829', '2849371039', NULL, 'CDI', '2019-07-01', '2020-07-10', 30);
+(16, 'Employé', 'Tétrault', 'Alexandrie', '1998-10-22', '+33606060606', '$2y$10$AZgOiPpCSYZVUKYnCfLQZOe4ZEKZQMmk/EA97VuMSZ10DrmNVud5W', '23468651829', '2849371039', NULL, 'CDI', '2019-07-01', '2020-07-10', 30),
+(17, 'Client', 'Sevier', 'Dominique', '1973-11-16', '+33671058526', NULL, NULL, NULL, '564037513', NULL, NULL, NULL, 31),
+(22, 'Client', 'Courtais', 'Clémence', '2001-04-04', '+33673826492', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 37),
+(23, 'Employé', 'Brunaly', 'Charles', '1983-06-11', '+33625232221', '$2y$10$mQ.vB5X3B1BCl9DqpaMrMuxwyFEknScKCzYjAMn0juSKBRJLCWqcO', '2135759864', NULL, NULL, 'CDD', '2020-08-14', '2020-08-10', 38),
+(25, 'Client', 'Loiselle', 'Léon', '1980-05-19', '+336483423372', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 40),
+(34, 'Employé', 'Foillard', 'Stanislas', '2000-12-03', '+33783297606', '$2y$10$dTwQuCWccu40c9zAi0OPP.PfiT6Uf6B2JSGInxjR2.LgXxSwE58eO', '2324252627', NULL, '1213141516', 'CDI', '2020-05-01', '2020-02-20', 49);
 
 -- --------------------------------------------------------
 
@@ -832,6 +962,14 @@ CREATE TABLE `reservation` (
   `ID_Reservation` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Déchargement des données de la table `reservation`
+--
+
+INSERT INTO `reservation` (`ID_Reservation`) VALUES
+(1),
+(2);
+
 -- --------------------------------------------------------
 
 --
@@ -842,6 +980,16 @@ CREATE TABLE `reservation_client_employe` (
   `ID_Reservation` int(11) NOT NULL,
   `ID_Personne` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `reservation_client_employe`
+--
+
+INSERT INTO `reservation_client_employe` (`ID_Reservation`, `ID_Personne`) VALUES
+(1, 8),
+(1, 11),
+(2, 17),
+(1, 25);
 
 -- --------------------------------------------------------
 
@@ -866,7 +1014,10 @@ INSERT INTO `ville` (`ID_Ville`, `Nom_Ville`, `Code_Postal`, `Nom_Pays`) VALUES
 (3, 'AIX EN PROVENCE', '13090', 'France'),
 (4, 'AIX EN PROVENCE', '13540', 'France'),
 (46342, 'PORT LOUIS', '56290', 'Maurice'),
-(46343, 'LYON', '69003', 'France');
+(46343, 'LYON', '69003', 'France'),
+(46344, 'TOULON', '83200', 'France'),
+(46345, 'BRUAY-LA-BUISSIÈRE', '62700', 'France'),
+(46346, 'ROANNE', '42300', 'France');
 
 --
 -- Index pour les tables déchargées
@@ -959,7 +1110,7 @@ ALTER TABLE `ville`
 -- AUTO_INCREMENT pour la table `adresse`
 --
 ALTER TABLE `adresse`
-  MODIFY `ID_Adresse` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `ID_Adresse` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT pour la table `equipement`
@@ -971,13 +1122,13 @@ ALTER TABLE `equipement`
 -- AUTO_INCREMENT pour la table `periode_inactivite`
 --
 ALTER TABLE `periode_inactivite`
-  MODIFY `ID_Inactivite` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ID_Inactivite` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `personne`
 --
 ALTER TABLE `personne`
-  MODIFY `ID_Personne` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `ID_Personne` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT pour la table `prix_horaire`
@@ -989,13 +1140,13 @@ ALTER TABLE `prix_horaire`
 -- AUTO_INCREMENT pour la table `reservation`
 --
 ALTER TABLE `reservation`
-  MODIFY `ID_Reservation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `ID_Reservation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `ville`
 --
 ALTER TABLE `ville`
-  MODIFY `ID_Ville` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46344;
+  MODIFY `ID_Ville` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46347;
 
 --
 -- Contraintes pour les tables déchargées
