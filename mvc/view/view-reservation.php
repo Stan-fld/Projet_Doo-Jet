@@ -19,7 +19,7 @@ $resaEq = $model->getReservationEq();
                     <h2 class="title-1">Liste des réservations clients</h2>
                 </div>
                 <input class ="au-input" id="myInputC" style="padding: 0px 16px;  border-radius: 10px; margin-bottom: 1vh; margin-left: 1vh" type="text" placeholder="Rechercher..">
-                <button style="margin-left: 2vh" onclick="createE()" class="btn btn-outline-success">
+                <button style="margin-left: 2vh" onclick="createR()" class="btn btn-outline-success">
                     <i class="fa fa-edit (alias)"></i> Nouvelle réservation
                 </button>
                 <!-- DATA TABLE-->
@@ -76,7 +76,8 @@ $resaEq = $model->getReservationEq();
             });
         });
     });
-    function createE(){
+
+    function createR(){
         window.location.assign("/createreservation")
     }
 </script>

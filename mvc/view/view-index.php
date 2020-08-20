@@ -69,6 +69,9 @@ $service = 1;
                     <h2 class="title-1">Liste des réservations</h2>
                 </div>
                 <input class ="au-input" id="myInput" style="padding: 0px 16px;  border-radius: 10px; margin-bottom: 1vh; margin-left: 1vh" type="text" placeholder="Rechercher..">
+                <button style="margin-left: 2vh" onclick="createR()" class="btn btn-outline-success">
+                    <i class="fa fa-edit (alias)"></i> Nouvelle réservation
+                </button>
                 <!-- DATA TABLE-->
                 <div class="table-responsive m-b-40">
                     <table class="table table-borderless table-data3 text-center">
@@ -121,4 +124,8 @@ $service = 1;
             });
         });
     });
+
+    function createR(){
+        window.location.assign("/createreservation")
+    }
 </script>
