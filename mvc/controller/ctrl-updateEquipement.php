@@ -59,7 +59,7 @@ switch ($etape) {
 
         if($count !== 0)
         {
-            $feedback .= '<script type="text/javascript">alert("Équipement requis pour une réservation future, suppression impossible");window.location.assign("/reservation");</script>';
+            $feedback .= '<script type="text/javascript">alert("Équipement requis pour une réservation future, suppression impossible");window.location.assign("/reservationEq");</script>';
         }
         else
         {

@@ -246,7 +246,7 @@ switch ($etape) {
 
         if($count !== 0)
         {
-            $feedback .= '<script type="text/javascript">alert("Employé requis pour une réservation future, suppression impossible");window.location.assign("/reservation");</script>';
+            $feedback .= '<script type="text/javascript">alert("Employé requis pour une réservation future, suppression impossible");window.location.assign("/reservationE");</script>';
         }
         else
         {
