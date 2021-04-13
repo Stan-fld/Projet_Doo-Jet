@@ -1,4 +1,4 @@
 # Projet_Doo-Jet
-Projet Foillard Stanislas Cesi Exia A2
+Foillard Stanislas Cesi Exia A2 Project
 
-Récupérer la dernière version de la BDD et modifier la connexion à la BDD dans le Model pour faire fonctionner l'admin.
+Retrieve the latest version of the DB and modify the connection to the DB in the Model to make the admin work.
